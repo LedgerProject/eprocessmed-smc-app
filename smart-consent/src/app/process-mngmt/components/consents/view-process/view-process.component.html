@@ -1,0 +1,86 @@
+<div id="contentPatient">
+
+  <div style="align-content: right; float: right;">
+    <button class="btn btn-primary btn-lg" style="background-color: #7884d4; width: 210px; margin-right: 20px;"
+      (click)="openModalProcess()">
+      Nuevo Procedimiento</button>
+
+    <!-- The Modal -->
+    <div id="modalProcess" class="modal">
+
+      <!-- Modal content -->
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <h2 class="modal-title" id="exampleModalLabel"><b>CREAR NUEVO PROCEDIMIENTO</b></h2>
+          <span class="close" (click)="closeModalProcess()">×</span>
+        </div>
+
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="recipient-name" class="col-form-label">Nombre Procedimiento:</label>
+              <input type="text" class="form-control" id="nombre">
+            </div>
+
+            <div class="form-group">
+              <label for="message-text" class="col-form-label">Texto Aceptación:</label>
+              <textarea class="form-control" id="texto_acepta"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="message-text" class="col-form-label">Texto Rechazo:</label>
+              <textarea class="form-control" id="texto_rechazo"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="message-text" class="col-form-label">Texto Aceptación de Representante:</label>
+              <textarea class="form-control" id="texto_r_acept"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="message-text" class="col-form-label">Texto Rechazo de Representante:</label>
+              <textarea class="form-control" id="texto_r_rech"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="message-text" class="col-form-label">Texto del Consentimiento:</label>
+              <textarea class="form-control" id="texto_consent"></textarea>
+            </div>
+
+          </form>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeModalProcess()">Cerrar</button>
+          <button type="button" class="btn btn-primary" style="background-color: #7884d4;"
+            (click)="createProcess()">Crear Procedimiento</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <section>
+    <table class="table">
+
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th>NOMBRE PROCEDIMIENTO</th>
+          <th>ESTADO</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let proc of process">
+          <th scope="row">{{proc.idProcess}}</th>
+          <td>{{proc.name}}</td>
+          <td>{{proc.state}}</td>
+        </tr>
+      </tbody>
+
+    </table>
+
+  </section>
+
+</div>

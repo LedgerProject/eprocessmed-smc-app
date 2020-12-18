@@ -1,0 +1,40 @@
+  <!-- Sidebar -->
+
+  <nav class="sidebar_collapse" id="sidebar">
+    <div class="sidebar-header">
+        <!-- <p class="title_sidebar">{{nameAPP}}</p> -->
+        <img src="../../../assets/img/logo.png" alt="logo" style="width: 100px; margin-left: 50px; " >
+    </div>
+
+    <ul class="list-unstyled components">
+
+        <!-- <li [routerLinkActive]="['active']" *ngIf="dataSesion.role === 'admin'">
+            <a [routerLink]="['list-forms']">Formularios</a>
+        </li>
+
+        <li [routerLinkActive]="['active']" *ngIf="dataSesion.role === 'admin'">
+            <a [routerLink]="['list-setting-form']">Configuración Form.</a>
+        </li>
+
+        <li [routerLinkActive]="['active']" *ngIf="dataSesion.role === 'admin'">
+            <a [routerLink]="['list-customer-form']">Formularios clientes</a>
+        </li>
+
+        <li [routerLinkActive]="['active']"  *ngIf="dataSesion.role === 'customer' || dataSesion.role === 'respondent' ">
+          <a [routerLink]="['list-respondent-form']">Formularios pacientes</a>
+        </li>
+
+        <li [routerLinkActive]="['active']">
+          <a href="https://e-processmed.com/empresa/nuestro-equipo/" style="display: block;">Conoce a nuestro equipo</a>
+        </li> -->
+
+        <div class="vertical-menu">
+          <a href="/dr-dashboard/create-consents" class="active">Consentimientos</a>
+          <a href="/dr-dashboard/view-patients">Pacientes</a>
+          <a href="/dr-dashboard/view-process">Procedimientos</a>
+          <a href="/dr-dashboard/view-stablishment">Centros Médicos</a>
+        </div>
+
+    </ul>
+
+</nav>

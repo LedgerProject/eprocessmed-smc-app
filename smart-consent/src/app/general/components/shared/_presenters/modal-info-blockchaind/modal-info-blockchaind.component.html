@@ -1,0 +1,123 @@
+<!-- <div id="modalPreview" #modalPreview class="modalPreview" style="overflow: auto; height: 100%;">
+
+  <div class="modal-header">
+    <h3 class="modal-title modal_title" >CONSENTIMIENTO</h3>
+    <button type="button" class="close" aria-label="Close" (click)="closeModalPreview()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <form >
+      <div class="container">
+        <div class="row">
+
+          <div class="col-sm-12">
+            <label for="">ID DEL MEDICO</label>
+            <input class="" type="text" value="{{consentModal2.medico}}" disabled>
+          </div>
+
+          <div class="col-sm-12">
+            <label for="">ID DEL PACIENTE</label>
+            <input class="" type="text" value="{{consentModal2.paciente}}" disabled>
+          </div>
+
+          <div class="col-sm-12">
+            <label for="">ID DEL PROCEDIMIENTO</label>
+            <input class="" type="text" value="{{consentModal2.procedimiento}}" disabled>
+          </div>
+
+          <div class="col-sm-12">
+            <label for="">ID DE LA ESPECIALIDAD</label>
+            <input class="" type="text" value="{{consentModal2.especialidad}}" disabled>
+          </div>
+
+          <div class="col-sm-12">
+            <label for="">HASH DEL PDF</label>
+            <input class="" type="text" value="{{consentModal2.hash}}" disabled>
+          </div>
+
+          <div class="col-sm-12">
+            <label for="">HASH DEL BLOCKCHAIND</label>
+            <input class="" type="text" value="{{consentModal2.block}}" disabled>
+          </div>
+
+        </div>
+
+
+
+      </div>
+
+      <p class="msgform" id="msgform" #msgform></p>
+
+    </form>
+  </div>
+
+</div> -->
+
+
+<!-- The Modal -->
+<div id="modalPreview" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+
+    <div class="modal-header">
+      <h3 class="modal-title modal_title">CONSENTIMIENTO</h3>
+      <button type="button" class="close" aria-label="Close" (click)="closeModalPreview()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <form>
+        <div class="container">
+          <div class="row">
+
+            <div class="col-sm-12">
+              <label for="">ID DEL MEDICO</label>
+              <input class="" type="text" value="{{consentModal2.medico}}" disabled>
+            </div>
+
+            <div class="col-sm-12">
+              <label for="">ID DEL PACIENTE</label>
+              <input class="" type="text" value="{{consentModal2.paciente}}" disabled>
+            </div>
+
+            <div class="col-sm-12">
+              <label for="">ID DEL PROCEDIMIENTO</label>
+              <input class="" type="text" value="{{consentModal2.procedimiento}}" disabled>
+            </div>
+
+            <div class="col-sm-12">
+              <label for="">ID DE LA ESPECIALIDAD</label>
+              <input class="" type="text" value="{{consentModal2.especialidad}}" disabled>
+            </div>
+
+            <div class="col-sm-12">
+              <label for="">HASH DEL PDF</label>
+              <input class="" type="text" value="{{consentModal2.hash}}" disabled>
+            </div>
+
+            <div class="col-sm-12">
+              <label for="">HASH DEL BLOCKCHAIND</label>
+              <!-- <input class="" type="text"  onclick="location.href='1.html';" value="{{consentModal2.block}}" disabled> -->
+              <a href="{{consentModal2.block}}" target="_blank" style="color: blue;">
+                Registro generado
+              </a>
+            </div>
+
+          </div>
+
+
+
+        </div>
+
+        <p class="msgform" id="msgform" #msgform></p>
+
+      </form>
+    </div>
+
+  </div>
+
+</div>

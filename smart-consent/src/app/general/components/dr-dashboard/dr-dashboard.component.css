@@ -1,0 +1,11 @@
+.imgBackGround{
+  position: fixed; z-index: -10; margin-left: 25%; width: 200px;
+}
+
+@media (min-width: 700px){
+  .imgBackGround{
+    position: fixed; z-index: -10; margin-left: 25%; width: 200px;
+  }
+
+
+}

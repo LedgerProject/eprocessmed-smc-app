@@ -1,0 +1,214 @@
+/*
+    STYLE
+*/
+@import "../../../node_modules/ag-grid-community/dist/styles/ag-grid.css";
+@import "../../../node_modules/ag-grid-community/dist/styles/ag-theme-alpine.css";
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #fafafa;
+}
+
+p {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1em;
+    font-weight: 300;
+    line-height: 1.7em;
+    color: #999;
+}
+
+a, a:hover, a:focus {
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+ul {
+  list-style: none;
+}
+
+.line {
+    width: 100%;
+    height: 1px;
+    border-bottom: 1px dashed #ddd;
+    margin: 40px 0;
+}
+
+.title_lf {
+  padding-left: 10px;
+  font-weight: bold;
+}
+
+.undisplay {
+  display: none;
+}
+
+/* ---------------------------------------------------
+    FORMS STYLE
+----------------------------------------------------- */
+.titel_form {
+  font-size: 22px;
+}
+
+.titel_tap {
+  font-size: 19px;
+  padding: 0px 0px 10px 0px;
+}
+
+input,
+textarea,
+select {
+    padding: 0px 8px 4px 8px;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    border-radius: 0px;
+    margin-bottom: 25px;
+    margin-top: 2px;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: montserrat;
+    color: #2C3E50;
+    font-size: 16px;
+    letter-spacing: 1px
+}
+
+input:focus,
+textarea:focus {
+    -moz-box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+    border: none;
+    font-weight: bold;
+    border-bottom: 2px solid skyblue;
+    outline-width: 0
+}
+
+/* Mark input boxes that gets an error on validation:*/
+input.invalid {
+  background-color: #ffdddd;
+}
+
+select {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: #fff;
+  background-image: url('../img/arrow_d.webp'),
+    linear-gradient(to bottom, #ffffff 0%,#f7f7f7 100%);
+  background-repeat: no-repeat, repeat;
+  background-position: right .7em top 50%, 0 0;
+  background-size: .65em auto, 100%;
+}
+
+.check_input {
+  position: inherit !important;
+  width: 10px;
+  margin-right: 10px;
+  margin-left: 5px;
+}
+
+.check_label {
+  /* margin-left: 30px; */
+}
+
+/* ---------------------------------------------------
+    SIDEBAR STYLE
+----------------------------------------------------- */
+.wrapper {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+    perspective: 1500px;
+}
+
+/* ---------------------------------------------------
+    CONTENT STYLE
+----------------------------------------------------- */
+#content {
+    width: 100%;
+    padding: 20px;
+    min-height: 100vh;
+    transition: all 0.3s;
+}
+
+#btn_sidebarStt {
+    width: 40px;
+    height: 40px;
+    background: #f5f5f5;
+    cursor: pointer;
+}
+
+#btn_sidebarStt span {
+    width: 80%;
+    height: 2px;
+    margin: 0 auto;
+    display: block;
+    background: #555;
+    transition: all 0.8s cubic-bezier(0.810, -0.330, 0.345, 1.375);
+    transition-delay: 0.2s;
+}
+
+#btn_sidebarStt span:first-of-type {
+    transform: rotate(45deg) translate(2px, 2px);
+}
+#btn_sidebarStt span:nth-of-type(2) {
+    opacity: 0;
+}
+#btn_sidebarStt span:last-of-type {
+    transform: rotate(-45deg) translate(1px, -1px);
+}
+
+#btn_sidebarStt.active span {
+    transform: none;
+    opacity: 1;
+    margin: 5px auto;
+}
+
+/* ---------------------------------------------------
+    COLLAPSE
+----------------------------------------------------- */
+
+.sidebar_collapse {
+    margin-left: -250px !important;
+    transform: rotateY(90deg) !important;
+}
+
+.span_call {
+  transform: none !important;
+  opacity: 1 !important;
+  margin: 5px auto !important;
+}
+
+/* ---------------------------------------------------
+    MEDIAQUERIES
+----------------------------------------------------- */
+@media (max-width: 768px) {
+    #sidebar {
+        margin-left: -250px;
+        transform: rotateY(90deg);
+    }
+    #sidebar.active {
+        margin-left: 0;
+        transform: none;
+    }
+    #btn_sidebarStt span:first-of-type,
+    #btn_sidebarStt span:nth-of-type(2),
+    #btn_sidebarStt span:last-of-type {
+        transform: none;
+        opacity: 1;
+        margin: 5px auto;
+    }
+    #btn_sidebarStt.active span {
+        margin: 0 auto;
+    }
+    #btn_sidebarStt.active span:first-of-type {
+        transform: rotate(45deg) translate(2px, 2px);
+    }
+    #btn_sidebarStt.active span:nth-of-type(2) {
+        opacity: 0;
+    }
+    #btn_sidebarStt.active span:last-of-type {
+        transform: rotate(-45deg) translate(1px, -1px);
+    }
+
+}
