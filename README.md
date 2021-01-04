@@ -1,7 +1,7 @@
 # FRONTEND
 **SMART CONSENT**
 
-![](RackMultipart20210104-4-s0gaxu_html_85efdde4a1895043.png)
+![](./smart-consent/src/assets/img/1.jpg)
 
 Login screen, access to the system, with user and password
 
