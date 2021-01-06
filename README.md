@@ -1,5 +1,7 @@
 # The Smart Consent Project
 
+![](./smart-consent/src/assets/img/logo.png)
+
 eHealth startup focused exclusively on the digitization of medical processes, has technologically advanced the medical informed consent in security and communication.
 
 
@@ -21,9 +23,6 @@ Use of API-REST in express with Nodejs and Blockchain API Alastria. And Angular
 
 Application link: [E-processmed](https://e-processmed.com/)
 
-
-**SMART CONSENT**
-![](./smart-consent/src/assets/img/logo.png)
 
 
 ![](./smart-consent/src/assets/img/1.jpg)
