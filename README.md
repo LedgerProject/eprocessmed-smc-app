@@ -10,13 +10,13 @@ eHealth startup focused exclusively on the digitization of medical processes, ha
 Use of API-REST in express with Nodejs and Blockchain API Alastria. And Angular
 
 
-###  Repository
+###  Repository 
 
  - In "smart-consent" is the new frontend structure 
  - In "api_df_middleware" is a business middle layer
  - In "api_df_back" contains the data models
  - In "apiblockchain" It contains an api that gives access 
-   to the frontend to interact with the Alaska blockchain.
+   to the frontend to interact with the Alastria blockchain.
 
 
 ## Links
@@ -54,7 +54,7 @@ Screen that lists the patients loaded into the database, also contains a Button 
 ![](./smart-consent/src/assets/img/9.jpg)
 
 Screen that lists the patients loaded into the database, also contains a Button that allows the creation of new ones, using a modal that allows the entry of their respective data.
-# BACKEND
+
 
 # BlockChain
   API REST NodeJS  / 
