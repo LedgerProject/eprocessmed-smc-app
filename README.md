@@ -1,5 +1,30 @@
+# The Smart Consent Project
+
+eHealth startup focused exclusively on the digitization of medical processes, has technologically advanced the medical informed consent in security and communication.
+
+
+## The Technology
+
+Use of API-REST in express with Nodejs and Blockchain API Alastria. And Angular
+
+
+###  Repository
+ - [Repo-BF](https://github.com/LedgerProject/eprocessmed-smc-app)
+ - In "smart-consent" is the new frontend structure 
+ - In "api_df_middleware" is a business middle layer
+ - In "api_df_back" contains the data models
+ - In "apiblockchain" It contains an api that gives access 
+   to the frontend to interact with the Alaska blockchain.
+
+
+## Links
+
+Application link: [E-processmed](https://e-processmed.com/)
+
 
 **SMART CONSENT**
+![](./smart-consent/src/assets/img/logo.png)
+
 
 ![](./smart-consent/src/assets/img/1.jpg)
 
