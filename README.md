@@ -11,7 +11,7 @@ Use of API-REST in express with Nodejs and Blockchain API Alastria. And Angular
 
 
 ###  Repository
- - [Repo-BF](https://github.com/LedgerProject/eprocessmed-smc-app)
+
  - In "smart-consent" is the new frontend structure 
  - In "api_df_middleware" is a business middle layer
  - In "api_df_back" contains the data models
