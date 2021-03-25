@@ -35,6 +35,7 @@ It helps the understanding of the patient and offers security using blockchain t
 * [Typescript](https://www.typescriptlang.org)
 * [Web3js](https://web3js.readthedocs.io/)
 * [Flutter](https://flutter.dev/)
+* [Python 3](https://www.python.org/)
 
 
 ## The Technology
