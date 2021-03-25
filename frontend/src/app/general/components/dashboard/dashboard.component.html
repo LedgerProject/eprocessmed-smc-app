@@ -1,0 +1,33 @@
+
+<!-- Main wrapper -->
+<div class="main-container" [dir]="dir" [ngClass]="{'minisidebar': minisidebar, 'boxed': boxed, 'danger': danger, 'blue': blue, 'green': green, 'dark': dark,  'horizontal' : horizontal }">
+
+  <!-- Navbar -->
+  <app-navbar (ToggleSnav)="toggleSnav()"></app-navbar>
+
+  <mat-sidenav-container class="example-sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 0 : 0" [ngClass]="{'minisidebar': minisidebar}">
+
+    <!-- Sidebar -->
+    <mat-sidenav #snav id="snav" class="pl-xs" [mode]="mobileQuery.matches ? 'side' : 'over'" fixedTopGap="0"
+      [opened]="mobileQuery.matches" [disableClose]="mobileQuery.matches" (open)="sidebarOpened = true"
+      (close)="sidebarOpened = false">
+
+      <perfect-scrollbar class="scbar" [config]="config">
+        <app-sidebar class="app-sidebar"></app-sidebar>
+      </perfect-scrollbar>
+
+    </mat-sidenav>
+
+    <!-- Page container -->
+    <mat-sidenav-content class="page-wrapper" [ngClass]="status ? 'minitoggle' : ''">
+      <app-breadcrumb></app-breadcrumb>
+      <div class="page-content">
+        <router-outlet>
+          <app-spinner></app-spinner>
+        </router-outlet>
+      </div>
+    </mat-sidenav-content>
+
+  </mat-sidenav-container>
+
+</div>

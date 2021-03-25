@@ -1,7 +1,0 @@
-<div class="form-group">
-  <select class="" id="id_input" name="id_input" #id_input="ngModel" [(ngModel)]="otpForm.id_input">
-    <option value="" selected disabled>{{parameters.name}}</option>
-    <option *ngFor="let param of parameters.params[0]" [value]="param.value">{{param.name}}</option>
-  </select>
-</div>
-

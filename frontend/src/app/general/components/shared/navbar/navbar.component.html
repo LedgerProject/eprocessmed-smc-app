@@ -1,0 +1,47 @@
+  <!-- Topbar -->
+  <mat-toolbar color="primary" class="topbar telative">
+    <div class="w-100 fix-width-for-horizontal">
+
+
+      <!-- Logo -->
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/">
+          <!-- Logo icon -->
+          <b>
+            <img src="assets/images/logo-light-icon.png" alt="homepage" class="light-logo">
+          </b>
+          <!-- Logo text -->
+          <span fxShow="false" fxShow.gt-xs>
+            <img src="assets/images/logo-light-text.png" class="light-logo" alt="homepage">
+          </span>
+        </a>
+      </div>
+
+
+      <!-- sidebar toggle -->
+      <button mat-icon-button (click)="toggleSnav(); clickEvent()" class="sidebar-toggle" value="sidebarclosed">
+        <mat-icon>menu</mat-icon>
+      </button>
+
+
+      <!-- Search -->
+      <button mat-icon-button class="srh-btn" (click)="showSearch = !showSearch">
+        <mat-icon>search</mat-icon>
+      </button>
+      <form class="app-search" [ngClass]="{'show-search': showSearch}">
+        <input type="text" class="form-control" placeholder="Search &amp; enter">
+        <a class="cl-srh-btn" (click)="showSearch = !showSearch">
+          <i class="ti-close"></i>
+        </a>
+      </form>
+      <span fxFlex></span>
+
+
+      <!-- app header component / header.component.ts-->
+      <div>
+        <app-header></app-header>
+      </div>
+
+    </div>
+
+  </mat-toolbar>

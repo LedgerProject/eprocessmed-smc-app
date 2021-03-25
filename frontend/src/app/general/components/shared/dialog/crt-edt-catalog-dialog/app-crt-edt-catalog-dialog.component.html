@@ -1,0 +1,39 @@
+
+<h1 mat-dialog-title>{{data.titleDlg}}</h1>
+
+<div mat-dialog-content>
+
+  <p></p>
+
+  <mat-form-field>
+    <mat-label>Nombre</mat-label>
+    <input matInput [(ngModel)]="data.name">
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" *ngIf="!data.type || data.type === ''">
+    <mat-label>Tipo</mat-label>
+    <mat-select [(ngModel)]="data.type">
+      <mat-option value="{{item}}" *ngFor="let item of data.types">{{item}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Requerido</mat-label>
+    <mat-select [(ngModel)]="data.required">
+      <mat-option value="{{item}}" *ngFor="let item of data.requireds">{{item}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field *ngIf="!data.language|| data.language === ''">
+    <mat-label>Idioma</mat-label>
+    <mat-select [(ngModel)]="data.language">
+      <mat-option value="{{item}}" *ngFor="let item of data.languages">{{item}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="dialogClose()">Cerrar</button>
+  <button mat-button mat-dialog-close cdkFocusInitial tabindex="2" (click)="dialogSave()" >Guardar</button>
+</div>
+

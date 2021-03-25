@@ -1,0 +1,19 @@
+<div fxLayout="row" fxLayoutWrap="wrap">
+    <div fxFlex.gt-sm="50" fxFlex.gt-xs="50">
+        <div class="example-button-container" style="padding-top: 10px;">
+            <button mat-mini-fab color="primary" title="add Catalog" aria-label="add Catalog" (click)="openDialog('create', [], 'json')" >
+                <mat-icon>add</mat-icon>
+            </button>
+            <button mat-mini-fab color="primary" title="save Catalog" aria-label="save Catalog" [disabled]='!btnSaveCatalogStrctAdtive' (click)="saveCatalogStrct()" >
+                <mat-icon>save</mat-icon>
+            </button>
+        </div>
+    </div>
+</div>
+<br>
+
+<section class="sectionCreateCatalogsStrct">
+    <label class="titel_seg">Catalogos:</label>
+    <br> <br>
+    <div id="divCatalogStrct" #divCatalogStrct ></div>
+</section>

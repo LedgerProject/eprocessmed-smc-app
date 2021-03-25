@@ -1,0 +1,31 @@
+<div fxLayout="row" fxLayoutWrap="wrap">
+    <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+        <mat-card>
+            <mat-card-content>
+              <mat-tab-group [(selectedIndex)]="tabAdtive">
+
+                <div *ngFor="let tab of tabs;">
+                  <div [ngSwitch]="tab">
+                    <div *ngSwitchCase="'create'">
+                      <mat-tab label="Create" #tab [disabled]='!tabCreateAdtive'>
+                          <app-create-catalogs [btnSaveCatalogStrctAdtive]="btnSaveCatalogStrctAdtive" (ApgradeCatalogsStrct)="apgradeCatalogsStrct($event)"></app-create-catalogs>
+                      </mat-tab>                
+                    </div>
+                    <div *ngSwitchCase="'list'">
+                      <mat-tab label="List" #tab [disabled]='!tabListAdtive'>
+                          <app-list-catalogs [catalogs]="catalogs" (EditStructure)="editStructure($event)" (EditCatalog)="editCatalog($event)" (DeleteCatalog)="deleteCatalog($event)"></app-list-catalogs>
+                      </mat-tab>                
+                    </div>
+                    <div *ngSwitchCase="'edit'">
+                      <mat-tab label="Edit" #tab [disabled]='!tabEditAdtive'>
+                          <app-edit-catalos [idCatalog]="idCatalogEdit" [catalog]="catalogEdit" [structure]="structureEdit" (CloseEditCatalog)="closeEditCatalog()"></app-edit-catalos>
+                      </mat-tab>            
+                    </div>
+                  </div>
+                </div>
+
+              </mat-tab-group>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

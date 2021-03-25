@@ -1,0 +1,23 @@
+<ng-template mat-tab-label>
+    <span id="editCatalogs">Edit</span>
+  </ng-template>
+
+<div fxLayout="row" fxLayoutWrap="wrap">
+    <div fxFlex.gt-sm="50" fxFlex.gt-xs="50">
+        <div class="example-button-container" style="padding-top: 10px;">
+            <button mat-mini-fab color="primary" title="save Catalog" aria-label="save Catalog" [disabled]='!btnSaveCatalogAdtive' (click)="saveCatalog()" >
+                <mat-icon>save</mat-icon>
+            </button>
+            <button mat-mini-fab color="primary" title="close Edit Catalog" aria-label="close Edit Catalog" (click)="closeEditCatalog()" >
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+    </div>
+</div>
+<br>
+
+<section class="sectionCreateCatalogs">
+    <label class="titel_seg">Catalogo:</label>
+    <br> <br>
+    <div id="divCatalog" #divCatalog ></div>
+</section>
