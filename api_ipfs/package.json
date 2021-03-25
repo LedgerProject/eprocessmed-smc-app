@@ -1,0 +1,32 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Api para Blockchain IPFS",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodemon src/index.js"
+  },
+  "author": "Carlos Montano",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "crypto-js": "^4.0.0",
+    "ethereumjs-common": "^1.5.2",
+    "ethereumjs-tx": "^2.1.2",
+    "express": "^4.17.1",
+    "express-fileupload": "^1.2.1",
+    "file-system": "^2.2.2",
+    "ipfs": "^0.54.4",
+    "ipfs-core": "^0.5.2",
+    "ipfs-http-client": "^49.0.2",
+    "ipfsd-ctl": "^7.2.0",
+    "keccak256": "^1.0.0",
+    "pg": "^8.3.3",
+    "pm2": "^4.5.5",
+    "shelljs": "^0.8.4",
+    "web3": "^1.2.11"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
