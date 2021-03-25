@@ -75,7 +75,7 @@ Web frontend have been built in Angular JS and mobile in Flutter 2.0. The busine
 * Python 3 with Django Rest Framework  (https://www.python.org/)
 
 
-npm install
+npm install      
 flutter pub get
 
 ## Available scripts
@@ -110,6 +110,14 @@ python manage.py runserver 0.0.0.0:3009
 To run frontend:
 ```sh
 ng serve
+```
+
+To run Mobile:
+```sh
+flutter pub get
+flutter packages get
+flutter clean
+flutter run android
 ```
 
 ## Links
