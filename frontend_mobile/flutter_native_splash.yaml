@@ -1,4 +1,0 @@
-flutter_native_splash:
-  image: assets/splash_screen/logo.png
-  color: "FFFFFF"
-  android_disable_fullscreen: true

@@ -34,10 +34,12 @@ It helps the understanding of the patient and offers security using blockchain t
 * [Angular 11](https://angular.io/)
 * [Typescript](https://www.typescriptlang.org)
 * [Web3js](https://web3js.readthedocs.io/)
+* [Flutter](https://flutter.dev/)
+
 
 ## The Technology
 
-Using Express with NodeJS, ApiREST has been built that give access to the data to the FrontEnd that is built in AngularJS. Similarly, using NodeJS together with Web3.js, access points have been built to communicate the FrontEnd with the Alastria blockchain.
+Web frontend have been built in Angular JS and mobile in Flutter 2.0. The business and access layers to BDD are implemented in NodeJS. APIs are implemented for encryption and file sharing with IPFS. NodeJS is used with Web3.js to communicate the FrontEnd with the Alastria blockchain.
 
 ## Software used
 
@@ -49,11 +51,14 @@ Using Express with NodeJS, ApiREST has been built that give access to the data t
 
 ##  Directory structure 
 
- - In "smart-consent" is the new frontend structure 
- - In "api_df_middleware" is a business middle layer
- - In "api_df_back" contains the data models
- - In "apiblockchain" It contains an api that gives access 
+ - In "frontend" contains the implemented components of the web application 
+ - In "frontend_mobile" contains the implemented components of the mobile application   
+ - In "middleware" contains the business rule APIs
+ - In "backend" contains the database access components.
+ - In "api_blockchain" It contains an api that gives access 
    to the frontend to interact with the Alastria blockchain.
+ - In "api_ipfs" It contains an api that gives access 
+   to the frontend to interact with the IPFS blockchain.
 
 
 ## Starting a development environment
@@ -64,31 +69,44 @@ Using Express with NodeJS, ApiREST has been built that give access to the data t
 
 * Angular CLI: install the Angular CLI (https://angular.io/guide/setup-local)
 
+* Flutter: install the Flutter 2.0 (https://flutter.dev/)
+
+* Python 3 with Django Rest Framework  (https://www.python.org/)
+
 
 npm install
-
+flutter pub get
 
 ## Available scripts
 
 To run each project:
 
-To run api_df_middleware:
+To run backend:
 ```sh
-/api_df_middleware/src$ node app.js
+/backend/src$ node app.js
 ```
 
-To run api_df_back:
+To run middleware:
 ```sh
- /api_df_back/src$ node app.js
+ /middleware/src$ node app.js
 ```
 
-To run the rest api to access the blockchain:
+To run the rest api to access the blockchain IPFS:
 
 ```sh
 npm run test
 ```
 
-To run smart-consent FRONT:
+
+To run the rest api to access the blockchain Alastria:
+
+```sh
+source env/bin/activate
+python manage.py runserver 0.0.0.0:3009
+```
+
+
+To run frontend:
 ```sh
 ng serve
 ```
@@ -99,5 +117,6 @@ Application link: [E-processmed](https://e-processmed.com/)
 
 
 # BlockChain Description
-  API REST NodeJS: 
-  access to the Alastria blockchain
+*  API REST in Python access to the Alastria blockchain
+*  IPFS REST API in Nodejs
+ 
