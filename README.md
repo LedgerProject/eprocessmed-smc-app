@@ -2,7 +2,7 @@
 <br />
 <p>
   <h3>The Smart Consent Project</h3>
-  <img src="https://github.com/LedgerProject/eprocessmed-smc-app/raw/master/smart-consent/src/assets/img/logo.png" />
+  <img src="https://github.com/LedgerProject/eprocessmed-smc-app/raw/master/frontend/src/assets/logo.png" />
 </p>
 
 <!-- GETTING STARTED -->
