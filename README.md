@@ -113,11 +113,12 @@ ng serve
 ```
 
 To run Mobile:
+Additionally you can also execute the f5 key to execute the project
 ```sh
 flutter pub get
 flutter packages get
 flutter clean
-flutter run android
+flutter run 
 ```
 
 ## Links
