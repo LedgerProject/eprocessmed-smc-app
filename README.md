@@ -5,6 +5,7 @@
   <img src="https://github.com/LedgerProject/eprocessmed-smc-app/raw/master/frontend/src/assets/logo.png" />
 </p>
 
+
 <!-- GETTING STARTED -->
 ## Table of contents
 
