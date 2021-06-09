@@ -61,6 +61,9 @@ Web frontend have been built in Angular JS and mobile in Flutter 2.0. The busine
    to the frontend to interact with the Alastria blockchain.
  - In "api_ipfs" It contains an api that gives access 
    to the frontend to interact with the IPFS blockchain.
+ - In "api_ncrypt" contains functions to encrypt sensitive data.
+ - In "api_whatsapp" contains functions to send notifications via WhatsApp.
+
 
 
 ## Starting a development environment
