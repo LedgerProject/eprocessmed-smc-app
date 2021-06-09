@@ -122,9 +122,19 @@ flutter clean
 flutter run 
 ```
 
+To run WhatsApp API:
+```sh
+npm run test
+```
+
+To run Ncrypt/Decrypt API:
+```sh
+npm run test
+```
+
 ## Links
 
-Application link: [E-processmed](https://e-processmed.com/)
+Application link: [E-processmed](http://forms.e-processmed.com:4100/login)
 
 
 # BlockChain Description
