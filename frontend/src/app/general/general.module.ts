@@ -5,12 +5,10 @@ import { MaterialModule } from '../material-module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { BrowserModule } from '@angular/platform-browser';
 
-
 /* Modules */
 import { SharedModule } from './components/shared/shared.module';
 
 /* Components */
-
 
 @NgModule({
   declarations: [
@@ -25,8 +23,8 @@ import { SharedModule } from './components/shared/shared.module';
     MaterialModule,
     FlexLayoutModule,
     RouterModule,
-    SharedModule,
-    BrowserModule
+    BrowserModule,
+    SharedModule
   ]
 })
 export class GeneralModule { }

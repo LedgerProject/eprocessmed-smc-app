@@ -22,9 +22,9 @@ const pool = (configDB) => {
 };
 
 const tryConnect = async (req, res) => {
-    poolSys = pool(config);
-    await poolSys.connect();
     try {
+        poolSys = pool(config);
+        await poolSys.connect();
         messagesSrv(config);
         messagesSrv(msgs.psqlConnected);
         return msgs.psqlConnected;

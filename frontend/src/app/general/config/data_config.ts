@@ -1,19 +1,21 @@
 export const dataConfig = {
   srvMiddl: {
-    host:'<host>',
-    port:'<port>'
+    host: 'localhost',
+    port: 8080
   },
   srvMiddlTest: {
-    host:'<host>',
-    port:'<port>'
+    host: 'localhost',
+    port: 8080
   },
   srvMiddlDev: {
-    host:'<host>',
-    port:'<port>'
+    host: 'localhost',
+    port: 8080
   },
   http: 'http://',
   https: 'https://',
   environment: 'Development', // Development || Testing || Production
   ssl: false                  // false || true
 };
+//api.saas-ecuador.com
+//
 

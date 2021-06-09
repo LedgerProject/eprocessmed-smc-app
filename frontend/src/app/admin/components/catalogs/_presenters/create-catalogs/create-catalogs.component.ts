@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, AfterViewInit, Renderer2, ViewChild, ElementRef, HostListener, SimpleChanges } from '@angular/core';
-import { GeneralService } from '../../../../../service-mngmt/services/general.service';
+import { GeneralService } from '../../../../../service-mngmt/general.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CrtEdtCatalogDialogComponent }  from  '../../../../../general/components/shared/dialog/crt-edt-catalog-dialog/app-crt-edt-catalog-dialog.component' ;
 
@@ -70,17 +70,12 @@ export class CreateCatalogsComponent implements AfterViewInit {
   }
 
   createGeneral(data: any): void {
-
-    console.log('createGeneral data::');
-    console.log(data);
-
     this.generalService.queryGeneral(data).subscribe(
       resp => {
         const ouput = resp.filter((res: any) => res.ouput === data.request);
         const answer = ouput[0].answer;
         if (answer.correct) {
-          console.log('answer.resp');
-          console.log(answer.resp);
+          location.reload();
         }
       },
       err => {
@@ -142,7 +137,7 @@ export class CreateCatalogsComponent implements AfterViewInit {
       // idUserModify: 0
     };
     // envia a la DB
-    this.createGeneral({ process: '', request: "rgt-catalogs", data });
+    this.createGeneral({ request: "rgt-catalogs", data });
   }  
 
   createCatalogStrct = async (data: any) => {

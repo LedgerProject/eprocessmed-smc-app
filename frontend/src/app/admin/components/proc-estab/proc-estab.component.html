@@ -1,0 +1,83 @@
+<mat-accordion class="example-headers-align">
+    <!-- *** ESTABLISHMENTS *** -->
+    <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+      <mat-expansion-panel-header id="mat-expansion-panel-header-2" class="expansion-panel-header">
+        <mat-panel-title class="expPanHeader">
+            Establishment/Specialties
+        </mat-panel-title>
+        <mat-panel-description>
+          <label for=""></label>
+          <mat-icon>business</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <mat-grid-list cols="2" rowHeight="90px">
+        <mat-grid-tile>
+            <mat-form-field hintLabel="Max 10 characters" appearance="fill">
+              <mat-label>Establishment</mat-label>
+              <mat-select [(value)]="procEstab.idEstablishment">
+                <mat-option *ngFor="let stablishment of stablishments" value="{{stablishment.id_establishment}}" (click)="presentsSpecialties(stablishment.id_establishment)">{{stablishment.description}}</mat-option>
+              </mat-select>
+              <mat-hint align="end"></mat-hint>
+            </mat-form-field>
+        </mat-grid-tile>
+        
+        <mat-grid-tile>
+          <mat-form-field appearance="fill">
+            <mat-label>Specialties</mat-label>
+            <mat-select [disabled]="!specSlctActive" [(value)]="slctSpecialty">
+              <mat-option *ngFor="let specialtie of collector.specialties" value="{{specialtie.id}}" (click)="presentsProcedures(specialties,specialtie.id)">
+                <mat-grid-list cols="2" rowHeight="2:1">
+                  <mat-grid-tile>{{specialtie.value}}</mat-grid-tile>
+                  <mat-grid-tile><mat-icon class="specid">{{specialtie.icon}}</mat-icon></mat-grid-tile>
+                </mat-grid-list></mat-option>
+            </mat-select>
+            <mat-hint align="end"></mat-hint>
+          </mat-form-field>
+        </mat-grid-tile>
+
+      </mat-grid-list>
+    </mat-expansion-panel>
+  
+    <!-- *** SPATIALITIES *** -->
+    <mat-expansion-panel [disabled]="true" [expanded]="step === 1" (opened)="setStep(1)" hideToggle>
+      <mat-expansion-panel-header class="expansion-panel-header">
+        <mat-panel-title class="expPanHeader">
+            Specialties/Procedures
+        </mat-panel-title>
+        <mat-panel-description>
+          <label for=""></label>
+          <mat-icon>rule</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <ul>
+        <li class="liProcCheck">
+          <mat-checkbox #checkedAll class="procCheckAll" id="" (click)="addRemoveProcAll(slctSpecialty, $event)">Add/Removed All</mat-checkbox>
+        </li>
+      </ul>
+
+      <!-- armar en grid -->
+      <ul>
+
+          <li *ngFor="let procedure of collector.procedures" class="liProcCheck">
+            <div *ngIf="procedure.checked; then thenBlock else elseBlock"></div>
+            <ng-template #thenBlock>
+              <mat-checkbox checked="procedure.checked" class="procCheck procCheck_{{procedure.id}}" (click)="addRemoveProcedure(slctSpecialty,procedure.id,false,NULL)">{{procedure.value}}</mat-checkbox>
+            </ng-template>
+            <ng-template #elseBlock>
+              <mat-checkbox class="procCheck procCheck_{{procedure.id}}" (click)="addRemoveProcedure(slctSpecialty,procedure.id,false,NULL)">{{procedure.value}}</mat-checkbox>
+            </ng-template>
+          </li>
+          
+      </ul>
+    </mat-expansion-panel>
+
+    <mat-action-row>
+      <button mat-button id="btnConfirm" name="{{btnStabActions.name}}" value="{{btnStabActions.value}}" [disabled]="!btnConfirmActive" class="example-label" mat-raised-button color="{{btnStabActions.color}}">
+        <data id="btnConfirm" value="{{btnStabActions.value}}">{{btnStabActions.name}}</data>
+      </button>
+    </mat-action-row>
+  
+  </mat-accordion>
+  

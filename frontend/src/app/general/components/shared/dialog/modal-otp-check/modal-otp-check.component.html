@@ -1,0 +1,13 @@
+<button type="button" class="close" aria-label="Close" (click)="closeModal()">
+  <span aria-hidden="true">&times;</span>
+</button>
+<h1 mat-dialog-title>Ingresar código sms </h1>
+<div mat-dialog-content>
+  <p>Por favor ingrese el codígo enviado por sms</p>
+  <div style="width: 60%; margin: auto; padding: 10px;">
+    <ng-otp-input allowNumbersOnly="true" (onInputChange)="onInputChange($event)" [config]="{length:4}"></ng-otp-input>
+  </div>  
+</div>
+<div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+    <button mat-raised-button style="background-color:  #00669A; color: #ffffff;" class="btn-block btn-lg m-t-20 m-b-10" type="button" (click)=" CheckOtp()">Verificar</button>  
+</div>

@@ -1,0 +1,31 @@
+<div class="main" >  
+
+    <!-- Boton de Login -->
+    <div class="btnLoginDiv" (click)="openDialog()" >
+      <h2 class="text-center " style="color: #ffffff;cursor: pointer;">Iniciar sesión</h2> 
+    </div>    
+
+
+     <!-- Texto -->
+    <div class="textDiv" style="margin-top: 30%; position: absolute;">
+      <p style="font-size: 14px; color: #00669A; text-align: justify;">{{this.domainData.text_body}}</p>
+    </div>
+
+    <div>
+    <img   class="imgEprocess2" class="imageSmartPassportDiv" src="/assets/images/befitting/smart_consent_Icon.png">            
+    </div>
+
+     <!--Logos Eprocess-->
+     <div  style="margin-top: 31.5%;"></div>
+
+     <div class="LogoEprocesDiv">      
+       <img class="imgEprocess1" src="/assets/images/befitting/Icon.png" >
+       <img *ngIf="idCustomer != 4"  class="imgEprocess2" src="/assets/images/befitting/LogoD&S.png">
+       <img   class="imgEprocess4"  src="/assets/images/befitting/spri_logo_TRANSPARENTE.png">       
+     </div>
+
+  </div>
+
+  <div style="z-index: -2; ">
+    <img  src="/assets/images/befitting/BackGroundSmartPassport.png" >
+  </div>

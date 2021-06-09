@@ -1,72 +1,76 @@
 const data_config = {
     server: {
-        host:'<host>',
-        port:'<port>'
+        host: 'localhost',
+        port: 8080
     },
     srvFront: {
-        host:'<host>',
-        port:'<port>'
+        host: 'localhost',
+        port: 8080
     },
     srvBack: {
-        host:'<host>',
-        port:'<port>'
+        host: 'localhost',
+        port: 8080
     },    
     serverTest: {
-        host:'<host>',
-        port:'<port>'
+        host: 'localhost',
+        port: 8080
     },
     srvFrontTest: {
-        host:'<host>',
-        port:'<port>'
+        host: 'localhost',
+        port: 8080
     },    
     srvBackTest: {
-        host:'<host>',
-        port:'<port>'
+        host: 'localhost',
+        port: 8080
     },
     serverDev: {
-        host:'<host>',
-        port:'<port>'
+        host: 'localhost',
+        port: 8080
     },
     srvFrontDev: {
-        host:'<host>',
-        port:'<port>'
+        host: 'localhost',
+        port: 8080
     },    
     srvBackDev: {
-        host:'<host>',
-        port:'<port>'
+        host: 'localhost',
+        port: 8080
     },
     otpSrv:{
-        host: '<host>',
-        port: '<port>'
+        host: 'localhost',
+        port: 8080
     },
     mailSrv:{
-        host: '<host>',
-        port: '<port>'
+        host: 'localhost',
+        port: 8080
     },    
     zoomSrv:{
-        host: '<host>',
-        port: '<port>'
+        host: 'localhost',
+        port: 8080
     },    
     shortSrv:{
-        host: '<host>',
-        port: '<port>'
+        host: 'localhost',
+        port: 8080
     },
     bockchHashSrv: {
-        host: '<host>',
-        port: '<port>'       
+        host: 'localhost',
+        port: 8080     
     },
     bockchCryptSrv: {
-        host: '<host>',
-        port: '<port>'
+        host: 'localhost',
+        port: 8080
     },
     encryptIpfsSrv: {
-        host: '<host>',
-        port: '<port>'
+        host: 'localhost',
+        port: 8080
     },
-    rootDocs: '<path>',
-    rootDocsTest: '<path>',
-    rootDocsDev: '<path>',
-    rootDocsPdf: '<path>',
+    serverPdf: {
+        host: 'localhost',
+        port: 8080
+    },
+    rootDocs: '/data/documents/temp/',
+    rootDocsTest: '/data/documents/temp/',
+    rootDocsDev: './src/documents/',
+    rootDocsPdf:'public/',
     http: 'http://',
     https: 'https://',
     environment: 'Development', // Development || Testing || Production

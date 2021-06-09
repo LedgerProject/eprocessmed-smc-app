@@ -13,30 +13,29 @@ import { GeneralModule } from '../general/general.module';
 // /* Components */
 import { StatisticsComponent } from './components/statistics/statistics.component';
 import { CatalogsComponent } from './components/catalogs/catalogs.component';
-import { UsersComponent } from './components/users/users.component';
 import { ParametersComponent } from './components/parameters/parameters.component';
 import { CreateCatalogsComponent } from './components/catalogs/_presenters/create-catalogs/create-catalogs.component';
 import { ListCatalogsComponent } from './components/catalogs/_presenters/list-catalogs/list-catalogs.component';
 import { EditCatalosComponent } from './components/catalogs/_presenters/edit-catalos/edit-catalos.component';
 import { StablishmentComponent } from './components/stablishment/stablishment.component';
 import { PatientsComponent } from './components/patients/patients.component';
+import { ProcEstabComponent } from './components/proc-estab/proc-estab.component';
 
 @NgModule({
   declarations: [
     StatisticsComponent,
     CatalogsComponent,
-    UsersComponent,
     ParametersComponent,
     CreateCatalogsComponent,
     ListCatalogsComponent,
     EditCatalosComponent,
     StablishmentComponent,
-    PatientsComponent
+    PatientsComponent,
+    ProcEstabComponent
   ],
   exports: [
     StatisticsComponent,
     CatalogsComponent,
-    UsersComponent,
     ParametersComponent
   ],
   imports: [

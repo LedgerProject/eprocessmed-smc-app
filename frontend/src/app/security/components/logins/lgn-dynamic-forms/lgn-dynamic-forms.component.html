@@ -1,0 +1,47 @@
+
+<div class="main" >  
+  <!--Título Texto -->
+  <div class="tittleDiv">
+    <h2 class="textoTittle">Termina con la curva de contagios desde los primeros síntomas</h2>
+  </div>
+  <!-- Título Texto -->
+  <!-- Boton de Login -->
+  <div class="btnLoginDiv" (click)="openDialog()" >
+    <h2 class="text-center " style="color: #ffffff;cursor: pointer;">Iniciar sesión</h2> 
+  </div>    
+  <!-- Boton de Login -->
+
+  <!-- Botones de registro -->
+  <div class="btnSingUpDiv">
+    <div class="btnSingUpBtnGoogle" (click)="signInWithGoogle()" >
+      <h2 class="text-center" style="color: #868686;cursor: pointer;">{{LoginText}} con Google</h2> 
+    </div>      
+    <div class="btnSingUpBtnSMS" (click)="openModalOtp()">
+      <h2 class="text-center" style="color: #868686;cursor: pointer;">{{LoginText}} con SMS</h2> 
+    </div>
+  </div>
+   <!-- Botones de registro -->
+     <!-- Texto -->
+  <div class="textDiv">
+    <p style="font-size: 14px; color: #00669A; text-align: justify;">
+      Cuando rellenas el formulario D&S recibes un pre-diagnósticos sobre el estado de tu salud en relación con el Covid-19. Además un médico especialista en Urgencias te citará para una consulta telemática en la que te aconsejará sobre los siguientes pasos a seguir.
+      D&S es un recurso gratuito para ayudarnos a reducir la curva de contagios. Tener la mejor información sobre nuestra salud desde el primer momento nos permite actuar de forma responsable.</p>
+  </div>
+   <!-- Texto -->   
+   <!--Logos Eprocess-->
+   <div class="LogoEprocesDiv">      
+     <img class="imgEprocess1" src="/assets/images/befitting/Icon.png" >
+     <img class="imgEprocess2" src="/assets/images/befitting/LogoD&S.png">     
+   </div>
+   <!--Logos Eprocess-->
+   <!-- Logos auspiciantes -->
+   <div class="logosAuspDiv" *ngIf="ImagesUCA">
+    <h2 class="TextAuspi" >Con la colaboración de:</h2>
+    <img class="imgAuspi1" src="/assets/images/befitting/spri_logo_TRANSPARENTE.png">
+    <img class="imgAuspi2" src="/assets/images/befitting/Tecnalia-removebg-preview.png">
+   </div>
+   <!-- logos Auspiciantes -->
+</div>
+<div style="z-index: -2; ">
+  <img src="/assets/images/befitting/LoginBackgroung.png" >
+</div>

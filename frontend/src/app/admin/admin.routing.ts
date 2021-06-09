@@ -5,10 +5,10 @@ import { NgModule } from '@angular/core';
 import { DashboardComponent } from '../general/components/dashboard/dashboard.component';
 import { StatisticsComponent } from './components/statistics/statistics.component';
 import { CatalogsComponent } from './components/catalogs/catalogs.component';
-import { UsersComponent } from './components/users/users.component';
 import { ParametersComponent } from './components/parameters/parameters.component';
 import { StablishmentComponent } from './components/stablishment/stablishment.component';
 import { PatientsComponent } from './components/patients/patients.component';
+import { ProcEstabComponent } from './components/proc-estab/proc-estab.component';
 
 // import { GeneralModule } from '../general/general.module';
 
@@ -25,10 +25,10 @@ const routes: Routes = [
         path: 'statistics',
         component: StatisticsComponent,
         data: {
-          title: 'Starter Page',
+          title: 'Starter',
           urls: [
             { title: 'Dashboard', url: '/dashboard' },
-            { title: 'Starter Page', url: '/statistics' }
+            { title: 'Starter', url: '/statistics' }
           ]
         },
         // canActivate: [AuthGuard, AdminGuard]
@@ -37,22 +37,10 @@ const routes: Routes = [
         path: 'admin/catalogs',
         component: CatalogsComponent,
         data: {
-          title: 'Catalogs Page',
+          title: 'Catalogs',
           urls: [
             { title: 'Dashboard', url: '/dashboard' },
-            { title: 'Catalogs Page', url: '/coucatalogsntry' }
-          ]
-        },
-        // canActivate: [AuthGuard, AdminGuard]
-      },
-      {
-        path: 'admin/users',
-        component: UsersComponent,
-        data: {
-          title: 'Users Page',
-          urls: [
-            { title: 'Dashboard', url: '/dashboard' },
-            { title: 'Users Page', url: '/users' }
+            { title: 'Catalogs', url: '/catalogs' }
           ]
         },
         // canActivate: [AuthGuard, AdminGuard]
@@ -61,10 +49,10 @@ const routes: Routes = [
         path: 'admin/parameters',
         component: ParametersComponent,
         data: {
-          title: 'Parameters Page',
+          title: 'Parameters',
           urls: [
             { title: 'Dashboard', url: '/dashboard' },
-            { title: 'Parameters Page', url: '/parameters' }
+            { title: 'Parameters', url: '/parameters' }
           ]
         },
         // canActivate: [AuthGuard, AdminGuard]
@@ -73,26 +61,38 @@ const routes: Routes = [
         path: 'admin/establishment',
         component: StablishmentComponent,
         data: {
-          title: 'Establishment Page',
+          title: 'Establishment',
           urls: [
             { title: 'Dashboard', url: '/dashboard' },
-            { title: 'Establishment Page', url: '/establishment' }
+            { title: 'Establishment', url: '/establishment' }
           ]
         },
         // canActivate: [AuthGuard, AdminGuard]
-      }      ,
+      },
       {
         path: 'admin/patients',
         component: PatientsComponent,
         data: {
-          title: 'Patients Page',
+          title: 'Patients',
           urls: [
             { title: 'Dashboard', url: '/dashboard' },
-            { title: 'Patients Page', url: '/patients' }
+            { title: 'Patients', url: '/patients' }
           ]
         },
         // canActivate: [AuthGuard, AdminGuard]
-      },      
+      },
+      {
+        path: 'admin/proc-estab',
+        component: ProcEstabComponent,
+        data: {
+          title: 'Procedures Establishments',
+          urls: [
+            { title: 'Dashboard', url: '/dashboard' },
+            { title: 'Procedures Establishments', url: '/proc-estab' }
+          ]
+        },
+        // canActivate: [AuthGuard, AdminGuard]
+      },           
       { path: '', redirectTo: '/statistics', pathMatch: 'full' }
     ],
     // canActivate: [AuthGuard]

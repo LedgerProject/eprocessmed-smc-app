@@ -1,5 +1,5 @@
 import { Component, Output, EventEmitter, Input, OnChanges, Renderer2, ViewChild, ElementRef, HostListener, SimpleChanges } from '@angular/core';
-import { GeneralService } from '../../../../../service-mngmt/services/general.service';
+import { GeneralService } from '../../../../../service-mngmt/general.service';
 
 export interface PeriodicElement {
   id_catalog: number;
@@ -30,7 +30,7 @@ export class ListCatalogsComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.catalogs.currentValue !== changes.catalogs.previousValue) {
-      this.listGeneral({ process: '', request: "catalogs" });
+      this.listGeneral({ request: "catalogs" });
     }
   }
 

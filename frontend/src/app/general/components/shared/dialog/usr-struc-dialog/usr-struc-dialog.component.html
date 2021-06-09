@@ -1,0 +1,22 @@
+
+<h1 mat-dialog-title>{{data.titleDlg}}</h1>
+
+<div mat-dialog-content>
+
+  <mat-form-field appearance="fill" *ngIf="!data.addtData || data.addtData === ''">
+    <mat-label>Tipo</mat-label>
+    <mat-select [(ngModel)]="data.addtData">
+        <div *ngFor="let addtData of data.additionalDatas">
+            <mat-option *ngFor="let dta of addtData.data" value="{{addtData.id}}|{{dta.id}}">{{dta.value}}</mat-option>
+        </div>
+    </mat-select>
+  </mat-form-field>
+
+
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="dialogClose()">Close</button>
+  <button mat-button mat-dialog-close cdkFocusInitial tabindex="2" (click)="dialogSave()" >Save</button>
+</div>
+
+

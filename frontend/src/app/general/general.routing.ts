@@ -4,10 +4,6 @@ import { NgModule } from '@angular/core';
 /* Components */
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 
-// import { CatalogsComponent } from '../admin/components/country/country.component';
-// import { UsersComponent } from '../admin/components/province/province.component';
-// import { ParametersComponent } from '../admin/components/city/city.component';
-
 // import { CreateConsentsComponent } from "../process-mngmt/components/consents/create-consents/create-consents.component";
 
 /* Guards */

@@ -1,0 +1,70 @@
+<div class="imgBackGround"  >
+    <img  src="../../../assets/images/befitting/logo.png" alt="logo">
+  </div>
+  
+  <p class="titel_form">Formularios paciente</p>
+  <!-- <div>
+    <button class="button" (click)="prueba()"> prueba </button>
+  </div> -->
+  
+  <a class="btn btn-info" role="button" [routerLink]="['/create-respondent-form']" *ngIf="dataSesion.role==='admin'">Crear</a>
+  
+  <!-- <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+    
+  </table> -->
+  
+  <mat-tab-group>
+    <mat-tab label="Nuevos formularios">
+      <div class="table-responsive">
+        <table class="table">
+          <thead class="" style="background: #00669A;">
+            <tr>
+              <th style="color: #ffffff;">Paciente</th>
+              <th style="color: #ffffff;">Formulario</th>
+              <th style="color: #ffffff;">Fecha</th>
+              <th style="color: #ffffff;">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let form of respondentForms.notAnswered">
+                <td>{{userName}}</td>
+                <td>{{form.name}}</td>
+                <td>{{form.creation_date}}</td>
+                <!-- <td *ngIf="!form.answered_check; then answerForm else formFilled"></td> -->
+                <!-- <ng-template #answerForm><td><a class="btn btn-info btn_ansFin" role="button" [routerLink]="['/dynamic-forms/edt-resp-form', form.id_frmdata]">Responder</a></td></ng-template>
+                <ng-template #formFilled><td><a class="btn btn-info btn_ansFin disabled" role="button" [routerLink]="['/dynamic-forms/edt-resp-form', form.id_frmdata]" style="background: #00669A;">Terminado</a></td></ng-template> -->
+                <div *ngIf="form.status=='O'" ><td><a class="btn btn-info btn_ansFin" role="button" [routerLink]="['/dynamic-forms/edt-resp-form', form.id_frmdata]">Responder</a></td></div>
+                <div *ngIf="form.status!='O'"><td><a class="btn btn-info btn_ansFin disabled" role="button" [routerLink]="['/dynamic-forms/edt-resp-form', form.id_frmdata]" style="background: #00669A;">Terminado</a></td></div>
+      
+            </tr>
+          </tbody>
+        </table>
+      </div>    
+    </mat-tab>
+    <mat-tab label="Contestados">
+      <div class="table-responsive">    
+        <table class="table">
+          <thead class="" style="background: #00669A;">
+            <tr>
+              <th style="color: #ffffff;">Paciente</th>
+              <th style="color: #ffffff;">Formulario</th>
+              <th style="color: #ffffff;">Fecha</th>
+              <th style="color: #ffffff;">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let form of respondentForms.answered">
+                <td>{{userName}}</td>
+                <td>{{form.name}}</td>
+                <td>{{form.creation_date}}</td>
+                <!-- <td *ngIf="!form.answered_check; then answerForm else formFilled"></td>-->
+                <!-- <ng-template #answerForm><td><a class="btn btn-info btn_ansFin" role="button" [routerLink]="['/dynamic-forms/edt-resp-form', form.id_frmdata]">Responder</a></td></ng-template>
+                <ng-template #formFilled><td><a class="btn btn-info btn_ansFin disabled" role="button" [routerLink]="['/dynamic-forms/edt-resp-form', form.id_frmdata]" style="background: #00669A;">Terminado</a></td></ng-template> -->
+                <div *ngIf="form.status=='O'" ><td><a class="btn btn-info btn_ansFin" role="button" [routerLink]="['/dynamic-forms/edt-resp-form', form.id_frmdata]">Responder</a></td></div>
+                <div *ngIf="form.status!='O'"><td><a class="btn btn-info btn_ansFin disabled" role="button" [routerLink]="['/dynamic-forms/edt-resp-form', form.id_frmdata]" style="background: #00669A;">Terminado</a></td></div>    
+            </tr>
+          </tbody>
+        </table>
+      </div>    
+    </mat-tab>
+  </mat-tab-group>  

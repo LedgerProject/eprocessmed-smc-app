@@ -1,5 +1,5 @@
 const request = require("request");
-const { urlSrv, urls } = require('../../global/global_data');
+const { urlSrv, urls } = require('../../global/data/global_data');
 const serverBackCtr = {};
 
 serverBackCtr.ping = (req, res) => {

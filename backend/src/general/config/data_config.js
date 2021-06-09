@@ -1,85 +1,89 @@
 const data_config = {
     server: {
-        host: '<host>',
-        port: '<port>'
+        host: 'localhost',
+        port: 8080
     },
     srvFront: {
-        host: '<host>',
-        port: '<port>'
+        host: 'localhost',
+        port: 8080
     },
     postgresql: {
-       host: '<host>',
-        port: '<port>',
-        user: '<user>',
-        password: '<password>',
-        database:'<database>'
+        host: 'localhost',
+        port: 8080,
+        user: '',
+        password: '',
+        database:''
     },
     mongodb: {
-        host: '<host>',
-        port: '<port>',
-        db: '<database>',
-        user: '<user>',
-        pwd: '<password>'
+        host: 'localhost',
+        port: 8080,
+        db: '',
+        user: '',
+        pwd: ''
     },
     serverTest: {
-        host:'<host>',
-        port: '<port>'
+        host: 'localhost',
+        port: 8080
     },
     srvFrontTest: {
-        host:'<host>',
-        port:'<port>'
+        host: 'localhost',
+        port: 8080
     },  
     postgresqlTest: {
-       host: '<host>',
-        port: '<port>',
-        user: '<user>',
-        password: '<password>',
-        database:'<database>'
+        host: 'localhost',
+        port: 8080,
+        user: '',
+        password: '',
+        database:''
     },
     mongodbTest: {
-        host: '<host>',
-        port: '<port>',
-        db: '<database>',
-        user: '<user>',
-        pwd: '<password>'
+        host: 'localhost',
+        port: 8080,
+        db: '',
+        user: '',
+        pwd: ''
     },
     serverDev: {
-       host:'<host>',
-        port: '<port>'
+        host: 'localhost',
+        port: 8080
     },
     srvFrontDev: {
-        host:'<host>',
-        port:'<port>'
+        host: 'localhost',
+        port: 8080
     },
     postgresqlDev: {
-        host: '<host>',
-        port: '<port>',
-        user: '<user>',
-        password: '<password>',
-        database: '<database>'
+        host: 'localhost',
+        port: 8080,
+        user: '',
+        password: '',
+        database: ''
     },
     mongodbDev: {
-        host: '<host>',
-        port: '<port>',
-        db: '<database>',
-        user: '<user>',
-        pwd: '<password>'
+        host: 'localhost',
+        port: 8080,
+        db: '',
+        user: '',
+        pwd: ''
     },
     otpSrv:{
-        host: '<host>',
-        port: '<port>'
+        host: 'localhost',
+        port: 8080
     },
     mailSrv:{
-        host: '<host>',
-        port: '<port>'
+        host: 'localhost',
+        port: 8080
     },    
     shortSrv:{
-        host: '<host>',
-        port: '<port>'
+        host: 'localhost',
+        port: 8080
     },
-    rootDocs: '<path>',
-    rootDocsTest: '<path>',
-    rootDocsDev: '<path>',
+    bockchCryptSrv: {
+        host: 'localhost',
+        port: 8080
+    },
+    rootDocs: '/data/documents/public/',
+    rootDocsTest: '/data/documents/public/',
+    rootDocsDev: './src/documents/',
     http: 'http://',
     https: 'https://',
     environment: 'Development',     // Development || Testing || Production
@@ -88,6 +92,7 @@ const data_config = {
     sslOtp: true,
     sslMail: true,
     sslShort: true,
+    sslBock: false,
     setting: {
         t_daemMeeting_ms: 2000,         //  Tiempo de chequeo del Demonio 3600000: 1H
         t_reminderLeadTime: 10800000,   //  Tiempo de antelación del recordatorio: 10800000: 3H

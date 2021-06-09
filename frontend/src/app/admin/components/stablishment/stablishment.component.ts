@@ -6,9 +6,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogMsgComponent } from '../../../general/components/shared/dialog/dialog-msg/dialog-msg.component';
 
 //SERVICES
-import { StablishmentService } from '../../../service-mngmt/services/stablishment.service';
-import { GeneralService } from '../../../service-mngmt/services/general.service';
-import { BlockchainService } from '../../../service-mngmt/services/blockchain.service';
+import { StablishmentService } from '../../../service-mngmt/stablishment.service';
+import { GeneralService } from '../../../service-mngmt/general.service';
+import { BlockchainService } from '../../../service-mngmt/blockchain.service';
 
 export interface StablishmentModel {
   idEstablishment?: string;
@@ -25,12 +25,18 @@ export interface StablishmentModel {
   specialistSign?: string;
   hash?: string;
   urlhash?: string;
+  patientLoad?: string;
+  idCatPatientLoad?: string;
+  idCatPatientVal?: string;
 }
 
 export interface SelectedValues {
   countries: string;
   provinces: string;
   cities: string;
+  idType: string;
+  idCatPatientLoad: string;
+  idCatPatientVal: string;
 }
 
 @Component({
@@ -40,25 +46,25 @@ export interface SelectedValues {
 })
 
 export class StablishmentComponent implements AfterViewInit {
-
   displayedColumns: string[] = ['action','idestablishment', 'name', 'dni', 'address', 'mail', 'phone'];
   dataSource!: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  public colector: any;
+  public collector: any;
   public stabListActive: boolean;
   public btnConfirmActive: boolean;
   public countries!: [any];
+  public dataUploadPat!: [any];
+  public patientDtValProc!: [any];
   public stablishment: any;
   public btnStabActions: any;
   public btn:any;
   public btnclick:any;
-
   public customers: any;
   public stablishmentmodel!: StablishmentModel;
 
-  //variables para insert de data
+  // variables para insert de data
   public sltValues!: SelectedValues;
 
   @HostListener('click', ['$event'])
@@ -66,13 +72,12 @@ export class StablishmentComponent implements AfterViewInit {
     this.switchOnClick(event);
   }
 
-  constructor( 
+  constructor (
     private generalService: GeneralService, 
     private stablishmentService: StablishmentService, 
     private blockchainService: BlockchainService, 
     private dialog: MatDialog ) {
-      
-    this.colector = [];
+    this.collector = [];
     this.stabListActive = true;
     this.stablishment = [];
     this.btnConfirmActive = true;
@@ -81,10 +86,11 @@ export class StablishmentComponent implements AfterViewInit {
       name: '',
       value: ''
     };
-    //proceso que llena el data table y permite filtro y paginacion
+
+    // proceso que llena el data table y permite filtro y paginacion
     this.dataSource = new MatTableDataSource(this.stablishment);
-    this.paginator=ViewChild(MatPaginator);
-    this.sort= ViewChild(MatSort);
+    this.paginator = ViewChild(MatPaginator);
+    this.sort = ViewChild(MatSort);
 
     this.stablishmentmodel = {
       idEstablishment:'',
@@ -100,12 +106,18 @@ export class StablishmentComponent implements AfterViewInit {
       contactPhone:'',
       specialistSign: '',
       hash: '',
-      urlhash: ''
+      urlhash: '',
+      patientLoad: '',
+      idCatPatientLoad: '',
+      idCatPatientVal: ''
     };
     this.sltValues = {
       countries: '',
       provinces: '',
-      cities: ''
+      cities: '',
+      idType: '',
+      idCatPatientLoad: '',
+      idCatPatientVal: ''
     };
 
     this.initialAsyncFunctions();
@@ -117,16 +129,21 @@ export class StablishmentComponent implements AfterViewInit {
   }
 
   initialAsyncFunctions = async () => {
-    await this.getCatalogs({ process: '', request: "catalogs" });
-    await this.getStablis({ process: '', request: "establishment" });
-    await this.getCustomer({ process: '', request: "customers" });
+    await this.getCatalogs({ request: "catalogs" });
+    await this.getStablis({ request: "establishment" });
+    await this.getCustomer({ request: "customers" });
   }
 
   switchOnClick =async (event: any) => {
-    // botones en el datatable
+    let eventTargetName;
+    const innerHtml = event.target.innerHTML;
+    if (event.target.name !== undefined) {
+      eventTargetName = event.target.name;
+    } else{
+      eventTargetName = innerHtml;
+    }
     switch (event.target.id) {
       case 'btnNew':
-        this.switchJsonParse(this.countries,'0','countries','true');
         this.stablishmentmodel = {
           idEstablishment:'',
           idCustomer:'',
@@ -141,17 +158,23 @@ export class StablishmentComponent implements AfterViewInit {
           contactPhone:'',
           specialistSign: '',
           hash: '',
-          urlhash: ''
+          urlhash: '',
+          patientLoad: '',
+          idCatPatientLoad: '',
+          idCatPatientVal: ''
         };
         this.sltValues = {
           countries: '',
           provinces: '',
-          cities: ''
+          cities: '',
+          idType: '',
+          idCatPatientLoad: '',
+          idCatPatientVal: ''
         };
-
         this.btnStabActions = {
           color: 'primary',
-          name: 'Create'
+          name: 'Create',
+          value: ''
         }
         this.show();
       break;
@@ -174,7 +197,7 @@ export class StablishmentComponent implements AfterViewInit {
           this.show();
         break;
       case 'btnConfirm': // botones en el CONTENT REGISTER, UPDATE, DELETE
-          switch (event.target.name) {
+          switch (eventTargetName) {
             case 'Create':
                 this.createStablishment(event.target.id);
               break;
@@ -195,8 +218,13 @@ export class StablishmentComponent implements AfterViewInit {
           const ouput = resp.filter((res: any) => res.ouput === data.request);
           const answer = ouput[0].answer;
           if (answer.correct) {    
-            const catalog = answer.resp.find((catalog: any) => catalog.description === "countries" );
-            this.countries = catalog.data_jb;
+            const countries = answer.resp.find((catalog: any) => catalog.description === "countries" );
+            const dataUploadPat = answer.resp.find((catalog: any) => catalog.description === "dataUploadPat" );
+            const patientDtValProc = answer.resp.find((catalog: any) => catalog.description === "patientDtValProc" );
+            this.countries = countries.data_jb;
+            this.dataUploadPat = dataUploadPat.data_jb;
+            this.patientDtValProc = patientDtValProc.data_jb;
+            this.selectBuilder();           
           }
         },
         error => {
@@ -239,7 +267,6 @@ export class StablishmentComponent implements AfterViewInit {
 
   getStablishmentByid(id:any): void {
     const dataSet = {
-      process: '', 
       request: 'estab-by-id',
       data: {idEstablishment: id}
     };
@@ -252,7 +279,10 @@ export class StablishmentComponent implements AfterViewInit {
           this.sltValues = {
             countries: stablishment.id_cat_location.countries,
             provinces: stablishment.id_cat_location.provinces,
-            cities: stablishment.id_cat_location.cities
+            cities: stablishment.id_cat_location.cities,
+            idType: stablishment.id_cat_type.idType,
+            idCatPatientLoad: stablishment.id_cat_patient_load.idCatPatientLoad,
+            idCatPatientVal: stablishment.id_cat_patient_val.idCatPatientVal
           };
           this.stablishmentmodel = {
             idEstablishment: stablishment.id_establishment,
@@ -262,16 +292,27 @@ export class StablishmentComponent implements AfterViewInit {
             address: stablishment.address,
             phone: stablishment.phone,
             mail: stablishment.mail,
-            idType: stablishment.id_cat_type,
+            idType: '',
             idLocation: '',
             contactName: stablishment.contact_name,
             contactPhone: stablishment.contact_phone,
             specialistSign:  stablishment.specialist_sign,
             hash: stablishment.hash,
-            urlhash: stablishment.urlhash
+            urlhash: stablishment.url_hash,
+            patientLoad: stablishment.patient_load,
+            idCatPatientLoad: '',
+            idCatPatientVal: ''
           };
           this.editEstablishment(this.countries, this.sltValues);
-          this.decrypt(stablishment.dni, stablishment.hash);
+          let encrypted = {
+            dni: stablishment.dni,
+            address: stablishment.address,
+            mail: stablishment.mail,
+            phone: stablishment.phone,
+            contactName: stablishment.contact_name,
+            contactPhone: stablishment.contact_name     
+          }
+          this.decrypt(encrypted, stablishment.hash);
         }
       },
       error => {
@@ -280,22 +321,30 @@ export class StablishmentComponent implements AfterViewInit {
     );
   }
 
+  async selectBuilder(){
+    await this.switchJsonParse(this.countries,'0','countries','true', '');
+    await this.switchJsonParse(this.dataUploadPat,'0','dataUploadPat','true', '');
+    await this.switchJsonParse(this.patientDtValProc,'0','patientDtValProc','true', ''); 
+  }
+
   createStablishment = async(namebutton:any) => {
-    this.bloquearbtn(namebutton);
+    this.lockButton(namebutton);
     const idLocation = {
       countries: this.sltValues.countries,
       provinces: this.sltValues.provinces,
       cities: this.sltValues.cities
     };
     this.stablishmentmodel.idLocation = await JSON.stringify(idLocation);
+    this.stablishmentmodel.idType = await JSON.stringify({idType: this.sltValues.idType});
+    this.stablishmentmodel.idCatPatientLoad = await JSON.stringify({idCatPatientLoad: this.sltValues.idCatPatientLoad});
+    this.stablishmentmodel.idCatPatientVal = await JSON.stringify({idCatPatientVal: this.sltValues.idCatPatientVal});
     const data = {
-      process: '', 
       request: 'rgt-establishment',
       data: this.stablishmentmodel
     };
-    await this.stablishmentService.createStablishment(data).subscribe(
+    await this.stablishmentService.crtUpdStablishment(data).subscribe(
       resp => {
-        const ouput = resp.filter((res: any) => res.ouput === data.request);
+        const ouput = resp.resp.filter((res: any) => res.ouput === 'upd-ncrypt-establ');
         const answer = ouput[0].answer;
         if (answer.correct) {
           location.reload();
@@ -308,10 +357,9 @@ export class StablishmentComponent implements AfterViewInit {
   }
 
   editEstablishment = async (countries: any, sltValues:any) => {
-    await this.switchJsonParse(countries,'0','countries','true');
-    await this.switchJsonParse(countries, sltValues.countries, 'provinces', 'false');
-    await this.switchJsonParse(countries, sltValues.provinces, 'cities', 'false');
-    await this.switchJsonParse(countries, sltValues.cities, '', 'false');
+    await this.switchJsonParse(countries, sltValues.countries, 'provinces', 'false', '');
+    await this.switchJsonParse(countries, sltValues.provinces, 'cities', 'false', '');
+    await this.switchJsonParse(countries, sltValues.cities, '', 'false', '');
   }
 
   decrypt = async (data: any, hash: any) => {
@@ -325,7 +373,13 @@ export class StablishmentComponent implements AfterViewInit {
     this.blockchainService.decrypt(dataSet).subscribe(
       resp => {
         if (resp.correct) {
-          this.stablishmentmodel.dni = resp.resp.data;
+          const decryptSData = resp.resp.data;
+          this.stablishmentmodel.dni = decryptSData.dni,
+          this.stablishmentmodel.address = decryptSData.address,
+          this.stablishmentmodel.mail = decryptSData.mail,
+          this.stablishmentmodel.phone = decryptSData.phone,
+          this.stablishmentmodel.contactName = decryptSData.contactName,
+          this.stablishmentmodel.contactPhone = decryptSData.contactName
         }
       },
       error => {
@@ -336,21 +390,23 @@ export class StablishmentComponent implements AfterViewInit {
 
   //procedimiento que obtiene el registro de la tabla a y lo modifica
   updateStablishment = async (id:any, namebutton:any) => {
-    this.bloquearbtn(namebutton);
+    this.lockButton(namebutton);
     const idLocation = {
       countries: this.sltValues.countries,
       provinces: this.sltValues.provinces,
       cities: this.sltValues.cities
     };
     this.stablishmentmodel.idLocation = await JSON.stringify(idLocation);
+    this.stablishmentmodel.idType = await JSON.stringify({idType: this.sltValues.idType});
+    this.stablishmentmodel.idCatPatientLoad = await JSON.stringify({idCatPatientLoad: this.sltValues.idCatPatientLoad});
+    this.stablishmentmodel.idCatPatientVal = await JSON.stringify({idCatPatientVal: this.sltValues.idCatPatientVal});
     const data = {
-      process: '', 
       request: 'upd-establishment',
       data: this.stablishmentmodel
     };
-    await this.generalService.queryGeneral(data).subscribe(
+    await this.stablishmentService.crtUpdStablishment(data).subscribe(
       resp => {
-        const ouput = resp.filter((res: any) => res.ouput === data.request);
+        const ouput = resp.resp.filter((res: any) => res.ouput === data.request);
         const answer = ouput[0].answer;
         if (answer.correct) {
           location.reload();
@@ -364,9 +420,8 @@ export class StablishmentComponent implements AfterViewInit {
 
    //procedimiento que obtiene el registro de la tabla a y lo modifica
   deleteStablishment = async (id:any, namebutton:any) => {
-    this.bloquearbtn(namebutton);
+    this.lockButton(namebutton);
     const data = {
-      process: '', 
       request: 'upd-establishment',
       data: {
         idEstablishment: id,
@@ -407,7 +462,7 @@ export class StablishmentComponent implements AfterViewInit {
     }
   }
 
-  bloquearbtn(namebutton:any): void {
+  lockButton(namebutton:any): void {
     switch (namebutton) {
       case 'btnConfirm':
           this.btnConfirmActive = false;
@@ -423,7 +478,7 @@ export class StablishmentComponent implements AfterViewInit {
       width: '400px',
       data: {
         titleDlg,
-        action: 'delete'
+        action: ''
       }
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -438,21 +493,24 @@ export class StablishmentComponent implements AfterViewInit {
   }
 
   // Recorre JSON de Catalogos general.
-  switchJsonParse = async (data: [any], traceId:string, name:string, principal:string) => {
-    await this.childJson([data], traceId, name, principal);
+  switchJsonParse = async (data: [any], traceId: string, name:string, principal:string, paramName:string) => {
+    await this.childJson([data], traceId, name, principal, paramName);
   }
 
-  childJson = async (data: [any], strTraceId:string, name:string, principal:string) => {
+  childJson = async (data: [any], strTraceId: string, name:string, principal:string, paramName:string) => {
     const traceIdStr: any = strTraceId.split(',');
     const traceId = traceIdStr.map(this.parseInter);
     const id = traceId[0];
     const record = data[id];
-    var colector: any = [];
+    var collector: any = [];
     var dta: any = [];
     traceId.splice(0, 1);
+    if (paramName === '') {
+      paramName = 'name';
+    }
     if(traceId.length > 0) {
       const strId = traceId.toString();
-      await this.childJson(record.children, strId, name, principal);
+      await this.childJson(record.children, strId, name, principal, paramName);
     } else {
       if(principal == 'true') {
         dta= record.children;
@@ -464,16 +522,19 @@ export class StablishmentComponent implements AfterViewInit {
           }          
         }
       }
+
+      // Separar y parametrizar solo para construir selectores
       dta.forEach( async (datachild: any)=> {
-        const param: any = datachild.children.find((param: any) => param.name === 'name');
+        const param: any = datachild.children.find((param: any) => param.name === paramName);
         if (param !== undefined) {
           const idChild = `${datachild.father},${datachild.id}`;
+          // const idChild = `${datachild.father},${param.id}`;
           const value = param.value;
-          colector.push({id: idChild, value});          
+          collector.push({id: idChild, value});
         }
       });
-      if (colector.length > 0) {
-        this.colector[name] = colector;
+      if (collector.length > 0) {
+        this.collector[name] = collector;
       }
     }
   }

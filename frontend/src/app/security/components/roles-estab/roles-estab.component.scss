@@ -1,0 +1,43 @@
+.example-headers-align .mat-expansion-panel-header-title,
+.example-headers-align .mat-expansion-panel-header-description {
+  flex-basis: 0;
+}
+
+.example-headers-align .mat-expansion-panel-header-description {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.example-headers-align .mat-form-field + .mat-form-field {
+  margin-left: 8px;
+}
+
+.activeStep {
+  background-color: rgb(163, 235, 253) !important;
+}
+
+.expPanHeader {
+  font-weight: 600;
+  color: grey;
+}
+
+.specid {
+  color: green;
+}
+
+.rolIcon {
+  color: green;
+}
+
+.moduleIcon {
+  color: green;
+}
+
+
+.liProcCheck {
+  list-style: none;
+}
+
+.procCheckAll {
+  font-weight: bold;
+}

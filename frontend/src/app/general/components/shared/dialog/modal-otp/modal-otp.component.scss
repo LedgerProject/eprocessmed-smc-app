@@ -1,0 +1,126 @@
+.modal_title {
+    color: grey;
+  }
+  
+  .btn_login {
+    padding-bottom: 10px;
+  }
+  
+  .btn_otp {
+    background-color: #eee;
+    color: #3663e9;
+    width: 166px;
+    padding: 2px 10px 2px 10px;
+  }
+  
+  /* imput */
+  .form__group {
+    position: relative;
+    padding: 15px 0 0;
+    margin-top: 10px;
+  }
+  .form__field {
+    font-family: inherit;
+    width: 100%;
+    border: 0;
+    border-bottom: 2px solid #fff;
+    outline: 0;
+    font-size: 1.3rem;
+    color: #fff;
+    padding: 7px 0;
+    background: transparent;
+    transition: border-color 0.2s;
+  }
+  .form__field::placeholder {
+    color: transparent;
+  }
+  .form__field:placeholder-shown ~ .form__label {
+    /* font-size: 1.3rem; */
+    cursor: text;
+    top: 20px;
+  }
+  .form__label {
+    position: absolute;
+    top: 0;
+    display: block;
+    transition: 0.2s;
+    font-size: 1rem;
+    color: #fff;
+  }
+  .form__field:focus {
+    padding-bottom: 6px;
+    font-weight: 700;
+    border-width: 3px;
+    /* border-image: linear-gradient(to right, #11998e, #38ef7d); */
+    border-image-slice: 1;
+  }
+  .form__field:focus ~ .form__label {
+    position: absolute;
+    top: 0;
+    display: block;
+    transition: 0.2s;
+    font-size: 1rem;
+    /* color: #11998e; */
+    font-weight: 700;
+  }
+  /* reset input */
+  .form__field:required, .form__field:invalid {
+    box-shadow: none;
+  }
+  
+  .msgform {
+    color: #17a2b8;
+    text-align: center;
+  }
+  
+  /* modal */
+  /* Modal */
+  
+  /* The Modal (background) */
+  .modalOtp {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 2000; /* Sit on top */
+    left: 100px;
+    right: auto;
+    margin-top: 0px;
+    width: 50%;
+    height: 20%; /* Full width */
+    background-color: #fefefe;
+    border: 1px solid #888;
+  }
+  
+  /* The Close Button */
+  .close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  .cont_btn {
+    text-align: end;
+    padding-bottom: 30px;
+  }
+  
+  .guide_text {
+    text-align: center;
+    color: gray;
+    padding: 10px 0px 10px 0px;
+  }
+  
+  @media screen and (max-width: 600px) {
+    .modalOtp {
+      left: 30px;
+      right: auto;
+      width: 80%; /* Full width */
+    }
+  }
+  

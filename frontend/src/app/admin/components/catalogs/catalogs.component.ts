@@ -1,6 +1,6 @@
 import { Component, AfterViewInit, Renderer2, ElementRef, HostListener } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { GeneralService } from '../../../service-mngmt/services/general.service';
+import { GeneralService } from '../../../service-mngmt/general.service';
 
 @Component({
   selector: 'app-catalogs',
@@ -8,7 +8,6 @@ import { GeneralService } from '../../../service-mngmt/services/general.service'
   styleUrls: ['./catalogs.component.scss']
 })
 export class CatalogsComponent implements AfterViewInit {
-
   public idCatalogEdit!: string;
   public catalogsStrct!: [any?];
   public catalogEdit!: [any?];
@@ -70,9 +69,6 @@ export class CatalogsComponent implements AfterViewInit {
         const ouput = resp.filter((res: any) => res.ouput === data.request);
         const answer = ouput[0].answer;
         if (answer.correct) {// Falta dialogo de "Correct" o "Failed"
-          console.log('correct: ', answer.correct);      
-          console.log('answer.resp');
-          console.log(answer.resp);
           location.reload();
         }
       },
@@ -93,19 +89,15 @@ export class CatalogsComponent implements AfterViewInit {
     this.tabAdtive = this.idEditTab % this.tabCount;
   }
 
-  deleteCatalog(dataSet: any): void {//Falta dialogo de confirmación
-    console.log('deleteCatalog data');
-    console.log(dataSet);
-
+  deleteCatalog(dataSet: any): void {
     const data = {
       idCatalog: dataSet.idCatalog,
       status: '0'
     };
-    this.queryGeneral({ process: '', request: "upd-catalogs", data });
+    this.queryGeneral({ request: "upd-catalogs", data });
   }
 
   closeEditCatalog(): void {
-    console.log('Alerta de borrado del contenido creado en Edit');// Nota: Construir alerta
     this.catalogEdit = [];
     this.structureEdit = [];
     this.valueInitials();

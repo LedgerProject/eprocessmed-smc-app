@@ -21,6 +21,14 @@ import {
 import { CrtEdtCatalogDialogComponent } from './dialog/crt-edt-catalog-dialog/app-crt-edt-catalog-dialog.component';
 import { DialogMsgComponent } from './dialog/dialog-msg/dialog-msg.component';
 import { DialogComponent } from './dialog/dialog/dialog.component';
+import { UsrStrucDialogComponent } from './dialog/usr-struc-dialog/usr-struc-dialog.component';
+
+import { ModalAlertComponent } from './dialog/modal-alert/modal-alert.component';
+import { ModalOtpCheckComponent } from './dialog/modal-otp-check/modal-otp-check.component';
+import { ModalPrivacyPoliciesComponent } from './dialog/modal-privacy-policies/modal-privacy-policies.component';
+import { ModalLoginComponent } from './dialog/modal-login/modal-login.component';
+import { ModalOtpComponent } from './dialog/modal-otp/modal-otp.component';
+import { NgOtpInputModule } from 'ng-otp-input';
 
 @NgModule({
   declarations: [
@@ -29,7 +37,14 @@ import { DialogComponent } from './dialog/dialog/dialog.component';
     AccordionDirective,
     CrtEdtCatalogDialogComponent,
     DialogMsgComponent,
-    DialogComponent
+    DialogComponent,
+    UsrStrucDialogComponent,
+    ModalAlertComponent,
+    ModalOtpCheckComponent,
+    ModalPrivacyPoliciesComponent,
+    ModalOtpCheckComponent,
+    ModalLoginComponent,
+    ModalOtpComponent
   ],
   imports: [
     MatButtonModule,
@@ -39,7 +54,8 @@ import { DialogComponent } from './dialog/dialog/dialog.component';
     FormsModule,
     CommonModule,
     MaterialModule,
-    BrowserModule
+    BrowserModule,
+    NgOtpInputModule
     // MatNativeDateModule
   ],
   bootstrap: [
@@ -49,7 +65,15 @@ import { DialogComponent } from './dialog/dialog/dialog.component';
     AccordionAnchorDirective,
     AccordionLinkDirective,
     AccordionDirective,
-    CrtEdtCatalogDialogComponent
+    CrtEdtCatalogDialogComponent,
+    DialogMsgComponent,
+    DialogComponent,
+    UsrStrucDialogComponent,
+    ModalAlertComponent,
+    ModalOtpCheckComponent,
+    ModalPrivacyPoliciesComponent,
+    ModalLoginComponent,
+    ModalOtpComponent
   ],
   entryComponents: [CrtEdtCatalogDialogComponent],
   providers: [

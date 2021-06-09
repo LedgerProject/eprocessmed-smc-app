@@ -1,0 +1,13 @@
+<router-outlet>
+    <div [ngSwitch]="module">
+        <div *ngSwitchCase="'dynamic-forms'">
+            <app-lgn-dynamic-forms [domainData]="domainData"></app-lgn-dynamic-forms>
+        </div>
+        <div *ngSwitchCase="'smart-passport'">
+             <!-- <app-lgn-dynamic-forms [domainData]="domainData"></app-lgn-dynamic-forms> -->
+        </div>
+        <div *ngSwitchCase="'consent'">
+             <app-lgn-consent [domainData]="domainData"></app-lgn-consent>
+        </div>   
+    </div>
+</router-outlet>

@@ -1,6 +1,6 @@
-const generatorRequest = require('../../global/generator_request');
-const bockchainRequest = require('./server_bockchain_ctr');
-const { urlSrv, urls, hdJson } = require('../../global/global_data');
+const generatorRequest = require('../../global/functions/generator_request');
+const bockchainRequest = require('../services/server_bockchain_ctr');
+const { urlSrv, urls, hdJson } = require('../../global/data/global_data');
 const stablishmentCtr = {};
 
 const url = `${urlSrv}${urls.genQuerySrv}`;
@@ -26,6 +26,14 @@ const sedRequest = async (reqSelet, requests, collector) => {
   return resp;
 }
 
+const ncrypt = async (dataNcrypt) => {
+  const hash = dataNcrypt.hash;
+  const data = dataNcrypt.data;
+  const resp = await bockchainRequest.ncrypt(data, hash);
+  const answerNcrypt = resp.find(dta => dta.ouput === 'ncrypt');
+  return answerNcrypt.answer;
+}
+
 const createEstablishment = async (dataReq) => {
   let prepareData = '';
   if (dataReq.prepareData !== undefined) {
@@ -43,17 +51,7 @@ const createEstablishment = async (dataReq) => {
   return sedRequest(reqSelet, requests, collector);
 }
 
-const updatEstab = async (idEstablishment, dni, hash, urlhash) => {
-  const dataReq = {
-    process: '',
-    request: 'upd-establishment',
-    data: {
-      idEstablishment,
-      dni,
-      hash: `${hash}`,
-      urlhash: `${urlhash}`
-    }
-  }
+const updatEstab = async (dataReq) => {
   let prepareData = '';
   if (dataReq.prepareData !== undefined) {
     prepareData = dataReq.prepareData;
@@ -70,7 +68,7 @@ const updatEstab = async (idEstablishment, dni, hash, urlhash) => {
   return sedRequest(reqSelet, requests, collector);
 }
 
-stablishmentCtr.create = async (req, res) => {
+stablishmentCtr.ctrUpd = async (req, res) => {
   let dataReq;
   if (req.body) {
     dataReq = req.body
@@ -78,73 +76,93 @@ stablishmentCtr.create = async (req, res) => {
   if (req.params.data) {
     dataReq = req.params
   }
+  const request = dataReq.request;
+  let requestUpd = dataReq.request;
+  const params = dataReq.data;
+  if (request === 'rgt-establishment') {
+    requestUpd = 'upd-ncrypt-establ';
+    // Crea al Usuario
+    // Esperar id del registro
+    const respCreate = await createEstablishment(dataReq);
+    const respC = respCreate.find(resp => resp.ouput === 'rgt-establishment');
+    if (respC !== undefined) {
+      const answerC = respC.answer.resp
+      params.idEstablishment = answerC[0].id_establishment;
+    }
+  }
 
-  // Guardar los datos con la función general
-  // Esperar id del registro
-  const respCreate = await createEstablishment(dataReq);
-  const respC = respCreate.find(resp => resp.ouput === 'rgt-establishment');
+  // Si la inserción es exitosa.
+  if (params.idEstablishment !== '') {
+    // Solicita "hash" del "DNI" a la blockchain.
+    const respHash = await bockchainRequest.sendHash(params.idEstablishment, params);
+    const respH = respHash.find(resp => resp.ouput === 'sedhash');
+    if (respH !== undefined) {
+      const answer = respH.answer;
+      const hash = answer.hash;
+      const urlhash = answer.alastria;
+      const dataNcrypt = {
+        hash,
+        data: {
+          dni: params.dni,
+          address: params.address,
+          mail: params.mail,
+          phone: params.phone,
+          contactName: params.contactName,
+          contactPhone: params.contactName            
+        }
+      }
 
-  if (respC !== undefined) {
-    const answerC = respC.answer.resp
-    const correctC = respC.answer.correct;
-    const params = dataReq.data[0].params[0];
-
-    // Si la inserción es exitosa.
-    if (correctC) {
-      // Solicita "hash" del "DNI" a la blockchain.
-      const respHash = await bockchainRequest.sendHash(answerC[0].id_establishment, params);
-      const respH = respHash.find(resp => resp.ouput === 'sedhash');
-      if (respH !== undefined) {
-        const answer = respH.answer;
-        const hash = answer.hash;
-        const urlhash = answer.alastria;
-        const id_establishment = answerC[0].id_establishment;
-
-        // Ncrypt
-        const respNcrypt = await bockchainRequest.ncrypt(params.dni, hash);
-        const answerNcrypt = respNcrypt.find(dta => dta.ouput === 'ncrypt');
-        const message = answerNcrypt.answer.message;
-
-        if (message === 'Datos encriptados correctamente') {
-          const dataNcrypt = answerNcrypt.answer.body.hash.encr_texto;
-
-          // Hace update al "hash".
-          const respUpdate = await updatEstab(id_establishment, dataNcrypt, hash, urlhash);
-          const updEstablishment = respUpdate.find(dta => dta.ouput === 'upd-establishment');
-
-          res.status(200).json({
-            correct: true,
-            resp: updEstablishment.answer
-          });
-
-          
+      // Ncrypt
+      const respNcrypt = await ncrypt(dataNcrypt);
+      if (respNcrypt.message === 'Datos encriptados correctamente') {
+        let dataUpdate;
+        if (requestUpd === 'upd-ncrypt-establ') {
+          dataUpdate = respNcrypt.data;
+          dataUpdate['idEstablishment'] = params.idEstablishment;
+          dataUpdate['hash'] = hash;
+          dataUpdate['urlhash'] = urlhash;  
         } else {
-          res.status(400).json({
-            correct: false,
-            resp: 'Error al consultar hash'
-          });
+          dataUpdate = params;
+          for (const key in respNcrypt.data) {
+            if (Object.hasOwnProperty.call(respNcrypt.data, key)) {
+              dataUpdate[key] = respNcrypt.data[key];
+            }
+          }
         }
 
+        const dataReq = {
+          request: requestUpd,
+          data: dataUpdate
+        }
+
+        // Hace update al "hash".
+        const respUpdate = await updatEstab(dataReq);
+        const updEstablishment = respUpdate.find(dta => dta.ouput === requestUpd);
+        res.status(200).json({
+          correct: true,
+          resp: [updEstablishment]
+        });
+        
       } else {
         res.status(400).json({
           correct: false,
           resp: 'Error al consultar hash'
         });
       }
-      
+
     } else {
       res.status(400).json({
         correct: false,
-        resp: 'Error al crear'
+        resp: 'Error al consultar hash'
       });
     }
-
+    
   } else {
     res.status(400).json({
       correct: false,
       resp: 'Error al crear'
     });
-  } 
+  }
 
 };
 

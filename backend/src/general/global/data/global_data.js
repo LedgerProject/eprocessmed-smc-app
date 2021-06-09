@@ -12,6 +12,7 @@ let portFront;
 let rootShort;
 let rootDocs;
 let configDB;
+let httpBock;
 
 const hostOtp = dataConfig.otpSrv.host;
 const portOtp = dataConfig.otpSrv.port;
@@ -19,6 +20,8 @@ const hostMail = dataConfig.mailSrv.host;
 const portMail = dataConfig.mailSrv.port;
 const hostShort = dataConfig.shortSrv.host;
 const portShort = dataConfig.shortSrv.port;
+const hostBockchCrypt = dataConfig.bockchCryptSrv.host;
+const portBockchCrypt = dataConfig.bockchCryptSrv.port;
 
 /*  Environment Settings */
 switch (environment) {
@@ -79,10 +82,17 @@ if (dataConfig.sslFront) {
   httpFront = dataConfig.http;
 }
 
+if (dataConfig.sslBock) {
+  httpBock = dataConfig.https;
+} else {
+  httpBock = dataConfig.http;
+}
+
 const rootURI = `${http}${host}:${port}/`;
 const rootOtp = `${httpOtp}${hostOtp}`;
 const mailSrv = `${httpMail}${hostMail}`;
 const shortSrv = `${httpShort}${hostShort}`;
+const rootBockchCrypt = `${httpBock}${hostBockchCrypt}:${portBockchCrypt}/`;
 
 if (portFront !== '') {
   rootShort = `${httpFront}${hostFront}:${portFront}/meeting-confirmation/`;
@@ -91,49 +101,51 @@ if (portFront !== '') {
 }
 
 const global_data = {
-      environment,
-      host,
-      port,
-      rootURI,
-      configDB,
-      rootOtp,
-      mailSrv,
-      shortSrv,
-      rootShort,
-      rootDocs,
-      nSalt: 10,
-      hdJson: { 'Content-Type': 'application/json' },
-      hdText: { 'Content-Type': 'text/xml' },
-      hdForm: { 'Content-Type' : 'application/x-www-form-urlencoded' },
-      secrets: {
-        jwt: {
-          secret :'af668804f9162927b2aa2c1c07b83640'
-        }
-      },
-      urls: {
-        srvDbSrv: 'srv-db-srv',
-        genQuerySrv: 'gen-query-srv',
-        sendOtpUsrSrv: 'send-otp-usr-srv',
-        scriptOtpSrv: 'clicksend_otp.php',
-        scriptMailSrv:'sendMail.php',
-        backToMiddle: 'back-middle', // Ruta de peticiones hacia el middle
-        getPatientSrv: 'get-patient-srv',
-        newPatientSrv: 'new-patient-srv',
-        getStablishmentSvr: 'get-stablishment-srv',
-        getStablishmentByIdSvr:'get-stablishmentByid-srv',
-        newStablishmentSvr: 'new-stablishment-srv',
-        updateStablishmentSvr: 'upd-stablishment-srv',
-        deleteStablishmentSvr: 'del-stablishment-srv'
-      },
-      msgs:{
-        errServer: 'Error starting server',
-        startServerMsg: `Server is working on port: ${port}`,
-        psqlConnected: 'Postgresql connected',
-        psqlConnectF: 'Postgresql connected failure: ',
-        formCrtdMsg: 'Form created: ',
-        updFormMsg: 'Updated form: ',
-        dltFormMsg: 'Delete form id: '
-      }
+  environment,
+  host,
+  port,
+  rootURI,
+  configDB,
+  rootOtp,
+  mailSrv,
+  shortSrv,
+  rootShort,
+  rootDocs,
+  rootBockchCrypt,
+  hdJson: { 'Content-Type': 'application/json' },
+  hdText: { 'Content-Type': 'text/xml' },
+  hdForm: { 'Content-Type' : 'application/x-www-form-urlencoded' },
+  accessToken: 'da912e64f27e44fd9667182da522b5d1',
+  urls: {
+    srvDbSrv: 'srv-db-srv',
+    genQuerySrv: 'gen-query-srv',
+    usrByPrmSrv: 'usr-by-prm-srv',        
+    crtUsrSrv: 'crt-usr-srv',
+    updUsrSrv: 'upd-usr-srv',
+    authUsrSrv: 'ath-usr-srv',
+    sendOtpUsrSrv: 'send-otp-usr-srv',
+    scriptOtpSrv: 'clicksend_otp.php',
+    scriptMailSrv:'sendMail.php',
+    backToMiddle: 'back-middle', // Ruta de peticiones hacia el middle
+    getPatientSrv: 'get-patient-srv',
+    newPatientSrv: 'new-patient-srv',
+    getStablishmentSvr: 'get-stablishment-srv',
+    getStablishmentByIdSvr:'get-stablishmentByid-srv',
+    newStablishmentSvr: 'new-stablishment-srv',
+    updateStablishmentSvr: 'upd-stablishment-srv',
+    deleteStablishmentSvr: 'del-stablishment-srv',
+    ncryptSrv: 'ncrypt',
+    decryptSrv: 'decrypt'
+  },
+  msgs:{
+    errServer: 'Error starting server',
+    startServerMsg: `Server is working on port: ${port}`,
+    psqlConnected: 'Postgresql connected',
+    psqlConnectF: 'Postgresql connected failure: ',
+    formCrtdMsg: 'Form created: ',
+    updFormMsg: 'Updated form: ',
+    dltFormMsg: 'Delete form id: '
+  }
 };
 
 module.exports = global_data;

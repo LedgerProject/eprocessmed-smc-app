@@ -24,8 +24,8 @@
     en modo stringify.
 */
 
-const generatorRequest = require('../../global/generator_request');
-const { urlSrv, urls, hdJson } = require('../../global/global_data');
+const generatorRequest = require('../../global/functions/generator_request');
+const { urlSrv, urls, hdJson } = require('../../global/data/global_data');
 const generalInquiryCtr = {};
 
 const url = `${urlSrv}${urls.genQuerySrv}`;
@@ -55,6 +55,7 @@ generalInquiryCtr.query = async (req, res) => {
   var collector = [];
   let dataReq;
   let prepareData = '';
+  let process = '';
   let status = 200;
   if (req.body) {
     dataReq = req.body
@@ -65,13 +66,16 @@ generalInquiryCtr.query = async (req, res) => {
   if (dataReq.prepareData !== undefined) {
     prepareData = dataReq.prepareData;
   }
-  const objDta =   [{
+  if (dataReq.process !== undefined) {
+    process = dataReq.process;
+  }
+  const objDta = [{
     params: [dataReq.data],
     where: {}
   }];
   dataReq.data = objDta;
   const queryData = strgf(dataReq);
-  const setQuery = { prepareData, process: dataReq.process, input: null, ouput: dataReq.request, url, method: 'POST', data: queryData, headers: hdJson, bodyType: 'body', respFormat: 'Json' };
+  const setQuery = { prepareData, process, input: null, ouput: dataReq.request, url, method: 'POST', data: queryData, headers: hdJson, bodyType: 'body', respFormat: 'Json' };
   const reqSelet = [setQuery];
   const requests = [];
   

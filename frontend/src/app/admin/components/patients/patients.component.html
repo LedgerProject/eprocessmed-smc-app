@@ -18,7 +18,7 @@
         <ng-container matColumnDef="action">
           <th mat-header-cell *matHeaderCellDef mat-sort-header width="15%"> Action </th>
           <td mat-row *matCellDef="let row" width="15%">
-            <button id="btnModify" mat-raised-button color="primary" value="{{row.id_patient}}"><mat-icon id="btnModify" value="{{row.id_patient}}">update</mat-icon></button>
+            <button id="btnModify" mat-raised-button color="primary" value="{{row.id_patient}}"><mat-icon id="btnModify" value="{{row.id_patient}}">edit</mat-icon></button>
             <button id="btnDelete" mat-raised-button color="warn" value="{{row.id_patient}}"><mat-icon id="btnDelete" value="{{row.id_patient}}">delete_forever</mat-icon></button>
           </td>
         </ng-container>
@@ -185,7 +185,7 @@
   
 <ng-template #patientsModif>
     <!-- CONTENT REGISTER, UPDATE, DELETE-->
-    <div class="example-container" id="divNew">
+    <div class="container" id="divNew">
       <mat-grid-list cols="2" rowHeight="90px">
 
         <mat-grid-tile>
@@ -205,9 +205,9 @@
         </mat-grid-tile>
 
         <mat-grid-tile>
-            <mat-form-field hintLabel="Max 100 characters" appearance="fill">
+            <mat-form-field hintLabel="Max 10 characters" appearance="fill">
                 <mat-label>Dni</mat-label>
-                <input matInput #input maxlength="100" placeholder="" [(ngModel)]="patientsModel.dni">
+                <input matInput #input maxlength="10" placeholder="" [(ngModel)]="patientsModel.dni" [disabled]="readonlyEdit">
                 <mat-hint align="end">{{input.value?.length || 0}}/100</mat-hint>
             </mat-form-field>
         </mat-grid-tile>
@@ -239,8 +239,8 @@
         <mat-grid-tile>
           <mat-form-field appearance="fill">
             <mat-label>Id Gender</mat-label>
-            <mat-select [(value)]="patientsModel.idCatGender">
-              <mat-option *ngFor="let gender of colector.gender" value="{{gender.id}}">{{gender.value}}</mat-option>
+            <mat-select [(value)]="sltValues.idCatGender">
+              <mat-option *ngFor="let gender of collector.gender" value="{{gender.id}}">{{gender.value}}</mat-option>
             </mat-select>
             <mat-hint align="end"></mat-hint>
           </mat-form-field>
@@ -249,8 +249,8 @@
         <mat-grid-tile>
           <mat-form-field appearance="fill">
             <mat-label>Id Cat Languaje</mat-label>
-            <mat-select [(value)]="patientsModel.idCatLanguaje">
-              <mat-option *ngFor="let languaje of colector.languaje" value="{{languaje.id}}">{{languaje.value}}</mat-option>
+            <mat-select [(value)]="sltValues.idCatLanguaje">
+              <mat-option *ngFor="let languaje of collector.languaje" value="{{languaje.id}}">{{languaje.value}}</mat-option>
             </mat-select>
             <mat-hint align="end"></mat-hint>
           </mat-form-field>
@@ -263,12 +263,12 @@
               <mat-hint align="end">{{input.value?.length || 0}}/10</mat-hint>
             </mat-form-field>
         </mat-grid-tile>
-
+        
         <mat-grid-tile>
           <mat-form-field appearance="fill">
             <mat-label>Id Cat Civilstatus</mat-label>
-            <mat-select [(value)]="patientsModel.idCatCivilstatus">
-              <mat-option *ngFor="let civilstatus of colector.civilstatus" value="{{civilstatus.id}}">{{civilstatus.value}}</mat-option>
+            <mat-select [(value)]="sltValues.idCatCivilstatus">
+              <mat-option *ngFor="let civilstatus of collector.civilstatus" value="{{civilstatus.id}}">{{civilstatus.value}}</mat-option>
             </mat-select>
             <mat-hint align="end"></mat-hint>
           </mat-form-field>
@@ -283,9 +283,9 @@
         </mat-grid-tile>
 
         <mat-grid-tile>
-            <mat-form-field hintLabel="Max 10 characters" appearance="fill">
+            <mat-form-field hintLabel="Max 100 characters" appearance="fill">
               <mat-label>Mail</mat-label>
-              <input matInput #input maxlength="10" placeholder="" [(ngModel)]="patientsModel.mail">
+              <input matInput #input maxlength="100" placeholder="" [(ngModel)]="patientsModel.mail">
               <mat-hint align="end">{{input.value?.length || 0}}/10</mat-hint>
             </mat-form-field>
         </mat-grid-tile>
@@ -294,11 +294,11 @@
           <mat-form-field appearance="fill">
             <mat-label>Id Cat Country</mat-label>
             <mat-select [(value)]="sltValues.countries">
-              <mat-option *ngFor="let countries of colector.countries" value="{{countries.id}}">{{countries.value}}</mat-option>
+              <mat-option *ngFor="let countries of collector.countries" value="{{countries.id}}">{{countries.value}}</mat-option>
             </mat-select>
             <mat-hint align="end"></mat-hint>
           </mat-form-field>
-        </mat-grid-tile>  
+        </mat-grid-tile>
 
         <mat-grid-tile>
             <mat-form-field hintLabel="Max 10 characters" appearance="fill">
@@ -309,68 +309,75 @@
         </mat-grid-tile>
 
         <mat-grid-tile>
-            <mat-form-field hintLabel="Max 10 characters" appearance="fill">
-              <mat-label>Id Establishment</mat-label>
-              <input matInput #input maxlength="10" placeholder="" [(ngModel)]="patientsModel.idEstablishment">
-              <mat-hint align="end">{{input.value?.length || 0}}/10</mat-hint>
-            </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Id Establishment</mat-label>
+            <mat-select [(value)]="sltValues.idEstablishment" [disabled]="readonlyEdit">
+              <mat-option *ngFor="let stab of stablishment" value="{{stab.id_establishment}}">{{stab.description}}</mat-option>
+            </mat-select>
+            <mat-hint align="end"></mat-hint>
+          </mat-form-field>
         </mat-grid-tile>
 
         <mat-grid-tile>
-            <mat-form-field hintLabel="Max 10 characters" appearance="fill">
-              <mat-label>Legal Representative</mat-label>
-              <input matInput #input maxlength="10" placeholder="" [(ngModel)]="patientsModel.legalRepresentative">
-              <mat-hint align="end">{{input.value?.length || 0}}/10</mat-hint>
-            </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Legal Representative</mat-label>
+            <mat-select [(value)]="sltValues.legalRepresentative">
+              <mat-option value="1">Si</mat-option>
+              <mat-option value="0">No</mat-option>
+            </mat-select>
+            <mat-hint align="end"></mat-hint>
+          </mat-form-field>
         </mat-grid-tile>
 
-        <mat-grid-tile>
-            <mat-form-field hintLabel="Max 10 characters" appearance="fill">
-              <mat-label>Dni Rep Legal</mat-label>
-              <input matInput #input maxlength="10" placeholder="" [(ngModel)]="patientsModel.dniRepLegal">
-              <mat-hint align="end">{{input.value?.length || 0}}/10</mat-hint>
-            </mat-form-field>
-        </mat-grid-tile>
+        <section *ngIf="sltValues.legalRepresentative === '1'">
+          <mat-grid-tile>
+              <mat-form-field hintLabel="Max 10 characters" appearance="fill">
+                <mat-label>Dni Rep Legal</mat-label>
+                <input matInput #input maxlength="10" placeholder="" [(ngModel)]="patientsModel.dniRepLegal">
+                <mat-hint align="end">{{input.value?.length || 0}}/10</mat-hint>
+              </mat-form-field>
+          </mat-grid-tile>
 
-        <mat-grid-tile>
-            <mat-form-field hintLabel="Max 10 characters" appearance="fill">
-              <mat-label>Name Rep Legal</mat-label>
-              <input matInput #input maxlength="10" placeholder="" [(ngModel)]="patientsModel.nameRepLegal">
-              <mat-hint align="end">{{input.value?.length || 0}}/10</mat-hint>
-            </mat-form-field>
-        </mat-grid-tile>
+          <mat-grid-tile>
+              <mat-form-field hintLabel="Max 50 characters" appearance="fill">
+                <mat-label>Name Rep Legal</mat-label>
+                <input matInput #input maxlength="50" placeholder="" [(ngModel)]="patientsModel.nameRepLegal">
+                <mat-hint align="end">{{input.value?.length || 0}}/10</mat-hint>
+              </mat-form-field>
+          </mat-grid-tile>
 
-        <mat-grid-tile>
-            <mat-form-field hintLabel="Max 10 characters" appearance="fill">
-              <mat-label>Lastname Rep Legal</mat-label>
-              <input matInput #input maxlength="10" placeholder="" [(ngModel)]="patientsModel.lastnameRepLegal">
-              <mat-hint align="end">{{input.value?.length || 0}}/10</mat-hint>
-            </mat-form-field>
-        </mat-grid-tile>
+          <mat-grid-tile>
+              <mat-form-field hintLabel="Max 50 characters" appearance="fill">
+                <mat-label>Lastname Rep Legal</mat-label>
+                <input matInput #input maxlength="50" placeholder="" [(ngModel)]="patientsModel.lastnameRepLegal">
+                <mat-hint align="end">{{input.value?.length || 0}}/10</mat-hint>
+              </mat-form-field>
+          </mat-grid-tile>
 
-        <mat-grid-tile>
-            <mat-form-field hintLabel="Max 10 characters" appearance="fill">
-              <mat-label>Address Rep Legal</mat-label>
-              <input matInput #input maxlength="10" placeholder="" [(ngModel)]="patientsModel.addressRepLegal">
-              <mat-hint align="end">{{input.value?.length || 0}}/10</mat-hint>
-            </mat-form-field>
-        </mat-grid-tile>
+          <mat-grid-tile>
+              <mat-form-field hintLabel="Max 10 characters" appearance="fill">
+                <mat-label>Address Rep Legal</mat-label>
+                <input matInput #input maxlength="10" placeholder="" [(ngModel)]="patientsModel.addressRepLegal">
+                <mat-hint align="end">{{input.value?.length || 0}}/10</mat-hint>
+              </mat-form-field>
+          </mat-grid-tile>
 
-        <mat-grid-tile>
-            <mat-form-field hintLabel="Max 10 characters" appearance="fill">
-              <mat-label>Mail Rep Legal</mat-label>
-              <input matInput #input maxlength="10" placeholder="" [(ngModel)]="patientsModel.mailRepLegal">
-              <mat-hint align="end">{{input.value?.length || 0}}/10</mat-hint>
-            </mat-form-field>
-        </mat-grid-tile>
+          <mat-grid-tile>
+              <mat-form-field hintLabel="Max 100 characters" appearance="fill">
+                <mat-label>Mail Rep Legal</mat-label>
+                <input matInput #input maxlength="100" placeholder="" [(ngModel)]="patientsModel.mailRepLegal">
+                <mat-hint align="end">{{input.value?.length || 0}}/10</mat-hint>
+              </mat-form-field>
+          </mat-grid-tile>
 
-        <mat-grid-tile>
-            <mat-form-field hintLabel="Max 10 characters" appearance="fill">
-              <mat-label>Phone Rep Legal</mat-label>
-              <input matInput #input maxlength="10" placeholder="" [(ngModel)]="patientsModel.phoneRepLegal">
-              <mat-hint align="end">{{input.value?.length || 0}}/10</mat-hint>
-            </mat-form-field>
-        </mat-grid-tile>
+          <mat-grid-tile>
+              <mat-form-field hintLabel="Max 10 characters" appearance="fill">
+                <mat-label>Phone Rep Legal</mat-label>
+                <input matInput #input maxlength="10" placeholder="" [(ngModel)]="patientsModel.phoneRepLegal">
+                <mat-hint align="end">{{input.value?.length || 0}}/10</mat-hint>
+              </mat-form-field>
+          </mat-grid-tile>
+        </section>
 
         <mat-grid-tile>
             <mat-form-field hintLabel="Max 10 characters" appearance="fill">
@@ -383,17 +390,17 @@
         <mat-grid-tile>
           <mat-form-field appearance="fill">
             <mat-label>Id Cat Relationshipeme</mat-label>
-            <mat-select [(value)]="patientsModel.idCatCivilstatus">
-              <mat-option *ngFor="let relations of colector.relations" value="{{relations.id}}">{{relations.value}}</mat-option>
+            <mat-select [(value)]="sltValues.idCatRelationshipeme">
+              <mat-option *ngFor="let relations of collector.relations" value="{{relations.id}}">{{relations.value}}</mat-option>
             </mat-select>
             <mat-hint align="end"></mat-hint>
           </mat-form-field>
         </mat-grid-tile>  
 
         <mat-grid-tile>
-            <mat-form-field hintLabel="Max 10 characters" appearance="fill">
+            <mat-form-field hintLabel="Max 50 characters" appearance="fill">
               <mat-label>Name Emecon</mat-label>
-              <input matInput #input maxlength="10" placeholder="" [(ngModel)]="patientsModel.nameEmecon">
+              <input matInput #input maxlength="50" placeholder="" [(ngModel)]="patientsModel.nameEmecon">
               <mat-hint align="end">{{input.value?.length || 0}}/10</mat-hint>
             </mat-form-field>
         </mat-grid-tile>
@@ -415,24 +422,36 @@
         </mat-grid-tile>
 
         <mat-grid-tile>
-            <mat-form-field hintLabel="Max 10 characters" appearance="fill">
+            <mat-form-field hintLabel="Max 100 characters" appearance="fill">
               <mat-label>Address Emecon</mat-label>
-              <input matInput #input maxlength="10" placeholder="" [(ngModel)]="patientsModel.addressEmecon">
+              <input matInput #input maxlength="100" placeholder="" [(ngModel)]="patientsModel.addressEmecon">
               <mat-hint align="end">{{input.value?.length || 0}}/10</mat-hint>
             </mat-form-field>
         </mat-grid-tile>
 
         <mat-grid-tile>
-            <mat-form-field hintLabel="Max 10 characters" appearance="fill">
-              <mat-label>Id Cat Gender Emecon</mat-label>
-              <input matInput #input maxlength="10" placeholder="" [(ngModel)]="patientsModel.idCatGenderEmecon">
-              <mat-hint align="end">{{input.value?.length || 0}}/10</mat-hint>
-            </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Id Cat Gender Emecon</mat-label>
+            <mat-select [(value)]="sltValues.idCatGenderEmecon">
+              <mat-option *ngFor="let gender of collector.gender" value="{{gender.id}}">{{gender.value}}</mat-option>
+            </mat-select>
+            <mat-hint align="end"></mat-hint>
+          </mat-form-field>
         </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-form-field appearance="fill">
+            <mat-label>dataUpload</mat-label>
+            <mat-select >
+              <mat-option *ngFor="let gender of collector.dataUpload" value="{{gender.id}}">{{gender.value}}</mat-option>
+            </mat-select>
+            <mat-hint align="end"></mat-hint>
+          </mat-form-field>
+        </mat-grid-tile>        
 
         <mat-grid-tile>
           <button id="btnConfirm" [disabled]="!btnConfirmActive" class="example-label" mat-raised-button color="{{btnPatientsActions.color}}" name="{{btnPatientsActions.name}}" value="{{btnPatientsActions.value}}">
-            <label id="btnConfirm" name="{{btnPatientsActions.value}}" >{{btnPatientsActions.name}}</label>
+            <data id="btnConfirm" value="{{btnPatientsActions.value}}">{{btnPatientsActions.name}}</data>
           </button>
           <button class="example-label" mat-raised-button color="warn" (click)="show()">Cancel</button>
         </mat-grid-tile>

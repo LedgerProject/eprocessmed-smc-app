@@ -1,9 +1,7 @@
 import { Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
-import { formatCurrency } from '@angular/common';
 
 /* Routes */
-import { FeatureRoutingModule } from './components/consents/consents-routing';
 
 const routes: Routes = [
 
@@ -11,12 +9,10 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
-    RouterModule.forChild(routes),
-    FeatureRoutingModule
+    RouterModule.forChild(routes)
   ],
   exports: [
-    RouterModule,
-    FeatureRoutingModule
+    RouterModule
   ]
 })
 export class ProcessRoutingModule {}

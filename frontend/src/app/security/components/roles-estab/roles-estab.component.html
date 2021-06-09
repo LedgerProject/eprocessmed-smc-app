@@ -1,0 +1,99 @@
+<mat-accordion class="example-headers-align">
+    <!-- *** ESTABLISHMENTS *** -->
+    <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+      <mat-expansion-panel-header id="mat-expansion-panel-header-2" class="expansion-panel-header">
+        <mat-panel-title class="expPanHeader">
+            Establishment/Roles
+        </mat-panel-title>
+        <mat-panel-description>
+          <label for=""></label>
+          <mat-icon>business</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <mat-grid-list cols="3" rowHeight="90px">
+        <mat-grid-tile>
+            <mat-form-field hintLabel="Max 10 characters" appearance="fill">
+              <mat-label>Establishment</mat-label>
+              <mat-select [(value)]="rolEstab.idEstablishment">
+                <mat-option *ngFor="let stablishment of stablishments" value="{{stablishment.id_establishment}}" (click)="presentsRoles(stablishment.id_establishment)">{{stablishment.description}}</mat-option>
+              </mat-select>
+              <mat-hint align="end"></mat-hint>
+            </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+            <mat-form-field hintLabel="Max 10 characters" appearance="fill">
+              <mat-label>Roles</mat-label>
+              <mat-select [disabled]="!slctRolActive" [(value)]="rolEstab.idCatRoluser">
+                <mat-option *ngFor="let rol of collector.roles" value="{{rol.id}}" (click)="roleModules(rol.id)">
+                  <mat-grid-list cols="2" rowHeight="2:1">
+                    <mat-grid-tile>{{rol.value}}</mat-grid-tile>
+                    <mat-grid-tile><mat-icon class="rolIcon">{{rol.icon}}</mat-icon></mat-grid-tile>
+                  </mat-grid-list>
+                </mat-option>
+              </mat-select>
+              <mat-hint align="end"></mat-hint>
+            </mat-form-field>
+        </mat-grid-tile>        
+        
+        <mat-grid-tile>
+          <mat-form-field appearance="fill">
+            <mat-label>Modules</mat-label>
+            <mat-select [disabled]="!slctModActive" [(value)]="slctModule">
+              <mat-option *ngFor="let module of collector.modules" value="{{module.id}}" (click)="presentsSubModules(modules, module.id)">
+                <mat-grid-list cols="2" rowHeight="2:1">
+                  <mat-grid-tile>{{module.value}}</mat-grid-tile>
+                  <mat-grid-tile><mat-icon class="moduleIcon">{{module.icon}}</mat-icon></mat-grid-tile>
+                </mat-grid-list>
+              </mat-option>
+            </mat-select>
+            <mat-hint align="end"></mat-hint>
+          </mat-form-field>
+        </mat-grid-tile>
+
+      </mat-grid-list>
+    </mat-expansion-panel>
+  
+    <!-- *** MODULES *** -->
+    <mat-expansion-panel [disabled]="true" [expanded]="step === 1" (opened)="setStep(1)" hideToggle>
+      <mat-expansion-panel-header class="expansion-panel-header">
+        <mat-panel-title class="expPanHeader">
+            Modules/Sub-modules
+        </mat-panel-title>
+        <mat-panel-description>
+          <label for=""></label>
+          <mat-icon>rule</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <ul>
+        <li class="liProcCheck">
+          <mat-checkbox #checkedAll class="procCheckAll" id="" (click)="addRemoveProcAll(slctModule, $event)">Add/Removed All</mat-checkbox>
+        </li>
+      </ul>
+
+      <!-- armar en grid -->
+      <ul>
+
+        <li *ngFor="let submodule of collector.submodules" class="liProcCheck">
+          <div *ngIf="submodule.checked; then thenBlock else elseBlock"></div>
+          <ng-template #thenBlock>
+            <mat-checkbox checked="submodule.checked" class="procCheck procCheck_{{submodule.id}}" (click)="addRemoveProcedure(slctModule,submodule.id,false,NULL)">{{submodule.value}}</mat-checkbox>
+          </ng-template>
+          <ng-template #elseBlock>
+            <mat-checkbox class="procCheck procCheck_{{submodule.id}}" (click)="addRemoveProcedure(slctModule,submodule.id,false,NULL)">{{submodule.value}}</mat-checkbox>
+          </ng-template>
+        </li>
+          
+      </ul>
+    </mat-expansion-panel>
+
+    <mat-action-row>
+      <button mat-button id="btnConfirm" name="{{btnRolStabActions.name}}" value="{{btnRolStabActions.value}}" [disabled]="!btnConfirmActive" class="example-label" mat-raised-button color="{{btnRolStabActions.color}}">
+        <data id="btnConfirm" value="{{btnRolStabActions.value}}">{{btnRolStabActions.name}}</data>
+      </button>
+    </mat-action-row>
+  
+  </mat-accordion>
+  

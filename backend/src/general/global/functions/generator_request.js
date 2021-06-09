@@ -39,8 +39,8 @@
   set<request-name>: {  Objeto con cabeceras y datos de la petición.
     prepareData:        Función para preparar los datos si se requiere alguno de peticiones anteriores o dar el formato que recibe "generalInquirySrv".
     process:            Proceso a realizar posterior a la consulta.
-    input:              Parámeto del "colector" de donde se toman datos de otra petición anterior necesarios en la actual.
-    ouput:              Parámeto del "colector" donde se almacenara la salida de la petición, regularmente su valor es "<request-name>".
+    input:              Parámeto del "collector" de donde se toman datos de otra petición anterior necesarios en la actual.
+    ouput:              Parámeto del "collector" donde se almacenara la salida de la petición, regularmente su valor es "<request-name>".
     url:                Dirección del servicio.
     method:             POST | GET | PUT | DELETE.
     data:               data<request-name>.
@@ -81,21 +81,22 @@ const validateResp = (res, respFormat) => {
 const returnRequests = (data) => {
   let { coll, ouput, resp } = data;
   if (coll !== undefined) {
-      const itme = coll.find(param => {
+      const item = coll.find(param => {
         if (param.ouput === ouput) {
-          param = { ouput: ouput, answer: resp };
+          param = { ouput, answer: resp };
           return param;
         }
       });
-      if (itme === undefined) {
-        coll.push({ ouput: ouput, answer: resp });
+      if (item !== undefined) {
+        item.answer = resp;
+      } else {
+        coll.push({ ouput, answer: resp });
       }
-      return coll;  
+      return coll;
   }
 }
 
 const generatorRequest = async (reqSelect, requests, collector) => {
-
   const dispatcher = (reqSlc, reqs, coll) => {
     return new Promise( async (resolve, reject) => {
       const set = reqSlc[0];
@@ -104,11 +105,9 @@ const generatorRequest = async (reqSelect, requests, collector) => {
       let params;
       let body;
       let form;
-
       if (prepareData != '') {
         dta = await prepareData(coll, input, dta);
       }
-
       switch (bodyType) {
         case 'body':
             body = dta;
@@ -120,15 +119,13 @@ const generatorRequest = async (reqSelect, requests, collector) => {
             params = dta;
           break;
       }
-
       const options = { method, params, body, form, headers };
-
       // Realiza la consulta y envia la respuesta al 'process'.
       await fetch(url, options)
         .then(resp => validateResp(resp, respFormat))
         .then(async resp => {
           let answer;
-          if (process !== '') {
+          if (process !== '' && process !== undefined) {
             answer = await process(reqs, coll, ouput, resp);
           } else {
             answer = {coll, ouput, resp};
@@ -145,11 +142,9 @@ const generatorRequest = async (reqSelect, requests, collector) => {
         .catch(err => console.error(err));
     });
   };
-
   const resp = await dispatcher(reqSelect, requests, collector)
     .then((answer) => { return answer })
     .catch((err) => console.error(`Error en Cascada "dispatcher: ${err}`));
-
   return resp;
 }
 

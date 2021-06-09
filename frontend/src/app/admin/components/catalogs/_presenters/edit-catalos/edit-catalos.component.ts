@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnChanges, AfterViewChecked,Renderer2, ViewChild, ElementRef, HostListener, SimpleChanges } from '@angular/core';
-import { GeneralService } from '../../../../../service-mngmt/services/general.service';
+import { GeneralService } from '../../../../../service-mngmt/general.service';
 
 export interface IntfNewCatalog {//fatherStrct
   id: number,
@@ -71,9 +71,6 @@ export class EditCatalosComponent implements OnChanges, AfterViewChecked {
         const ouput = resp.filter((res: any) => res.ouput === data.request);
         const answer = ouput[0].answer;
         if (answer.correct) {
-          console.log('correct: ', answer.correct);      
-          console.log('answer.resp');
-          console.log(answer.resp);
           location.reload();
         }
       },
@@ -104,7 +101,7 @@ export class EditCatalosComponent implements OnChanges, AfterViewChecked {
       idCatalog: this.idCatalog,
       data: JSON.stringify(this.catalog[0])
     };
-    this.createGeneral({ process: '', request: "upd-catalogs", data });
+    this.createGeneral({ request: "upd-catalogs", data });
   }
 
   equalize = (data: any): any => {

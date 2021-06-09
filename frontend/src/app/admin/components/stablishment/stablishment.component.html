@@ -19,7 +19,7 @@
       <ng-container matColumnDef="action">
         <th mat-header-cell *matHeaderCellDef mat-sort-header width="15%"> Action </th>
         <td mat-row *matCellDef="let row" width="15%">
-          <button id="btnModify" mat-raised-button color="primary" value="{{row.id_establishment}}"><mat-icon id="btnModify" value="{{row.id_establishment}}">update</mat-icon></button>
+          <button id="btnModify" mat-raised-button color="primary" value="{{row.id_establishment}}"><mat-icon id="btnModify" value="{{row.id_establishment}}">edit</mat-icon></button>
           <button id="btnDelete" mat-raised-button color="warn" value="{{row.id_establishment}}"><mat-icon id="btnDelete" value="{{row.id_establishment}}">delete_forever</mat-icon></button>
         </td>
       </ng-container>
@@ -75,9 +75,11 @@
   </div>
 </div>
 
+<!-- patient_load id_cat_patient_load -->
+
 <ng-template #establModif>
   <!-- CONTENT REGISTER, UPDATE, DELETE-->
-  <div class="example-container" id="divNew">
+  <div class="container" id="divNew">
     <mat-grid-list cols="2" rowHeight="90px">
 
       <mat-grid-tile>
@@ -107,9 +109,9 @@
       </mat-grid-tile>
 
       <mat-grid-tile>
-        <mat-form-field hintLabel="Max 50 characters" appearance="fill">
+        <mat-form-field hintLabel="Max 250 characters" appearance="fill">
           <mat-label>Url Hash</mat-label>
-          <input matInput #input maxlength="50" placeholder="" [(ngModel)]="stablishmentmodel.urlhash" readonly>
+          <input matInput #input maxlength="250" placeholder="" [(ngModel)]="stablishmentmodel.urlhash" readonly>
           <mat-hint align="end">{{input.value?.length || 0}}/50</mat-hint>
         </mat-form-field>
       </mat-grid-tile>
@@ -131,9 +133,9 @@
       </mat-grid-tile>
 
       <mat-grid-tile>
-        <mat-form-field hintLabel="Max 50 characters" appearance="fill">
+        <mat-form-field hintLabel="Max 100 characters" appearance="fill">
           <mat-label>E-mail</mat-label>
-          <input matInput #input maxlength="50" placeholder="" [(ngModel)]="stablishmentmodel.mail">
+          <input matInput #input maxlength="100" placeholder="" [(ngModel)]="stablishmentmodel.mail">
           <mat-hint align="end">{{input.value?.length || 0}}/50</mat-hint>
         </mat-form-field>
       </mat-grid-tile>
@@ -142,7 +144,7 @@
         <mat-form-field appearance="fill">
           <mat-label>Country</mat-label>
           <mat-select [(value)]="sltValues.countries">
-            <mat-option *ngFor="let country of colector.countries" value="{{country.id}}" (click)="switchJsonParse(countries,country.id,'provinces','false')">{{country.value}}</mat-option>
+            <mat-option *ngFor="let country of collector.countries" value="{{country.id}}" (click)="switchJsonParse(countries,country.id,'provinces','false', '')">{{country.value}}</mat-option>
           </mat-select>
           <mat-hint align="end"></mat-hint>
         </mat-form-field>
@@ -152,7 +154,7 @@
         <mat-form-field appearance="fill">
           <mat-label>Province</mat-label>
           <mat-select [(value)]="sltValues.provinces">
-            <mat-option *ngFor="let province of colector.provinces" value="{{province.id}}" (click)="switchJsonParse(countries,province.id,'cities','false')">{{province.value}}</mat-option>
+            <mat-option *ngFor="let province of collector.provinces" value="{{province.id}}" (click)="switchJsonParse(countries,province.id,'cities','false', '')">{{province.value}}</mat-option>
           </mat-select>
           <mat-hint align="end"></mat-hint>
         </mat-form-field>
@@ -162,7 +164,7 @@
         <mat-form-field appearance="fill">
           <mat-label>City</mat-label>
           <mat-select [(value)]="sltValues.cities">
-            <mat-option *ngFor="let city of colector.cities" value="{{city.id}}" (click)="switchJsonParse(countries,city.id,'','false')">{{city.value}}</mat-option>
+            <mat-option *ngFor="let city of collector.cities" value="{{city.id}}" (click)="switchJsonParse(countries,city.id,'','false', '')">{{city.value}}</mat-option>
           </mat-select>
           <mat-hint align="end"></mat-hint>
         </mat-form-field>
@@ -171,9 +173,40 @@
       <mat-grid-tile>
         <mat-form-field appearance="fill">
           <mat-label>Type</mat-label>
-          <mat-select [(value)]="stablishmentmodel.idType">
+          <mat-select [(value)]="sltValues.idType">
             <mat-option value="1">Clinic</mat-option>
             <mat-option value="2">Company</mat-option>
+          </mat-select>
+          <mat-hint align="end"></mat-hint>
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <mat-form-field appearance="fill">
+          <mat-label>Patient Load</mat-label>
+          <mat-select [(value)]="stablishmentmodel.patientLoad">
+            <mat-option value="1">True</mat-option>
+            <mat-option value="0">False</mat-option>
+          </mat-select>
+          <mat-hint align="end"></mat-hint>
+        </mat-form-field>
+      </mat-grid-tile>
+      
+      <mat-grid-tile>
+        <mat-form-field appearance="fill">
+          <mat-label>Data Upload Pat</mat-label>
+          <mat-select [(value)]="sltValues.idCatPatientLoad">
+            <mat-option *ngFor="let data of collector.dataUploadPat" value="{{data.id}}">{{data.value}}</mat-option>
+          </mat-select>
+          <mat-hint align="end"></mat-hint>
+        </mat-form-field>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <mat-form-field appearance="fill">
+          <mat-label>Patient Dt Val Proc</mat-label>
+          <mat-select [(value)]="sltValues.idCatPatientVal">
+            <mat-option *ngFor="let data of collector.patientDtValProc" value="{{data.id}}">{{data.value}}</mat-option>
           </mat-select>
           <mat-hint align="end"></mat-hint>
         </mat-form-field>
@@ -197,7 +230,7 @@
 
       <mat-grid-tile>
         <button id="btnConfirm" [disabled]="!btnConfirmActive" class="example-label" mat-raised-button color="{{btnStabActions.color}}" name="{{btnStabActions.name}}" value="{{btnStabActions.value}}">
-          <label id="btnConfirm" name="{{btnStabActions.value}}" >{{btnStabActions.name}}</label>
+          <data id="btnConfirm" value="{{btnStabActions.value}}">{{btnStabActions.name}}</data>
         </button>
         <button class="example-label" mat-raised-button color="warn" (click)="show()">Cancel</button>
       </mat-grid-tile>

@@ -6,8 +6,8 @@ const fileUpload = require('express-fileupload');
 const app = express();
 const routes = require('./security/routes/routes');
 const { server } = require('./general/config/data_config');
-const { messagesSrv } = require('./general/global/global_functions');
-const { msgs } = require('./general/global/global_data');
+const { messagesSrv } = require('./general/global/functions/global_functions');
+const { msgs } = require('./general/global/data/global_data');
 
 // settings
 app.set('port', process.env.PORT || `${server.port}`);
