@@ -1,6 +1,6 @@
 var fs = require('file-system');
 const { Console } = require('console');
-
+const crypto = require('crypto');
 
 //Aqui Encripto 
 const setData2= async (req, res) => {
