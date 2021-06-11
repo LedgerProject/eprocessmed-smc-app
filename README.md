@@ -101,7 +101,10 @@ To run the rest api to access the blockchain IPFS:
 ```sh
 npm run test
 ```
-
+If the ipfs-core or npm install fails, run the following:
+```sh
+aptitude install build-essential
+```
 
 To run the rest api to access the blockchain Alastria:
 
