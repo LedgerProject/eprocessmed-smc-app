@@ -50,7 +50,7 @@
 </button>
 
 <mat-menu #profile="matMenu" class="mymegamenu">
-    <button mat-menu-item>
+    <!-- <button mat-menu-item>
         <mat-icon>settings</mat-icon> Settings
     </button>
     <button mat-menu-item>
@@ -58,8 +58,8 @@
     </button>
     <button mat-menu-item>
         <mat-icon>notifications_off</mat-icon> Disable notifications
-    </button>
-    <button mat-menu-item>
-        <mat-icon>exit_to_app</mat-icon> Sign Out
+    </button> -->
+    <button mat-menu-item id="btnSignOut" (click)="signOut()">
+        <mat-icon id="btnSignOut" (click)="signOut()">exit_to_app</mat-icon> Sign Out
     </button>
 </mat-menu>

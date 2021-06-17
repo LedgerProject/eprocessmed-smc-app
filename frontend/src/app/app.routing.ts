@@ -6,6 +6,7 @@ import { SecurityRoutingModule } from './security/security-routing';
 import { AdminRoutingModule } from './admin/admin.routing';
 import { DynamicFormsRoutingModule } from './process-mngmt/submodule/dynamic-forms/dynamic-forms.routing';
 import { ConsentsRoutingModule } from './process-mngmt/submodule/consents/consents.routing';
+// import { GeneralRoutingModule } from './general/general.routing';
 
 /* Components */
 

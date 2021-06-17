@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { TranslateService } from '@ngx-translate/core';
+import { Router } from '@angular/router';
+
+import { AuthService } from 'src/app/security/services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -80,7 +83,7 @@ export class HeaderComponent {
     code: 'en',
     type: 'US',
     icon: 'us'
-  }
+  };
 
   public languages: any[] = [{
     language: 'English',
@@ -102,15 +105,19 @@ export class HeaderComponent {
     language: 'German',
     code: 'de',
     icon: 'de'
-  }]
+  }];
 
-  constructor(private translate: TranslateService) {
+  constructor(private translate: TranslateService, private authService: AuthService) {
     translate.setDefaultLang('en');
   }
 
   changeLanguage(lang: any) {
     this.translate.use(lang.code)
     this.selectedLanguage = lang;
+  }
+
+  signOut(): void {
+    this.authService.signOut();
   }
   
 }

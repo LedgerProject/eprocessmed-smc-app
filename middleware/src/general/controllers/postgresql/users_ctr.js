@@ -6,8 +6,7 @@ const fetch = require('node-fetch');
 const url = `${urlSrv}${urls.genQuerySrv}`;
 const urlCrtUsrSrv = `${urlSrv}${urls.crtUsrSrv}`;
 const urlUpdUsrSrv = `${urlSrv}${urls.updUsrSrv}`;
-
-const emailUrl = 'https://';
+const emailUrl = 'https://smartconsent.e-processmed.com/smartConsentWeb/control/apiapp/send_mail_Forms';
 
 const urlUsrByPrmSrv = `${urlSrv}${urls.usrByPrmSrv}`;
 const urlAuthUsrSrv = `${urlSrv}${urls.authUsrSrv}`;
@@ -59,15 +58,7 @@ const getHash = async () => {
   const reqSelet = [setQuery];
   const requests = [];
 
-  const getSecretRes = await sedRequest(reqSelet, requests, collector);
-  const correct = getSecretRes[0].answer.correct;
-  if (correct) {
-      const answer = getSecretRes[0].answer.resp;
-      const params = answer[0].params;
-      const auth = params.find(param => param.name === 'auth'); 
-      hash = auth.hash;
-  }
-  return hash;
+  return '0x80a6ae5d429838e8d279ac1bff4c0524d26eec4e9aa18d643166f9c1c5e21f86';
 }
 
 const ncrypt = async (dataNcrypt) => {
@@ -193,7 +184,7 @@ const getUser = async (dataReq) => {
   return resp;
 }
 
-// Crear usuario datos No Encriptados
+// Crear usuario (datos No Encriptados)
 const sendCtrUsers = async (dataReq) => {// 
   let resp = await fetch(
     urlCrtUsrSrv,
@@ -209,7 +200,7 @@ const sendCtrUsers = async (dataReq) => {//
   return resp;
 }
 
-// Crear usuario datos Encriptados
+// Crear usuario (datos Encriptados)
 const sendCtrUsersNcrypt = async (data) => {
   let prepareData = '';
   let process = '';
@@ -245,7 +236,7 @@ const sendCredentialsMail = async (name, lastname, module, mail, login, password
         texto = `E PROCESS MED informa. Estimad@ ${name} ${lastname}, sus credenciales para acceder son: Usuario ${login} y Password ${password}`;
       break;
     case 'mobile-consent':
-        texto = `E PROCESS MED informa. Estimad@ ${name} ${lastname}, su enlace para firmar su consentimiento es:' + + ', y sus credenciales para acceder son: Usuario ${login} y Password ${password}`;
+        texto = `E PROCESS MED informa. Estimad@ ${name} ${lastname}, su enlace para firmar su consentimiento es: http://ledger.e-processmed.com/login, y sus credenciales para acceder son: Usuario ${login} y Password ${password}`;
       break;      
   }
   const queryData = `nombre=${nombre}&texto=${texto}&correo=${correo}`;
@@ -532,6 +523,15 @@ const ctrUser = async (dataReq) => {
 
 }
 
+usersCtr.getHashExt = async (req, res) => {
+  const hash = await getHash();
+
+  res.status(200).json({
+    correct: true,
+    resp: hash
+  });
+}
+
 // 
 usersCtr.sendOtp = async (req, res) => {
   const params = req.body;
@@ -644,8 +644,6 @@ usersCtr.ctrUser = async (req, res) => {
 
 // 
 usersCtr.updUser = async (req, res) => {
-  console.log('req.body');
-  console.log(req.body);
 
 
 
@@ -727,52 +725,40 @@ usersCtr.auth = async (req, res) => {
     // dataReq.request = request;
     dataReq.data = params;
     const authAnswer = await sendAuth(dataReq);
+
     if (authAnswer.correct) {
-      const resp = authAnswer.resp;
-      const idEstablishment = parseInt(resp.data.idEstablishment);
-      const establishment = await getEstablishment(idEstablishment);
-      if (establishment.correct) {
-        if (establishment.resp.length > 0) {
-          authAnswer.resp.data['idCustomer'] = establishment.resp[0].id_customer;
-          answer = authAnswer.resp;
-          correct = true;
-          status = 200;        
+      if (authAnswer.resp !== 'Denied') {
+        const resp = authAnswer.resp;
+        const idEstablishment = parseInt(resp.data.idEstablishment);
+        const establishment = await getEstablishment(idEstablishment);
+        if (establishment.correct) {
+          if (establishment.resp.length > 0) {
+            authAnswer.resp.data['idCustomer'] = establishment.resp[0].id_customer;
+            answer = authAnswer.resp;
+
+            /* Agrega el código telefónico internacional del país */
+            const codePh = answer.data.codePhone.codePhone;
+            const intPhoneCode = await queryCodePhone(codePh);
+            answer.data['intPhoneCode'] = intPhoneCode;
+
+            correct = true;
+            status = 200;
+            
+          } else {
+            answer = 'Error: Establishment does not exist';
+          }
         } else {
-          answer = 'Error: Establishment does not exist';
+          answer = 'Failed to query the setting';
         }
       } else {
-        answer = 'Failed to query the setting';
+        answer = authAnswer.resp;
+        correct = true;
+        status = 200;
       }
     } else {
       answer = 'Failed to query or create user';
-    }      
+    }
   }
-
-  /* Método para encontrar el código telefónico internacional del país */
-  console.log('answer');
-  console.log(answer);
-  // {
-  //   msg: 'Authorized',
-  //   data: {
-  //     idUser: 56,
-  //     dni: '1111111111111111',
-  //     name: 'Nombre',
-  //     lastname: 'Ciudades',
-  //     login: '83c75d59bdc0b6a2e6',
-  //     phone: '1111111111',
-  //     codePhone: { codePhone: '0,0,0' },
-  //     mail: '1111111111',
-  //     idGoogle: '',
-  //     idCatRoluser: { idCatRoluser: '0,5,0' },
-  //     userStructure: { userStructure: [] },
-  //     idEstablishment: '144',
-  //     idSpecialist: null,
-  //     idCatAccesstype: { idCatAccesstype: '' },
-  //     idCatNotification: null,
-  //     token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZFVzZXIiOjU2LCJuYW1lIjoiOThkYjQ1NWFiZGNjIiwibGFzdG5hbWUiOiI5NWRkNWQ1Y2FlY2RiY2YxIiwibG9naW4iOiI4M2M3NWQ1OWJkYzBiNmEyZTYiLCJwaG9uZSI6ImU3ODUxOTA5ZmU5OGU4YjNlNjIyIiwiY29kZVBob25lIjp7ImNvZGVQaG9uZSI6IjAsMCwwIn0sIm1haWwiOiJlNzg1MTkwOWZlOThlOGIzZTYyMiIsImlkR29vZ2xlIjoiIiwiaWRDYXRSb2x1c2VyIjp7ImlkQ2F0Um9sdXNlciI6IjAsNSwwIn0sImlhdCI6MTYyMjMyODU3NSwiZXhwIjoxNjIyMzMxMjc1fQ.ZdVjuagfRX2GFKVhlP_ttICCeHF42imuprQYK5R24Nc',
-  //     idCustomer: '3'
-  //   }
-  // }
 
   res.status(status).json({
     correct,

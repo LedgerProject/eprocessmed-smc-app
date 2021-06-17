@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 
 /* Components */
 import { DashboardComponent } from '../general/components/dashboard/dashboard.component';
+import { WelcomeComponent } from './components/welcome/welcome.component';
 import { StatisticsComponent } from './components/statistics/statistics.component';
 import { CatalogsComponent } from './components/catalogs/catalogs.component';
 import { ParametersComponent } from './components/parameters/parameters.component';
@@ -22,7 +23,19 @@ const routes: Routes = [
     component: DashboardComponent,
     children: [
       {
-        path: 'statistics',
+        path: 'welcome',
+        component: WelcomeComponent,
+        data: {
+          title: 'Welcome',
+          urls: [
+            { title: 'Dashboard', url: '/dashboard' },
+            { title: 'Welcome', url: '/welcome' }
+          ]
+        },
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'admin/statistics',
         component: StatisticsComponent,
         data: {
           title: 'Starter',
@@ -31,7 +44,7 @@ const routes: Routes = [
             { title: 'Starter', url: '/statistics' }
           ]
         },
-        // canActivate: [AuthGuard, AdminGuard]
+        canActivate: [AuthGuard, AdminGuard]
       },
       {
         path: 'admin/catalogs',
@@ -43,7 +56,7 @@ const routes: Routes = [
             { title: 'Catalogs', url: '/catalogs' }
           ]
         },
-        // canActivate: [AuthGuard, AdminGuard]
+        canActivate: [AuthGuard, AdminGuard]
       },
       {
         path: 'admin/parameters',
@@ -55,7 +68,7 @@ const routes: Routes = [
             { title: 'Parameters', url: '/parameters' }
           ]
         },
-        // canActivate: [AuthGuard, AdminGuard]
+        canActivate: [AuthGuard, AdminGuard]
       },
       {
         path: 'admin/establishment',
@@ -67,7 +80,7 @@ const routes: Routes = [
             { title: 'Establishment', url: '/establishment' }
           ]
         },
-        // canActivate: [AuthGuard, AdminGuard]
+        canActivate: [AuthGuard, AdminGuard]
       },
       {
         path: 'admin/patients',
@@ -79,7 +92,7 @@ const routes: Routes = [
             { title: 'Patients', url: '/patients' }
           ]
         },
-        // canActivate: [AuthGuard, AdminGuard]
+        canActivate: [AuthGuard, AdminGuard]
       },
       {
         path: 'admin/proc-estab',
@@ -91,9 +104,9 @@ const routes: Routes = [
             { title: 'Procedures Establishments', url: '/proc-estab' }
           ]
         },
-        // canActivate: [AuthGuard, AdminGuard]
+        canActivate: [AuthGuard, AdminGuard]
       },           
-      { path: '', redirectTo: '/statistics', pathMatch: 'full' }
+      { path: '', redirectTo: '/welcome', pathMatch: 'full' }
     ],
     // canActivate: [AuthGuard]
   }

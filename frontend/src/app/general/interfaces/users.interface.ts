@@ -1,5 +1,3 @@
-import { session } from '../global/data/session';
-
 export interface User {
   idUser?: number | null;
   dni?: string;

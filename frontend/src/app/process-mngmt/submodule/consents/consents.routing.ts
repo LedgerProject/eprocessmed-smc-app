@@ -5,11 +5,12 @@ import { NgModule } from '@angular/core';
 import { DashboardComponent } from '../../../general/components/dashboard/dashboard.component';
 import { SwitchDefaultDformsComponent } from '../../components/switch-default-dforms/switch-default-dforms.component';
 import { SignatureHouseComponent } from './components/signature-house/signature-house.component';
+import { ViewConsentComponent } from './components/view-consent/view-consent.component';
 
 // import { GeneralModule } from '../general/general.module';
 
 /* Guards */
-// import { AuthGuard } from './../security/guard/auth.guard';
+import { AuthGuard } from 'src/app/security/guard/auth.guard';
 // import { AdminGuard } from './../security/guard/admin.guard';
 
 const routes: Routes = [
@@ -27,7 +28,7 @@ const routes: Routes = [
             { title: 'Switch Default Dforms', url: '/switch-default-dforms' }
           ]
         },
-        // canActivate: [AuthGuard, AdminGuard]
+        canActivate: [AuthGuard]//, AdminGuard
       },
       {
         path: 'consents/signature-house',
@@ -39,8 +40,20 @@ const routes: Routes = [
             { title: 'Signature at home', url: '/signature-house' }
           ]
         },
-        // canActivate: [AuthGuard, AdminGuard]
-      },     
+        canActivate: [AuthGuard]//, AdminGuard
+      },
+      {
+        path: 'consents/view-consent',
+        component: ViewConsentComponent,
+        data: {
+          title: 'Signature at home',
+          urls: [
+            { title: 'Dashboard', url: '/dashboard' },
+            { title: 'Signature at home', url: '/view-consent' }
+          ]
+        },
+        canActivate: [AuthGuard]//, AdminGuard
+      },      
       { path: '', redirectTo: '/switch-default-dforms', pathMatch: 'full' }
     ],
     // canActivate: [AuthGuard]

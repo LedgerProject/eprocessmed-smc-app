@@ -20,6 +20,7 @@ import { EditCatalosComponent } from './components/catalogs/_presenters/edit-cat
 import { StablishmentComponent } from './components/stablishment/stablishment.component';
 import { PatientsComponent } from './components/patients/patients.component';
 import { ProcEstabComponent } from './components/proc-estab/proc-estab.component';
+import { WelcomeComponent } from './components/welcome/welcome.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { ProcEstabComponent } from './components/proc-estab/proc-estab.component
     EditCatalosComponent,
     StablishmentComponent,
     PatientsComponent,
-    ProcEstabComponent
+    ProcEstabComponent,
+    WelcomeComponent
   ],
   exports: [
     StatisticsComponent,

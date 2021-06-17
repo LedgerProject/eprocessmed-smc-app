@@ -10,7 +10,7 @@ import { EdtRespFormComponent } from './components/edt-resp-form/edt-resp-form.c
 // import { GeneralModule } from '../general/general.module';
 
 /* Guards */
-// import { AuthGuard } from './../security/guard/auth.guard';
+import { AuthGuard } from 'src/app/security/guard/auth.guard';
 // import { AdminGuard } from './../security/guard/admin.guard';
 
 const routes: Routes = [
@@ -28,7 +28,7 @@ const routes: Routes = [
             { title: 'Switch Default Dforms', url: '/switch-default-dforms' }
           ]
         },
-        // canActivate: [AuthGuard, AdminGuard]
+        canActivate: [AuthGuard]//, AdminGuard
       },
       {
         path: 'dynamic-forms/lst-resp-forms',
@@ -40,7 +40,7 @@ const routes: Routes = [
             { title: 'List Respondent Forms', url: '/lst-resp-forms' }
           ]
         },
-        // canActivate: [AuthGuard, AdminGuard]
+        canActivate: [AuthGuard]//, AdminGuard
       },
       {
         path: 'dynamic-forms/edt-resp-form/:id',//edit-respondent-form/:id
@@ -52,7 +52,7 @@ const routes: Routes = [
             { title: 'Edit Respondent Forms', url: '/edt-resp-form' }
           ]
         },
-        // canActivate: [AuthGuard, AdminGuard]
+        canActivate: [AuthGuard]//, AdminGuard
       },      
       { path: '', redirectTo: '/switch-default-dforms', pathMatch: 'full' }
     ],

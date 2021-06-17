@@ -1,69 +1,69 @@
 const data_config = {
     server: {
-        host: 'localhost',
+        host:'localhost',
         port: 8080
     },
     srvFront: {
-        host: 'localhost',
+        host:'localhost',
         port: 8080
     },
     postgresql: {
         host: 'localhost',
         port: 8080,
-        user: '',
-        password: '',
-        database:''
+        user: 'user',
+        password: 'password',
+        database:'database'
     },
     mongodb: {
         host: 'localhost',
         port: 8080,
-        db: '',
-        user: '',
-        pwd: ''
+        db: 'db',
+        user: 'user',
+        pwd: 'pwd'
     },
     serverTest: {
-        host: 'localhost',
+        host:'localhost',
         port: 8080
     },
     srvFrontTest: {
-        host: 'localhost',
+        host:'localhost',
         port: 8080
     },  
     postgresqlTest: {
         host: 'localhost',
         port: 8080,
-        user: '',
-        password: '',
-        database:''
+        user: 'user',
+        password: 'password',
+        database:'database'
     },
     mongodbTest: {
         host: 'localhost',
         port: 8080,
-        db: '',
-        user: '',
-        pwd: ''
+        db: 'db',
+        user: 'user',
+        pwd: 'pwd'
     },
     serverDev: {
-        host: 'localhost',
+       host:'localhost',
         port: 8080
     },
     srvFrontDev: {
-        host: 'localhost',
+        host:'localhost',
         port: 8080
     },
     postgresqlDev: {
         host: 'localhost',
         port: 8080,
-        user: '',
-        password: '',
-        database: ''
+        user: 'user',
+        password: 'password',
+        database: 'database'
     },
     mongodbDev: {
         host: 'localhost',
         port: 8080,
-        db: '',
-        user: '',
-        pwd: ''
+        db: 'db',
+        user: 'user',
+        pwd: 'pwd'
     },
     otpSrv:{
         host: 'localhost',
@@ -87,7 +87,7 @@ const data_config = {
     http: 'http://',
     https: 'https://',
     environment: 'Development',     // Development || Testing || Production
-    ssl: false,                     // false || true
+    ssl: false,                 // false || true
     sslFront: false,
     sslOtp: true,
     sslMail: true,

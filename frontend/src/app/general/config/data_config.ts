@@ -16,6 +16,3 @@ export const dataConfig = {
   environment: 'Development', // Development || Testing || Production
   ssl: false                  // false || true
 };
-//api.saas-ecuador.com
-//
-

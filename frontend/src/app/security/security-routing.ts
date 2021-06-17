@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 
 /* Components */
 import { DashboardComponent } from '../general/components/dashboard/dashboard.component';
-import { StatisticsComponent } from '../admin/components/statistics/statistics.component';
+import { WelcomeComponent } from '../admin/components/welcome/welcome.component';
 
 
 import { LngSwitchComponent } from './components/logins/lng-switch/lng-switch.component';
@@ -14,6 +14,8 @@ import { UsersComponent } from './components/users/users.component';
 
 /* Guards */
 import { NotAuthGuard } from './guard/not-auth.guard';
+import { AuthGuard } from './guard/auth.guard';
+import { AdminGuard } from './guard/admin.guard';
 
 const routes: Routes = [
   {
@@ -21,16 +23,16 @@ const routes: Routes = [
     component: DashboardComponent,
     children: [
       {
-        path: 'statistics',
-        component: StatisticsComponent,
+        path: 'welcome',
+        component: WelcomeComponent,
         data: {
-          title: 'Starter',
+          title: 'Welcome',
           urls: [
             { title: 'Dashboard', url: '/dashboard' },
-            { title: 'Starter', url: '/statistics' }
+            { title: 'Welcome', url: '/welcome' }
           ]
         },
-        // canActivate: [AuthGuard, AdminGuard]
+        canActivate: [AuthGuard]
       },
       {
         path: 'security/users',
@@ -42,7 +44,7 @@ const routes: Routes = [
             { title: 'Users', url: '/users' }
           ]
         },
-        // canActivate: [AuthGuard, AdminGuard]
+        canActivate: [AuthGuard, AdminGuard]
       },
       {
         path: 'security/roles-estab',
@@ -54,21 +56,22 @@ const routes: Routes = [
             { title: 'Roles Establishments', url: '/roles-estab' }
           ]
         },
-        // canActivate: [AuthGuard, AdminGuard]
+        canActivate: [AuthGuard, AdminGuard]
       },
-      { path: '', redirectTo: '/statistics', pathMatch: 'full' }
+      { path: '', redirectTo: '/welcome', pathMatch: 'full' }
     ],
     // canActivate: [AuthGuard]
   },
   {
     path: 'login',
-    component: LngSwitchComponent
+    component: LngSwitchComponent,
+    canActivate: [NotAuthGuard]
   },
   {
     path: 'consent',
-    component: LngSwitchComponent
-  },
-  // { path: 'login', component: LoginComponent, canActivate: [NotAuthGuard] }
+    component: LngSwitchComponent,
+    canActivate: [NotAuthGuard]
+  }
 ];
 
 @NgModule({

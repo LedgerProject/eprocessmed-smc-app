@@ -6,7 +6,6 @@ import { SocialAuthService } from "angularx-social-login";
 import { GoogleLoginProvider } from "angularx-social-login";
 
 // import { element } from 'protractor';
-import { session } from '../../../../general/global/data/session';
 
 /* Components */
 import { DialogComponent } from '../../../../general/components/shared/dialog/dialog/dialog.component';
@@ -268,6 +267,7 @@ export class LoginComponent implements OnInit {
     localStorage.setItem('mail', `${this.usrAuth.mail}`);
     localStorage.setItem('phone', `${this.usrAuth.phone}`);
     localStorage.setItem('userStructure', `${this.usrAuth.userStructure}`);
+    localStorage.setItem('intPhoneCode', this.usrAuth.intPhoneCode);
   }  
 
   auth(): void {
@@ -301,6 +301,7 @@ export class LoginComponent implements OnInit {
             case '0,3,0':// customer
                 routeInit = 'dynamic-forms/lst-resp-forms';
               break;
+            //this.authService.signOut();
           }
           if (routeInit !== undefined) {
             this.router.navigate([routeInit]);
@@ -360,7 +361,6 @@ export class LoginComponent implements OnInit {
         // console.log('response',res);
       },
       error => {
-        console.log(error);
         this.alertMsg = 'Algo salio mal, porfavor vuelva a intentar';
         this.closeModalOtp();
         this.openAlertModal();

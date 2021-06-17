@@ -18,7 +18,6 @@ export class ModalOtpCheckComponent implements OnInit {
   }
 
   onInputChange(event: any){
-     console.log('event',event);
      this.codeotp = event;
   }
 

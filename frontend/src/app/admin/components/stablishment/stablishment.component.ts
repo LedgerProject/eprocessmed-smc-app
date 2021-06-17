@@ -9,6 +9,7 @@ import { DialogMsgComponent } from '../../../general/components/shared/dialog/di
 import { StablishmentService } from '../../../service-mngmt/stablishment.service';
 import { GeneralService } from '../../../service-mngmt/general.service';
 import { BlockchainService } from '../../../service-mngmt/blockchain.service';
+import { AuthService } from 'src/app/security/services/auth.service';
 
 export interface StablishmentModel {
   idEstablishment?: string;
@@ -51,6 +52,7 @@ export class StablishmentComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
+  public dataSesion: any;
   public collector: any;
   public stabListActive: boolean;
   public btnConfirmActive: boolean;
@@ -76,7 +78,9 @@ export class StablishmentComponent implements AfterViewInit {
     private generalService: GeneralService, 
     private stablishmentService: StablishmentService, 
     private blockchainService: BlockchainService, 
-    private dialog: MatDialog ) {
+    private dialog: MatDialog,
+    private authService: AuthService) {
+    this.dataSesion = this.authService.getDataSesion();
     this.collector = [];
     this.stabListActive = true;
     this.stablishment = [];
@@ -111,6 +115,7 @@ export class StablishmentComponent implements AfterViewInit {
       idCatPatientLoad: '',
       idCatPatientVal: ''
     };
+    
     this.sltValues = {
       countries: '',
       provinces: '',
@@ -130,7 +135,7 @@ export class StablishmentComponent implements AfterViewInit {
 
   initialAsyncFunctions = async () => {
     await this.getCatalogs({ request: "catalogs" });
-    await this.getStablis({ request: "establishment" });
+    await this.getStablis({ request: "estab-by-cust", data: { idCustomer: this.dataSesion.customerId } });
     await this.getCustomer({ request: "customers" });
   }
 
@@ -146,7 +151,7 @@ export class StablishmentComponent implements AfterViewInit {
       case 'btnNew':
         this.stablishmentmodel = {
           idEstablishment:'',
-          idCustomer:'',
+          idCustomer: this.dataSesion.customerId,
           description:'',
           dni:'',
           address:'',
@@ -311,7 +316,7 @@ export class StablishmentComponent implements AfterViewInit {
             phone: stablishment.phone,
             contactName: stablishment.contact_name,
             contactPhone: stablishment.contact_name     
-          }
+          };
           this.decrypt(encrypted, stablishment.hash);
         }
       },
@@ -528,7 +533,6 @@ export class StablishmentComponent implements AfterViewInit {
         const param: any = datachild.children.find((param: any) => param.name === paramName);
         if (param !== undefined) {
           const idChild = `${datachild.father},${datachild.id}`;
-          // const idChild = `${datachild.father},${param.id}`;
           const value = param.value;
           collector.push({id: idChild, value});
         }

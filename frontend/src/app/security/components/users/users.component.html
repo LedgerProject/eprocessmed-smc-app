@@ -92,6 +92,19 @@
 <ng-template #usersModif>
   <!-- CONTENT REGISTER, UPDATE, DELETE-->
   <div class="container" id="divNew">
+    
+    <mat-grid-list cols="4" rowHeight="90px">
+      <mat-grid-tile></mat-grid-tile>
+      <mat-grid-tile></mat-grid-tile>
+      <mat-grid-tile></mat-grid-tile>
+      <mat-grid-tile>
+        <button id="btnConfirm" [disabled]="!btnConfirmActive" class="example-label" mat-raised-button color="{{btnUsersActions.color}}" name="{{btnUsersActions.name}}" value="{{btnUsersActions.value}}">
+          <data id="btnConfirm" value="{{btnUsersActions.value}}">{{btnUsersActions.name}}</data>
+        </button>
+        <button class="example-label" mat-raised-button color="warn" (click)="show()">Cancel</button>
+      </mat-grid-tile>
+    </mat-grid-list>
+
     <mat-grid-list cols="2" rowHeight="90px">
 
       <mat-grid-tile>
@@ -193,14 +206,19 @@
           </mat-grid-tile>
         </li>
       </ul>
-      
+
+    </mat-grid-list>
+
+    <mat-grid-list cols="4" rowHeight="90px">
+      <mat-grid-tile></mat-grid-tile>
+      <mat-grid-tile></mat-grid-tile>
+      <mat-grid-tile></mat-grid-tile>
       <mat-grid-tile>
         <button id="btnConfirm" [disabled]="!btnConfirmActive" class="example-label" mat-raised-button color="{{btnUsersActions.color}}" name="{{btnUsersActions.name}}" value="{{btnUsersActions.value}}">
           <data id="btnConfirm" value="{{btnUsersActions.value}}">{{btnUsersActions.name}}</data>
         </button>
         <button class="example-label" mat-raised-button color="warn" (click)="show()">Cancel</button>
       </mat-grid-tile>
-
     </mat-grid-list>
 
   </div>

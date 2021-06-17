@@ -6,7 +6,6 @@ import { SocialAuthService } from "angularx-social-login";
 import { GoogleLoginProvider } from "angularx-social-login";
 
 // import { element } from 'protractor';
-import { session } from '../../../../general/global/data/session';
 
 /* Components */
 import { DialogComponent } from '../../../../general/components/shared/dialog/dialog/dialog.component';
@@ -268,6 +267,7 @@ export class AppLgnSmartPassportComponent implements OnInit {
     localStorage.setItem('mail', `${this.usrAuth.mail}`);
     localStorage.setItem('phone', `${this.usrAuth.phone}`);
     localStorage.setItem('userStructure', `${this.usrAuth.userStructure}`);
+    localStorage.setItem('intPhoneCode', this.usrAuth.intPhoneCode);
   }  
 
   auth(): void {

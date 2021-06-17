@@ -38,7 +38,6 @@ const urls = {
   crtUpdStablishment: 'crt-upd-stablishment',
   ncrypt: 'ncrypt',
   decrypt: 'decrypt',
-  //
   users: 'users',
   dataSend:'data-send',
   qyrUsr: 'qry-usr',
@@ -49,6 +48,7 @@ const urls = {
   dltUsr: 'dlt-usr',
   authUsr: 'ath-usr',
   lgutUsr: 'lgt-usr',
+  getHash: 'get-hash',
   customerUsr: 'customer-usr',
   sendOtpUsr: 'send-otp-usr',
   cust: 'customers',
@@ -91,10 +91,12 @@ const urls = {
   resMeeting: 'res-meet',
   getConsentStructure:'get-consent-structure-usr',
   getConsentPendingPatient:'get-consent-pending-crt',
+  consentBySpecialist:'consent-by-specialist',
   sendOtpConsent:'send-code-consent',
   updateConsent:'update-consent',
   getProcessDetail: 'get-process-detail-crt',
-  validateOtpConsent: 'validate-otp-consent'
+  validateOtpConsent: 'validate-otp-consent',
+  sendCodeWatsapp:'send-code-whatsapp'
 };
 
 export const globalData = {

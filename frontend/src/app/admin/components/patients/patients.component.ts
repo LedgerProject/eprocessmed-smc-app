@@ -9,6 +9,7 @@ import { DialogMsgComponent } from '../../../general/components/shared/dialog/di
 import { PatientsService } from '../../../service-mngmt/patients.service';
 import { GeneralService } from '../../../service-mngmt/general.service';
 import { BlockchainService } from '../../../service-mngmt/blockchain.service';
+import { AuthService } from '../../../security/services/auth.service';
 
 export interface PatientModel {
   idPatient?: string;
@@ -40,6 +41,7 @@ export interface PatientModel {
   phoneEmecon?: string;
   addressEmecon?: string;
   idCatGenderEmecon?: string;
+  idUserCreate?: number;
 }
 
 export interface SelectedValues {
@@ -139,6 +141,9 @@ export class PatientsComponent  implements AfterViewInit {
   public stablishment: any;
   public patientsModel!: PatientModel;
 
+  public dataSesion: any;
+  public idUser: string | null;
+
   //variables para insert de data
   public sltValues!: SelectedValues;
   public encrypted!: Encrypted;
@@ -152,7 +157,8 @@ export class PatientsComponent  implements AfterViewInit {
     private generalService: GeneralService, 
     private patientsService: PatientsService, 
     private blockchainService: BlockchainService, 
-    private dialog: MatDialog ) {
+    private dialog: MatDialog,
+    private authService: AuthService ) {
     this.stablishment = [];
     this.collector = [];
     this.patientsListActive = true;
@@ -168,6 +174,10 @@ export class PatientsComponent  implements AfterViewInit {
     this.paginator=ViewChild(MatPaginator);
     this.sort= ViewChild(MatSort);
     this.initialAsyncFunctions();
+
+    this.dataSesion = this.authService.getDataSesion();
+    this.idUser = this.dataSesion.id;
+
   }
 
   ngAfterViewInit = async () =>{
@@ -350,7 +360,8 @@ export class PatientsComponent  implements AfterViewInit {
           const ouput = resp.filter((res: any) => res.ouput === data.request);
           const answer = ouput[0].answer;
           if (answer.correct) {
-            this.patients = answer.resp;
+            const patients = answer.resp;
+            this.patients = patients.filter((pat: any) => pat.id_user_create === `${this.idUser}`);
             this.dataSource = new MatTableDataSource(this.patients);
           }
         },
@@ -454,7 +465,6 @@ export class PatientsComponent  implements AfterViewInit {
     this.switchJsonParse(this.dataUpload,'0','dataUpload','true', '');
   }
 
-
   createPatient = async (namebutton: any) => {
     this.lockButton(namebutton);
     const idLocation = {
@@ -470,6 +480,8 @@ export class PatientsComponent  implements AfterViewInit {
     this.patientsModel.legalRepresentative = this.sltValues.legalRepresentative;
     this.patientsModel.idCatRelationshipeme = JSON.stringify({idCatRelationshipeme: this.sltValues.idCatRelationshipeme});
     this.patientsModel.idCatGenderEmecon = JSON.stringify({idCatGenderEmecon: this.sltValues.idCatGenderEmecon});
+    this.patientsModel.idUserCreate = parseInt(this.dataSesion.id);
+
     const data = {
       request: 'rgt-patients',
       data: this.patientsModel
@@ -506,7 +518,6 @@ export class PatientsComponent  implements AfterViewInit {
       request: 'upd-patients',
       data: this.patientsModel
     };
-
     await this.patientsService.crtUpdPatients(data).subscribe(
       resp => {
         const ouput = resp.filter((res: any) => res.ouput === data.request);
@@ -684,16 +695,11 @@ export class PatientsComponent  implements AfterViewInit {
           }          
         }
       }
-
-      // Separar y parametrizar solo para construir selectores
       dta.forEach( async (datachild: any) => {
         const param: any = datachild.children.find((param: any) => param.name === paramName);
-
         if (param !== undefined) {
           const idChild = `${datachild.father},${param.id}`;
-
           const value = param.value;
-
           collector.push({id: idChild, value});
         }
       });

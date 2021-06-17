@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { SocialAuthService } from "angularx-social-login";
 import { GoogleLoginProvider } from "angularx-social-login";
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { globalData } from '../../general/global/data/global_data';
 
@@ -10,17 +11,9 @@ import { globalData } from '../../general/global/data/global_data';
 })
 export class AuthService {
 
-  // public session: boolean;
-  public usrSession: any;
+  public usrSession!: any;
 
-  constructor(private socialAuthService: SocialAuthService, private http: HttpClient) {
-    this.usrSession = {
-      id: null,
-      name: null,
-      role: null,
-      token: null
-    };
-  }
+  constructor(private socialAuthService: SocialAuthService, private http: HttpClient, private router: Router) { }
 
   auth(data: any): Observable<any> {
     const body: any = JSON.stringify(data);
@@ -34,13 +27,13 @@ export class AuthService {
   //   return this.http.post(`${globalData.urls.rootURI}${globalData.urls.qyrUsr}`, body, {headers: headers});
   // }
 
-  // loggedIn(): boolean {
-  //   this.session = false;
-  //   if (localStorage.getItem('token')) {
-  //     this.session = true;
-  //   }
-  //   return this.session;
-  // }
+  loggedIn(): boolean {
+    let session = false;
+    if (localStorage.getItem('token') !== null) {
+      session = true;
+    }
+    return session;
+  }
 
   getDataSesion(): any {
     this.usrSession = {
@@ -61,15 +54,20 @@ export class AuthService {
       login: localStorage.getItem('login'),
       mail: localStorage.getItem('mail'),
       phone: localStorage.getItem('phone'),
-      userStructure: localStorage.getItem('userStructure')
+      userStructure: localStorage.getItem('userStructure'),
+      intPhoneCode: localStorage.getItem('intPhoneCode')
     };
     return this.usrSession;
   }
 
+  getHash(): Observable<any> {
+    return this.http.get(`${globalData.urls.rootURI}${globalData.urls.getHash}`);
+  }
+
   signOut(): void {
+    const urlLogin: any = localStorage.getItem('urlLogin');
     localStorage.clear();
-    // this.router.navigate(['/login']);
-    location.reload();
+    document.location.href = urlLogin;
   }
 
 }

@@ -13,7 +13,6 @@ export class AppComponent {
 
   constructor( private generalService: GeneralService ) {
     this.arrCatalos = ["specialties", "dataUpload", "countries", "gender", "languaje", "civilstatus", "relations"];
-    // this.getCatalogs({ request: "catalogs" });
   };
 
   getCatalogs = async (data: any) => {

@@ -16,7 +16,11 @@
             <mat-form-field hintLabel="Max 10 characters" appearance="fill">
               <mat-label>Establishment</mat-label>
               <mat-select [(value)]="procEstab.idEstablishment">
-                <mat-option *ngFor="let stablishment of stablishments" value="{{stablishment.id_establishment}}" (click)="presentsSpecialties(stablishment.id_establishment)">{{stablishment.description}}</mat-option>
+                <mat-option *ngFor="let stablishment of stablishments" value="{{stablishment.id_establishment}}" (click)="presentsSpecialties(stablishment.id_establishment)">
+                  <mat-grid-list cols="1">
+                    <mat-grid-tile value="{{stablishment.id_establishment}}" (click)="presentsSpecialties(stablishment.id_establishment)">{{stablishment.description}}</mat-grid-tile>
+                  </mat-grid-list>
+                </mat-option>
               </mat-select>
               <mat-hint align="end"></mat-hint>
             </mat-form-field>
@@ -30,7 +34,8 @@
                 <mat-grid-list cols="2" rowHeight="2:1">
                   <mat-grid-tile>{{specialtie.value}}</mat-grid-tile>
                   <mat-grid-tile><mat-icon class="specid">{{specialtie.icon}}</mat-icon></mat-grid-tile>
-                </mat-grid-list></mat-option>
+                </mat-grid-list>
+              </mat-option>
             </mat-select>
             <mat-hint align="end"></mat-hint>
           </mat-form-field>
@@ -57,20 +62,52 @@
         </li>
       </ul>
 
-      <!-- armar en grid -->
       <ul>
 
-          <li *ngFor="let procedure of collector.procedures" class="liProcCheck">
-            <div *ngIf="procedure.checked; then thenBlock else elseBlock"></div>
-            <ng-template #thenBlock>
-              <mat-checkbox checked="procedure.checked" class="procCheck procCheck_{{procedure.id}}" (click)="addRemoveProcedure(slctSpecialty,procedure.id,false,NULL)">{{procedure.value}}</mat-checkbox>
-            </ng-template>
-            <ng-template #elseBlock>
-              <mat-checkbox class="procCheck procCheck_{{procedure.id}}" (click)="addRemoveProcedure(slctSpecialty,procedure.id,false,NULL)">{{procedure.value}}</mat-checkbox>
-            </ng-template>
-          </li>
+        <mat-grid-list cols="2" rowHeight="50px" gutterSize="15px">
+
+            <li *ngFor="let procedure of collector.procedures" class="liProcCheck">
+
+              <mat-grid-tile>
+
+                <div class="box box1">
+
+                  <div class="nested checked">
+                    <div *ngIf="procedure.checked; then thenBlock else elseBlock"></div>
+
+                    <ng-template #thenBlock>
+                      <mat-checkbox checked="procedure.checked" class="procCheck procCheck_{{procedure.id}}" (click)="addRemoveProcedure(slctSpecialty,procedure.id,false,NULL)">{{procedure.value}}</mat-checkbox>
+                    </ng-template>
+        
+                    <ng-template #elseBlock>
+                      <mat-checkbox class="procCheck procCheck_{{procedure.id}}" (click)="addRemoveProcedure(slctSpecialty,procedure.id,false,NULL)">{{procedure.value}}</mat-checkbox>
+                    </ng-template>
+                  </div>
+
+                  <!-- procedure.id -->
+                  <div class="nested">
+                    <mat-form-field appearance="fill">
+                      <mat-label>Video</mat-label>
+                      
+                      <mat-select >
+
+                        <mat-option *ngFor="let video of procedure.videos" value="{{video.route}}"  >{{video.name}}</mat-option>
+
+                      </mat-select>
+
+                    </mat-form-field>
+                  </div>
+
+                </div>
+
+              </mat-grid-tile>
+
+            </li>
+
+        </mat-grid-list>
           
       </ul>
+
     </mat-expansion-panel>
 
     <mat-action-row>
@@ -80,4 +117,3 @@
     </mat-action-row>
   
   </mat-accordion>
-  

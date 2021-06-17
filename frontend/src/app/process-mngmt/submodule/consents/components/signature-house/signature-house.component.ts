@@ -2,12 +2,16 @@ import { Component, HostListener } from '@angular/core';
 import { DataSource } from "@angular/cdk/collections";
 import { AuthService } from 'src/app/security/services/auth.service';
 import { ConsentService } from '../../../../../service-mngmt/consent.service';
+import { BrowserModule } from  '@angular/platform-browser';
+import { NgModule } from  '@angular/core';
+import { NgOtpInputModule } from  'ng-otp-input';
 
 @Component({
   selector: 'app-signature-house',
   templateUrl: './signature-house.component.html',
   styleUrls: ['./signature-house.component.scss']
 })
+
 export class SignatureHouseComponent {
   buttonActive: boolean;
   public session: any;
@@ -93,14 +97,18 @@ export class SignatureHouseComponent {
     //pantalla de datos personales
     const layoutDatosP: any = document.getElementById('layoutP');
     const layoutTextoConsent: any = document.getElementById('layoutTexto');
-    const layoutValidar: any = document.getElementById('confirSect');
-    const btnSeePdf: any = document.getElementById('btnSeePdf');
     const btConfirm: any = document.getElementById('btnConfirCod');
+    var video = document.getElementById('videoTag');
+    var source = document.createElement('source');
 
     if (event.target.id == "btnNext1") {
+      //aqui consulto si tiene video y se lo agrego al tag de video
       const order = this.strcuture.header[0].structure_screens.order;
       const result = order.find(element => element.frame === 'video');
       this.video = result!.text;
+      source.setAttribute('src', this.video);
+      video!.appendChild(source);
+
       const hoy = new Date();
       const fecha = hoy.getFullYear() + '-' + (hoy.getMonth() + 1) + '-' + hoy.getDate();
       const hora = hoy.getHours() + ':' + hoy.getMinutes() + ':' + hoy.getSeconds();
@@ -127,12 +135,18 @@ export class SignatureHouseComponent {
 
     }
     if (event.target.id == "btnBack3") {
+      video!.onpause
       layout2.style.display = 'block';
       layout3.style.display = 'none';
     }
     if (event.target.id == "btnNext3") {
       layout3.style.display = 'none';
       layout4.style.display = 'block';
+    }
+    if (event.target.id == "btnBack4") {
+      video!.onpause
+      layout3.style.display = 'block';
+      layout4.style.display = 'none';
     }
     if (event.target.id == "btnRefuse") {
       const hoy = new Date();
@@ -142,25 +156,26 @@ export class SignatureHouseComponent {
       //aqui actualizo el consentimiento y muestro mensaje de rechazo
       const updConsent = {
         idConsent: this.pocedure.idConsent,
-        status:'R',
+        status: 'R',
         traceability: {
-           time_init:'' ,
-           hash_init: '',
-           time_final: '',
-           hash_final:'',
-           accept_time_process:this.acceptTimeProcess,
-           accept_time_personalDate:this.acceptTimePersonalDate,
-           accept_time_consent_accept:this.acceptTimeConsentAccept,
-           accept_decline_process:this.acceptDeclineProcess
+          time_init: '',
+          hash_init: '',
+          time_end: '',
+          hash_final: '',
+          accept_time_process: this.acceptTimeProcess,
+          accept_time_personalDate: this.acceptTimePersonalDate,
+          accept_time_consent_accept: this.acceptTimeConsentAccept,
+          accept_decline_process: this.acceptDeclineProcess
         }
-
       }
       //aqui validamos si el codigo que se inngresa es el mismo con el que se registro el consent
       const objsend = {
         consent: updConsent,
         pdf: this.strcuture,
+        action: "refuse",
+        user:this.session
       };
-      await this.updateConsent(objsend,"refuse");
+      await this.updateConsent(objsend, "refuse");
     }
     if (event.target.id == "btnAcceptConsent") {
       const hoy = new Date();
@@ -168,32 +183,32 @@ export class SignatureHouseComponent {
       const hora = hoy.getHours() + ':' + hoy.getMinutes() + ':' + hoy.getSeconds();
       this.acceptDeclineProcess = fecha + ' ' + hora;
       var data = {
-        codephone: "593",
+        codephone: this.session.intPhoneCode,
         phone: this.session.phone,
         name: this.session.name,
         lastname: this.session.lastname,
         infoOtp: this.pocedure.infoOtp
       }
-      //aqui invocamos el metodo que envia el sms
+      //aqui invocamos el metodo que envia el sms y whatsapp
       this.sendOtp(data);
-      alert("Your code to sign the consent has been sent to your phone");
-      layoutValidar.style.display = 'block';
-      layout4.style.display = 'none';
+      this.sendWhatsapp(data);
     }
     if (event.target.id == "btnConfirCod") {
+      //aqui bloqueamos el boton
+      btConfirm.style.disabled = 'true';
       //aqui armamos la estructura del consent a modificar, falta data de tazabilidad
       const updConsent = {
         idConsent: this.pocedure.idConsent,
-        status:'C',
+        status: 'C',
         traceability: {
-           time_init:'' ,
-           hash_init: '',
-           time_final: '',
-           hash_final:'',
-           accept_time_process:this.acceptTimeProcess,
-           accept_time_personalDate:this.acceptTimePersonalDate,
-           accept_time_consent_accept:this.acceptTimeConsentAccept,
-           accept_decline_process:this.acceptDeclineProcess
+          time_init: '',
+          hash_init: '',
+          time_end: '',
+          hash_final: '',
+          accept_time_process: this.acceptTimeProcess,
+          accept_time_personalDate: this.acceptTimePersonalDate,
+          accept_time_consent_accept: this.acceptTimeConsentAccept,
+          accept_decline_process: this.acceptDeclineProcess
         }
 
       };
@@ -201,9 +216,11 @@ export class SignatureHouseComponent {
       const objsend = {
         consent: updConsent,
         pdf: this.strcuture,
-        otp: this.infoOtp
+        otp: this.infoOtp,
+        action: "accept",
+        user:this.session
       };
-      await this.updateConsent(objsend,"accept");
+      await this.updateConsent(objsend, "accept");
     }
     if (event.target.id == "btnSeePdf") {
       window.open(this.urlPdf, '_blank');
@@ -237,6 +254,7 @@ export class SignatureHouseComponent {
 
   @HostListener('change', ['$event'])
   onchange = async (event: any) => {
+    console.log(event.target);
   }
 
   constructor(
@@ -307,10 +325,10 @@ export class SignatureHouseComponent {
       status: ''
     };
 
-    this.acceptTimeProcess="";
-    this.acceptTimePersonalDate="";
-    this.acceptTimeConsentAccept="";
-    this.acceptDeclineProcess="";
+    this.acceptTimeProcess = "";
+    this.acceptTimePersonalDate = "";
+    this.acceptTimeConsentAccept = "";
+    this.acceptDeclineProcess = "";
     this.infoOtp = "";
     this.buttonActive = false;
     this.session = this.authService.getDataSesion();
@@ -319,6 +337,10 @@ export class SignatureHouseComponent {
     this.idEstablishment = parseInt(this.session.idEstablishment);
     this.getConsentPending(this.idPatient);
     this.getUsersConsent(this.idSpecialist, this.idEstablishment);
+  }
+
+  onOtpChange(event: any): void {
+    this.infoOtp = event;
   }
 
   ngOnInit(): void {
@@ -370,10 +392,13 @@ export class SignatureHouseComponent {
       resp => {
         const ouput = resp.resp;
         if (resp.correct) {
-          this.strcuture = ouput[0];        
+          this.strcuture = ouput[0];
           //ascending
           this.structureOrder = this.strcuture.body.sort((a, b) => a.id_det_strpro - b.id_det_strpro);
+          const appDiv = document.getElementById('textDoc');
+          appDiv!.innerHTML = this.structureOrder[0].information;
         }
+
       },
       err => {
         console.log(err);
@@ -407,6 +432,25 @@ export class SignatureHouseComponent {
     await this.consentService.sendOtp(data).subscribe(
       resp => {
         const ouput = resp.resp;
+        console.log(ouput);
+        if (resp.correct) {
+          const layoutValidar: any = document.getElementById('confirSect');
+          const layout4: any = document.getElementById('layout4');
+          alert("Your code to sign the consent has been sent to your phone");
+          layoutValidar.style.display = 'block';
+          layout4.style.display = 'none';
+        }
+      },
+      err => {
+        console.log(err);
+      }
+    );
+  }
+
+  sendWhatsapp = async (data: any) => {
+    await this.consentService.sendWhatsapp(data).subscribe(
+      resp => {
+        const ouput = resp.resp;
         if (resp.correct) {
           this.urlPdf = ouput;
         }
@@ -417,59 +461,61 @@ export class SignatureHouseComponent {
     );
   }
 
-  updateConsent = async (data: any, action:string) => {
+  updateConsent = async (data: any, action: string) => {
     var pdf = data.pdf;
-    var header=pdf.header[0].structure_header;
-    var answerDet=pdf.body;
-    var arrayBody=[];
-
-    var element={
-      order:"",
-      information:""
+    var header = pdf.header[0].structure_header;
+    var answerDet = pdf.body;
+    var arrayBody = [];
+    var element = {
+      order: "",
+      information: ""
     };
 
     for (let i = 0; i < answerDet.length; i++) {
-      element={
-        order:answerDet[i].order_proc,
-        information:answerDet[i].information
+      element = {
+        order: answerDet[i].order_proc,
+        information: answerDet[i].information
       }
       arrayBody.push(element);
     }
-
     const newPdf = {
-      header:header,
-      body:{
-        text:arrayBody,
-        firmas:{
-          firma_p:"",
-          firma_e:""
+      header: header,
+      body: {
+        text: arrayBody,
+        firmas: {
+          firma_p: "",
+          firma_e: ""
         }
       }
     }
-
-    data.pdf=newPdf;
-
+    data.pdf = newPdf;
+    await this.spinner();
+    const spinner: any = document.getElementById('spinner');
     await this.consentService.validateOtpConsent(data).subscribe(
       resp => {
         const ouput = resp.resp;
         if (resp.correct) {
-          if(action=="accept"){
-          const btnSeePdf: any = document.getElementById('btnSeePdf');
-          const btConfirm: any = document.getElementById('btnConfirCod');
-          alert("your consent has been signed successfully");
-          this.urlPdf = ouput.urlipfs;
-          btnSeePdf.style.display = 'block';
-          btConfirm.style.display = 'none';
+          if (action == "accept") {
+            spinner.style.display = "none";
+            alert("your consent has been signed successfully");
+            const btnSeePdf: any = document.getElementById('btnSeePdf');
+            const btConfirm: any = document.getElementById('btnConfirCod');
+            // línea ocultando el spinner
+            btnSeePdf.style.display = 'block';
+            btConfirm.style.display = 'none';
+            this.urlPdf = ouput.urlipfs;
           }
-          else{
+          else {
+            spinner.style.display = "none";
             window.alert("You have rejected the procedure");
             window.location.reload();
           }
-
         } else {
-          if(action=="accept"){
+          if (action == "accept") {
+            spinner.style.display = "none";
             alert("The entered code is incorrect");
-          }else{
+          } else {
+            spinner.style.display = "none";
             window.alert("Your consent could not be signed, contact your specialist for more information");
           }
         }
@@ -479,4 +525,45 @@ export class SignatureHouseComponent {
       }
     );
   }
+
+  spinner = async () => {
+    const spinner: any = document.getElementById('spinner');
+    // línea muestra el spinner
+    spinner.style.display = "block";
+  }
+
+  replaceLabel = async (ArrayText:string, consent:any, stablishment:any, specialist:any, patient:any) => {
+
+      const fecha_create=consent.traceability.time_init;
+      const text = ArrayText;
+      const text1=text.replace(/{consentimiento.fecha_creacion}/gi, fecha_create);
+      const text2=text1.replace(/{paciente.dni}/gi, patient[0].dni);
+      const text3=text2.replace(/{paciente.nombre}/gi, patient[0].name_patient);
+      const text4=text3.replace(/{paciente.apellido}/gi, patient[0].lastname);
+      const text5=text4.replace(/{paciente.direccion}/gi, patient[0].address);
+      const text6=text5.replace(/{paciente.correo}/gi, patient[0].mail);
+      const text7=text6.replace(/{paciente.telefono}/gi, patient[0].phone);
+      const text8=text7.replace(/{paciente.rep_dni}/gi, patient[0].dni_rep_legal);
+      const text9=text8.replace(/{paciente.rep_nombre}/gi, patient[0].name_rep_legal);
+      const text10=text9.replace(/{paciente.rep_apellido}/gi, patient[0].lastname_rep_legal);
+      const text11=text10.replace(/{paciente.rep_direccion}/gi, patient[0].address_rep_legal);
+      const text12=text11.replace(/{paciente.rep_correo}/gi, patient[0].address_rep_legal);
+      const text13=text12.replace(/{paciente.rep_telefono}/gi, patient[0].phone_rep_legal);
+      const text14=text13.replace(/{paciente.no_historia_c}/gi, patient[0].no_clinic_history);
+      const text15=text14.replace(/{especialista.dni}/gi, specialist.dni);
+      const text16=text15.replace(/{especialista.nombre}/gi, specialist.name);
+      const text17=text16.replace(/{especialista.apellido}/gi, specialist.lastname);
+      const text18=text17.replace(/{especialista.direccion}/gi, specialist.dni);
+      const text19=text18.replace(/{especialista.telefono_fijo}/gi, specialist.phone);
+      const text20=text19.replace(/{especialista.telefono_movil}/gi, specialist.phone);
+      const text21=text20.replace(/{centro_de_salud.nombre}/gi, stablishment.description);
+      const text22=text21.replace(/{centro_de_salud.direccion}/gi, stablishment.address);
+      const text23=text22.replace(/{centro_de_salud.telefono}/gi, stablishment.phone);
+      const text24=text23.replace(/{centro_de_salud.ciglas}/gi, stablishment.dni);
+      const text25=text24.replace(/{procedimientos.nombre}/gi, consent);
+
+    return text25;
+  }
+
+
 }

@@ -5,13 +5,13 @@ const sendMailCtr = {};
 
 sendMailCtr.send = async (req, res) => {
   request({
-    url: 'https://',
+    url: 'https://smartconsent.e-processmed.com/smartConsentWeb/control/apiapp/send_mail_Forms',
     headers: { 'Content-Type' : 'application/x-www-form-urlencoded' },
     method: 'POST',
     form: {
-      nonbre: 'nonbre',
-      texto: 'texto',
-      correo: 'email@bbb.com'
+      nonbre: 'Ñañiel',
+      texto: 'Hola Ñañiel',
+      correo: 'danielbry96@hotmail.com'
     }
   },  (error, response, body) => {
     if (!error && response.statusCode === 200) {

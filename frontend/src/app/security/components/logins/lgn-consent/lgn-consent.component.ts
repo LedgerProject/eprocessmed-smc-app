@@ -6,7 +6,6 @@ import { SocialAuthService } from "angularx-social-login";
 import { GoogleLoginProvider } from "angularx-social-login";
 
 // import { element } from 'protractor';
-import { session } from '../../../../general/global/data/session';
 
 /* Components */
 import { DialogComponent } from '../../../../general/components/shared/dialog/dialog/dialog.component';
@@ -35,6 +34,7 @@ import { User } from '../../../../general/interfaces/users.interface';
 export class LgnConsentComponent implements OnInit {
   @Input() public domainData!: any;
 
+  public dataSesion: any;
   private usrAuth: any;   
   public authForm: User;
   public collector: any;
@@ -47,7 +47,7 @@ export class LgnConsentComponent implements OnInit {
   public channelCustomer: any;
   public alertMsg!: string;
   public idEstablishment!: number;
-  public idPrincipalEstab!: number; //this.url
+  public idPrincipalEstab!: number;
   public loginText: string;
   public ImagesUCA!: Boolean;
   public countryPhoneCodes: any;
@@ -64,15 +64,15 @@ export class LgnConsentComponent implements OnInit {
 
   constructor(
     private generalService: GeneralService,
-    private parseJsonCatalogsService:ParseJsonCatalogsService,
+    private parseJsonCatalogsService: ParseJsonCatalogsService,
     private socialAuthService: SocialAuthService,
     private authService: AuthService,
     private otpService: OtpService,
     private usersService: UsersService,
     private router: Router,
     private modalService: NgbModal,
-    public dialog: MatDialog) {//, public Pwa: PwaServiceService
-
+    public dialog: MatDialog) {// public Pwa: PwaServiceService
+    this.dataSesion = this.authService.getDataSesion();
     this.btnPatronato = true;
 
     this.authForm = {
@@ -272,6 +272,7 @@ export class LgnConsentComponent implements OnInit {
     localStorage.setItem('mail', `${this.usrAuth.mail}`);
     localStorage.setItem('phone', `${this.usrAuth.phone}`);
     localStorage.setItem('userStructure', JSON.stringify(this.usrAuth.userStructure));
+    localStorage.setItem('intPhoneCode', this.usrAuth.intPhoneCode);
   }  
 
   auth(): void {
@@ -301,7 +302,7 @@ export class LgnConsentComponent implements OnInit {
                 }
               break;
             case '0,2,0':// specialist
-                routeInit = 'consents/medical-dashboard';
+                routeInit = 'consents';// /medical-dashboard
               break;
             case '0,3,0':// customer
                 routeInit = 'consents/signature-house';
@@ -312,7 +313,7 @@ export class LgnConsentComponent implements OnInit {
           }
         } else {
           this.alertMsg = 'Usuario o contraseña no valido(a)';
-          this.openAlertModal();  
+          this.openAlertModal();
           const messageContainer: any = document.getElementById('messageContainer');
           const loginMessage: any = document.getElementById('loginMessage');
           messageContainer.classList.remove("undisplay");
@@ -320,17 +321,21 @@ export class LgnConsentComponent implements OnInit {
         }
       },
       err => {
+
         const messageContainer: any = document.getElementById('messageContainer');
         const loginMessage: any = document.getElementById('loginMessage');
         messageContainer.classList.remove("undisplay");
         loginMessage.innerHTML = err;
+
       }
     );
   }
 
   unDisplay(): void {
+
     const messageContainer: any = document.getElementById('messageContainer');
     messageContainer.classList.add('undisplay');
+
   }
 
   signInWithGoogle(): void {

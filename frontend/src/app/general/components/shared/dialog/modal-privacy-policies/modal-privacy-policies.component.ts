@@ -38,7 +38,7 @@ export class ModalPrivacyPoliciesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.url = window.location.href;  
+    this.url = window.location.href;   
   }
 
   ngAfterViewChecked(): void {

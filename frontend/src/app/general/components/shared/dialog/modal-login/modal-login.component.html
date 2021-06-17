@@ -8,16 +8,15 @@
 </div>
 
 <div *ngIf="msg==' '" class="bg-danger p-10 text-white">{{ msg }}</div>
-<div class="form__group field">
-  <label for="usr" class="form__label">Usuario</label>
-  <input type="text" [(ngModel)]="loginForm.userName" class="form__field" placeholder="Usuario" name="usr" id='usr'  required />  
-</div>
+<mat-form-field appearance="legacy">
+  <mat-label>Usuario</mat-label>
+  <input matInput type="text" [(ngModel)]="loginForm.userName" placeholder="Usuario" name="usr" id='usr'  required >
+</mat-form-field>
+<mat-form-field appearance="standard">
+  <mat-label>Contraseña</mat-label>
+  <input matInput type="password" [(ngModel)]="loginForm.pass" placeholder="Contraseña" name="password" id='password' required  /> 
+</mat-form-field>
 
-<div  class="form__group field">
-    <label for="password" class="form__label">Contraseña</label>
-    <input  type="password" [(ngModel)]="loginForm.pass" class="form__field" placeholder="Contraseña" name="password" id='password' required  />  
-</div>
-
-<div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+<div style="border-radius: 5px;">
     <button mat-raised-button style="background: #00669A; color: #fff; " class="btn-block btn-lg m-t-20 m-b-20" type="button" (click)="login()">Iniciar sesión</button>
 </div>

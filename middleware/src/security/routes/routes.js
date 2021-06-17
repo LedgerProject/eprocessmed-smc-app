@@ -38,6 +38,9 @@ router.post(`/${urls.sendOtpUsr}`, usersCtr.sendOtp);
 // router.post(`/${urls.lgutUsr}`, usersCtr.logout);
 
 //
+router.get(`/${urls.getHash}`, usersCtr.getHashExt);
+
+//
 router.post(`/${urls.ncrypt}`, serverBockchainCtr.ndecrypt);
 router.post(`/${urls.decrypt}`, serverBockchainCtr.ndecrypt);
 
@@ -51,6 +54,7 @@ router.post(`/${urls.getConsentStructure}`, consentCtr.getStructureConsent);
 router.post(`/${urls.consentBySpecialist}`, consentCtr.getConsentBySpecialist);
 router.post(`/${urls.sendCodeConsent}`, consentCtr.sendOtp);
 router.post(`/${urls.validateOtpConsent}`, consentCtr.validateCodeOtp);
+router.post(`/${urls.sendCodeWatsapp}`, consentCtr.sendWhatsapp);
 
 /*  */
 

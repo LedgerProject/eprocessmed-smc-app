@@ -34,10 +34,22 @@ export class ConsentService {
     return this.http.post(`${globalData.urls.rootURI}${globalData.urls.sendOtpConsent}`, body, { headers: headers });
   }
 
+  sendWhatsapp(data: any): Observable<any> {
+    const body: any = JSON.stringify(data);
+    const headers: any = new HttpHeaders().set('Content-Type', 'application/json');
+    return this.http.post(`${globalData.urls.rootURI}${globalData.urls.sendCodeWatsapp}`, body, { headers: headers });
+  }
+
   validateOtpConsent(data: any): Observable<any> {
     const body:any = data;
     const headers: any = new HttpHeaders().set('Content-Type', 'application/json');
     return this.http.post(`${globalData.urls.rootURI}${globalData.urls.validateOtpConsent}`, body, { headers: headers });
+  }
+
+  getConsentSpecialist(data: any): Observable<any> {
+    const body: any = JSON.stringify(data);
+    const headers: any = new HttpHeaders().set('Content-Type', 'application/json');
+    return this.http.post(`${globalData.urls.rootURI}${globalData.urls. consentBySpecialist}`, body, { headers: headers });
   }
 
 }

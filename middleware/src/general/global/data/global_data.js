@@ -17,6 +17,11 @@ let rootShort;
 let rootDocs;
 let rootDocsPdf;
 let httpBock;
+let httpPdf;
+let serverPdfHost;
+let serverPdfPort;
+let serverWatHost;
+let serverWatPort;
 
 const hostOtp = dataConfig.otpSrv.host;
 const portOtp = dataConfig.otpSrv.port;
@@ -33,9 +38,6 @@ const portBockchCrypt = dataConfig.bockchCryptSrv.port;
 const hostencryptIpfsSrv = dataConfig.encryptIpfsSrv.host;
 const portencryptIpfsSrv = dataConfig.encryptIpfsSrv.port;
 
-const hostpdf = dataConfig.serverPdf.host;
-const portpdf = dataConfig.serverPdf.port;
-
 /*  Environment Settings */
 switch (dataConfig.environment) {
   case 'Production':
@@ -47,6 +49,8 @@ switch (dataConfig.environment) {
       portFront = dataConfig.srvFront.port;
       rootDocs = dataConfig.rootDocs;
       rootDocsPdf = dataConfig.rootDocsPdf;
+      serverPdfHost = dataConfig.serverPdfProd.host;
+      serverPdfPort = dataConfig.serverPdfProd.port;
     break;
   case 'Testing':
       host = dataConfig.serverTest.host;
@@ -57,6 +61,8 @@ switch (dataConfig.environment) {
       portFront = dataConfig.srvFrontTest.port;
       rootDocs = dataConfig.rootDocsTest;
       rootDocsPdf = dataConfig.rootDocsPdf;
+      serverPdfHost = dataConfig.serverPdfTest.host;
+      serverPdfPort = dataConfig.serverPdfTest.port;
     break;
   case 'Development':
       host = dataConfig.serverDev.host;
@@ -67,8 +73,13 @@ switch (dataConfig.environment) {
       portFront = dataConfig.srvFrontDev.port;
       rootDocs = dataConfig.rootDocsDev;
       rootDocsPdf = dataConfig.rootDocsPdf;
+      serverPdfHost = dataConfig.serverPdfDev.host;
+      serverPdfPort = dataConfig.serverPdfDev.port;
     break;
 }
+
+serverWatHost = dataConfig.serverWhatsapp.host;
+serverWatPort = dataConfig.serverWhatsapp.port;
 
 /*  Http configuration  */
 if (dataConfig.ssl) {
@@ -119,6 +130,18 @@ if (dataConfig.sslBock) {
   httpBock = dataConfig.http;
 }
 
+if (dataConfig.sslPdf) {
+  httpPdf = dataConfig.https;
+} else {
+  httpPdf = dataConfig.http;
+}
+
+if (dataConfig.sslWhatsapp) {
+  httpWat = dataConfig.https;
+} else {
+  httpWat = dataConfig.http;
+}
+
 const rootURI = `${http}${host}:${port}/`;
 const urlSrv = `${httpBack}${hostBack}:${portBack}/`;
 const rootOtp = `${httpOtp}${hostOtp}`;
@@ -128,7 +151,8 @@ const shortSrv = `${httpShort}${hostShort}`;
 const rootBockchHash = `${httpBock}${hostBockchHash}:${portBockchHash}/`;
 const rootBockchCrypt = `${httpBock}${hostBockchCrypt}:${portBockchCrypt}/`;
 const rootBockchCryptIpfs = `${httpBock}${hostencryptIpfsSrv}:${portencryptIpfsSrv}/`;
-const rootHostPdf = `${httpBock}${hostpdf}:${portpdf}/`;
+const rootHostPdf = `${httpPdf}${serverPdfHost}:${serverPdfPort}/`;
+const rootHostWat = `${httpWat}${serverWatHost}:${serverWatPort}/`;
 
 if (portFront !== '') {
   rootShort = `${httpFront}${hostFront}:${portFront}/meeting-confirmation/`;
@@ -151,6 +175,7 @@ const global_data = {
   rootBockchCrypt,
   rootBockchCryptIpfs,
   rootHostPdf,
+  rootHostWat,
   hdJson: { 'Content-Type': 'application/json' },
   hdText: { 'Content-Type': 'text/xml' },
   hdForm: { 'Content-Type' : 'application/x-www-form-urlencoded' },
@@ -164,6 +189,7 @@ const global_data = {
     lgutUsr: 'lgt-usr',
     authUsrSrv: 'ath-usr-srv',
     sendOtpUsr: 'send-otp-usr',
+    getHash: 'get-hash',
     sendOtpUsrSrv: 'send-otp-usr-srv',
     scriptOtpSrv: 'clicksend_otp.php',
     scriptMailSrv:'sendMail.php',
@@ -172,7 +198,7 @@ const global_data = {
     ndecrypt: 'ncrypt',
     decrypt: 'decrypt',
     ncryptSrv: 'ncrypt',
-    decryptSrv: 'decrypt',
+    decryptSrv: 'decrypt',// ???????????????
     encryptIpsSrv:'ipfs',
     genQuery: 'gen-query',
     genQuerySrv: 'gen-query-srv',
@@ -192,7 +218,8 @@ const global_data = {
     validateOtpConsent: 'validate-otp-consent',
     getPdf: 'get-pfd',
     dtaFrm: 'dta-forms',
-    getPatientForms: 'patient-frm'
+    getPatientForms: 'patient-frm',
+    sendCodeWatsapp:'send-code-whatsapp'
   },
   msgs:{
     errServer: 'Error starting server',

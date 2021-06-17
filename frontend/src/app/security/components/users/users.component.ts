@@ -10,6 +10,7 @@ import { UsrStrucDialogComponent } from '../../../general/components/shared/dial
 import { UsersService } from '../../../service-mngmt/users.service';
 import { GeneralService } from '../../../service-mngmt/general.service';
 import { BlockchainService } from '../../../service-mngmt/blockchain.service';
+import { AuthService } from '../../services/auth.service';
 
 export interface UserModel {
   idUser?: string;
@@ -29,8 +30,8 @@ export interface UserModel {
   idEstablishment?: string;
   // creation_date?: string;
   // modification_date?: string;
-  // id_user_create?: string;
-  // id_user_modify?: string;
+  idUserCreate?: number;
+  idUserModify?: number;
   // status?: string;
 }
 
@@ -84,6 +85,8 @@ export class UsersComponent {
   dataSource!: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+
+  public dataSesion: any;
   public collector: any;
   public usersListActive: boolean;
   public btnConfirmActive: boolean;
@@ -115,9 +118,11 @@ export class UsersComponent {
 
   constructor(
     private generalService: GeneralService, 
+    private authService: AuthService,
     private usersService: UsersService, 
     private blockchainService: BlockchainService, 
     private dialog: MatDialog ) {
+    this.dataSesion = this.authService.getDataSesion();
     this.stablishment = [];
     this.collector = [];
     this.usersListActive = true;
@@ -139,40 +144,6 @@ export class UsersComponent {
   ngAfterViewInit = async () =>{
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-  }
-
-  initialCollectors = async () => {
-    this.readonlyEdit = false;
-    this.sltValues = {
-      idCatAccesstype: '',
-      idCatRoluser: '',
-      userStructure: [],
-      codePhone: ''
-    }
-    this.userModel = {
-      idUser: '',
-      dni: '',
-      name: '',
-      lastname: '',
-      login: '',
-      password: '',
-      mail: '',
-      codePhone: '',
-      phone: '',
-      idGoogle: '',
-      idHashAlastria: '',
-      idCatRoluser: '',
-      userStructure: '',
-      idCatAccesstype: '',
-      idEstablishment: ''
-    };
-  }
-
-  initialAsyncFunctions = async () => {
-    await this.initialCollectors();
-    await this.getCatalogs({ request: "catalogs" });
-    await this.getUsers({ request: "users" });
-    await this.getStablis({ request: "establishment" });
   }
 
   switchOnClick = async (event: any) => {
@@ -224,6 +195,41 @@ export class UsersComponent {
           }
         break;        
     }
+  }
+
+  initialAsyncFunctions = async () => {
+    await this.initialCollectors();
+    await this.getCatalogs({ request: "catalogs" });
+    await this.getUsers({ request: "usr-by-estab", data: { idEstablishment: this.parseInter(this.dataSesion.idEstablishment) } });
+    await this.getStablis({ request: "estab-by-cust", data: { idCustomer: this.dataSesion.customerId } });
+  }
+
+  initialCollectors = async () => {
+    this.readonlyEdit = false;
+    this.sltValues = {
+      idCatAccesstype: '',
+      idCatRoluser: '',
+      userStructure: [],
+      codePhone: ''
+    }
+    this.userModel = {
+      idUser: '',
+      dni: '',
+      name: '',
+      lastname: '',
+      login: '',
+      password: '',
+      mail: '',
+      codePhone: '',
+      phone: '',
+      idGoogle: '',
+      idHashAlastria: '',
+      idCatRoluser: '',
+      userStructure: '',
+      idCatAccesstype: '',
+      idEstablishment: '',
+      idUserCreate: 0
+    };
   }
 
   getCatalogs = async (data: any) => {
@@ -281,7 +287,7 @@ export class UsersComponent {
   getUserByid(id:any): void {
     const dataSet = {
       request: 'usr-by-id',
-      data: {idUser: id}
+      data: { idUser: id }
     };  
     this.generalService.queryGeneral(dataSet).subscribe(
       resp => {
@@ -355,13 +361,12 @@ export class UsersComponent {
     this.userModel.idCatAccesstype = await JSON.stringify({idCatAccesstype: this.sltValues.idCatAccesstype});
     this.userModel.idCatRoluser = await JSON.stringify({idCatRoluser: this.sltValues.idCatRoluser});
     this.userModel.userStructure = await JSON.stringify({userStructure: this.sltValues.userStructure});
-
+    this.userModel.idUserCreate = parseInt(this.dataSesion.id);
     const data = {
       request: 'rgt-users',
       module: 'admin',
       data: this.userModel
     };
-
     await this.usersService.crtUpdUser(data).subscribe(
       resp => {
         if (resp.correct) {
@@ -422,18 +427,10 @@ export class UsersComponent {
   }
   
   decrypt = async (data: any, idEstablishment: any) => {
-    const dataSet = {
-      request: 'estab-by-id',
-      data: {
-        idEstablishment
-      }
-    };
-    await this.generalService.queryGeneral(dataSet).subscribe(
+    await this.authService.getHash().subscribe(
       resp => {
-        const ouput = resp.filter((res: any) => res.ouput === dataSet.request);
-        const answer = ouput[0].answer;
-        if (answer.correct) {
-          const hash = answer.resp[0].hash;
+        if (resp.correct) {
+          const hash = resp.resp;
           const dataSet = {
             request: 'decrypt',
             data: { data, hash }

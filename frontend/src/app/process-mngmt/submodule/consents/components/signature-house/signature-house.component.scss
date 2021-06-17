@@ -1,9 +1,20 @@
+.spinner {
+  margin-left: 45%;
+  margin-right: 30%;
+}
+
 .tittle {
   margin-top: 2%;
   top: 1rem;
   left: 0;
   right: 0;
   bottom: 0;
+}
+
+.text{
+ margin-left: 3%;
+ margin-right: 3%;
+ text-align: justify;
 }
 
 .div-mat-table{
@@ -18,18 +29,16 @@
   border-radius: 10px;
 }
 
-
 .link {
   font-size: 18px;
   text-decoration: underline;
   color: #506afc;
 }
+
 .link:hover {
   color: blue;
   text-decoration: underline;
 }
-
-
 
 h3{
   text-align: center;

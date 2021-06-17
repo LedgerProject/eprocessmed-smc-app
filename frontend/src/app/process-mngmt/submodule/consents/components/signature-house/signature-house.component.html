@@ -1,5 +1,5 @@
 <div class="tittle">
-  <h3 class="tittle">SIGNATURE AT HOME</h3>
+  <h3 class="tittle">SIGN HOME</h3>
 </div>
 
 <div id="divTable" class="div-mat-table">
@@ -49,15 +49,15 @@
     <mat-card>
       <h1><b>PRESENTATION</b></h1>
       <p>
-        You <b> {{session.name}} </b>, have accessed Smart Consent by indication of <b> {{Establishment.description}}
+        I <b> {{session.name}} </b>, have accessed Smart Consent by indication of <b> {{Establishment.description}}
         </b>
         in order to
         read and visualize the
-        <b> {{pocedure.procedureName}} </b> medical procedure and sign or
+        <b> {{pocedure.procedureName}} </b> medical procediment and sign or
         reject the corresponding Informed Medical Consent. In the following
-        screens must read and / or view the explanation of the prescribed medical procedure
+        screens must read and / or view the explanation of the prescribed medical procediment
         by your practitioner, please follow the instructions indicated on each page, one
-        Once the presentation is completed, you must indicate whether you accept or reject the procedure
+        Once the presentation is completed, you must indicate whether you accept or reject the procediment
         prescribed, by pressing the corresponding button, once you have selected the
         option of acceptance or rejection, you will receive via SMS to the mobile phone number that
         you provided your medical center with a unique authentication key so that you
@@ -66,7 +66,7 @@
 
       <div class="text-center">
         <button mat-raised-button color="primary" style="background-color: #506afc;" id="btnNext1">
-          <label id="btnNext1">Accept</label>
+          <data id="btnNext1">Accept</data>
           <mat-icon id="btnNext1">skip_next</mat-icon>
         </button>
       </div>
@@ -81,39 +81,39 @@
 
       <div class="text-center">
         <button mat-raised-button color="primary" style="background-color: #506afc;" id="btnConsent">
-          <mat-icon>remove_red_eye</mat-icon>
-          <label id="btnConsent">View Text</label>
+          <mat-icon id="btnConsent">remove_red_eye</mat-icon>
+          <data id="btnConsent">View Text</data>
         </button>
       </div>
 
       <p>
-        Select to see the text of the procedure to read in detail what is prescribed by your doctor, in case of
+        Select to see the text of the procediment to read in detail what is prescribed by your doctor, in case of
         procedures that incorporate explanatory videos of the same, to see this video you must indicate that you have
         read and
-        including the prescribed procedure, by checking the enabled check box.
+        including the prescribed procediment, by checking the enabled check box.
       </p>
 
-      <span  class="link">
+      <span class="link">
         <input class="link" type="checkbox" name="test" (change)="testCheck($event)" />
-        <span  id="link" style="color:#506afc">I have read and accept the procedure shown in the PDF</span>
-      </span >
+        <span id="link" style="color:#506afc">I have read and accept the procediment shown in the PDF</span>
+      </span>
 
       <div class="text-center" id="buttonDisabled">
         <button mat-raised-button color="primary" style="background-color: #506afc;" id="btnBack2">
-          <mat-icon>skip_previous</mat-icon>
-          <label id="btnBack2">Back</label>
+          <mat-icon id="btnBack2">skip_previous</mat-icon>
+          <data id="btnBack2">Back</data>
         </button>
       </div>
 
       <div class="text-center" id="buttonEnabled" style="display: none;">
         <button mat-raised-button color="primary" style="background-color: #506afc;" id="btnBack2">
-          <mat-icon>skip_previous</mat-icon>
-          <label id="btnBack2">Back</label>
+          <mat-icon id="btnBack2">skip_previous</mat-icon>
+          <data id="btnBack2">Back</data>
         </button>
 
         <button mat-raised-button color="primary" style="background-color: #506afc;" id="btnNext2">
-          <label id="btnNext2">Next</label>
-          <mat-icon>skip_next</mat-icon>
+          <data id="btnNext2">Next</data>
+          <mat-icon id="btnNext2">skip_next</mat-icon>
         </button>
       </div>
     </mat-card>
@@ -124,24 +124,18 @@
     <mat-card>
       <h1><b>VIDEO OF THE PROCEDURE</b></h1>
 
-      <!-- <video controls class="video">
-        <source src="{{video}}" type="video/mp4">
-      </video> -->
-
-      <video controls class="video">
-        <source [src]="video">
+      <video controls class="video" id="videoTag">
       </video>
-
 
       <div class="text-center">
         <button mat-raised-button color="primary" style="background-color: #506afc;" id="btnBack3">
-          <mat-icon>skip_previous</mat-icon>
-          <label id="btnBack3">Back</label>
+          <mat-icon id="btnBack3">skip_previous</mat-icon>
+          <data id="btnBack3">Back</data>
         </button>
 
         <button mat-raised-button color="primary" style="background-color: #506afc;" id="btnNext3">
-          <mat-icon>skip_next</mat-icon>
-          <label id="btnNext3">Next</label>
+          <data id="btnNext3">Next</data>
+          <mat-icon id="btnNext3">skip_next</mat-icon>
         </button>
       </div>
     </mat-card>
@@ -152,20 +146,27 @@
     <mat-card>
       <h1><b>SIGNATURE OF CONSENT</b></h1>
       <p>
-        Next, you must indicate whether you accept or reject the informed consent of the procedure prescribed by your
+        Next, you must indicate whether you accept or reject the informed consent of the procediment prescribed by your
         doctor, remember to have at hand the mobile phone whose number you provided to your medical center, since
         will send the signature key via SMS.
       </p>
 
       <div class="text-center">
         <button mat-raised-button color="primary" style="background-color: #506afc;" id="btnRefuse">
-          <mat-icon>skip_previous</mat-icon>
-          <label id="btnRefuse">Refuse consent</label>
+          <mat-icon id="btnRefuse">error</mat-icon>
+          <data id="btnRefuse">Refuse consent</data>
         </button>
 
         <button mat-raised-button color="primary" style="background-color: #506afc;" id="btnAcceptConsent">
-          <mat-icon>skip_next</mat-icon>
-          <label id="btnAcceptConsent">Accept Consent</label>
+          <data id="btnAcceptConsent">Accept Consent</data>
+          <mat-icon id="btnAcceptConsent">check_circle</mat-icon>
+        </button>
+      </div>
+
+      <div class="text-center">
+        <button mat-raised-button color="primary" style="background-color: #506afc;" id="btnBack4">
+          <mat-icon id="btnBack4">skip_previous</mat-icon>
+          <data id="btnBack4">Back</data>
         </button>
       </div>
     </mat-card>
@@ -228,8 +229,8 @@
 
       <div class="text-center">
         <button mat-raised-button color="primary" style="background-color: #506afc;" id="btnProt">
-          <mat-icon>skip_previous</mat-icon>
-          <label id="btnProt">Accept</label>
+          <data id="btnProt">Accept</data>
+          <mat-icon id="btnProt">check_circle</mat-icon>
         </button>
       </div>
     </mat-card>
@@ -239,41 +240,39 @@
   <div class="container" style="display: none;" id="layoutTexto">
     <mat-card>
       <h1><b>CONSENT TEXT</b></h1>
-      <p *ngFor="let item of structureOrder">
-        {{item.information}}
-      </p>
-
+      <div id="textDoc" class="text"></div>
       <div class="text-center">
         <button mat-raised-button color="primary" style="background-color: #506afc;" id="btnTexto">
-          <mat-icon>skip_previous</mat-icon>
-          <label id="btnTexto">Back</label>
+          <data id="btnTexto">Accept</data>
+          <mat-icon id="btnTexto">check_circle</mat-icon>
         </button>
       </div>
     </mat-card>
   </div>
 
-  <!-- Vista de confirmación -->
-  <div id="confirSect" style="display: none; width: 50%; margin-left: 25%; text-align: center;">
-    <mat-card>
-      <section id="confirCodSect">
-        <mat-form-field appearance="fill">
-          <mat-label>Confirmation code</mat-label>
-          <input matInput id="inputOtp" [(ngModel)]="infoOtp">
-        </mat-form-field>
-        <button id="btnConfirCod" mat-raised-button color="primary">Confirm</button>
-      </section>
-      
-      <section id="btnSeePdf" style="display: none;">
-        <button id="btnSeePdf" mat-raised-button color="primary">See Pdf</button>
-      </section>
-    </mat-card>
-  </div>
+ <!-- Vista de confirmación -->
+ <div id="confirSect" style="display: none; width: 50%; margin-left: 25%; text-align: center;">
+  <mat-card>
+    <section id="confirCodSect">
+      <mat-form-field appearance="fill" style="text-align: center;">
+        <data style="padding-bottom: 10px;">Confirmation code</data>
+        <input matInput id="inputOtp" [(ngModel)]="infoOtp" style="display: none;">
+        <ng-otp-input (onInputChange)="onOtpChange($event)" [config]="{length:4}"></ng-otp-input>
+      </mat-form-field>
+      <button mat-raised-button color="primary" style="background-color: #506AFC;" id="btnConfirCod">
+        <data id="btnConfirCod">Confirm</data>
+      </button>
+    </section>
+    <section id="btnSeePdf" style="display: none;">
+      <button mat-raised-button color="primary" style="background-color: #506AFC;" id="btnSeePdf">
+        <data id="btnSeePdf">See Pdf</data>
+      </button>
+    </section>
+  </mat-card>
+</div>
 
-  <!-- Vista de pdf -->
-  <div id="pdfViewSection" style="display: none;">
-    <mat-card>
-      <iframe src={{urlPdf}}></iframe>
-    </mat-card>
-  </div>
+  <div id="spinner" class="spinner" style="display: none;">
+    <mat-spinner></mat-spinner>
+    </div>
 
 </div>

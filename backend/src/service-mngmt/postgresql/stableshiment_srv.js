@@ -39,18 +39,21 @@ stablishmentSrv.getById = async (req, res) => {
   }
 };
 
-stablishmentSrv.query = async (req, res) => {
+stablishmentSrv.query = async (req, res) => {// 
   try {
     poolConnect = pool(configDB);
     const { type, item, value } = req.body;
     let where = '';
+
     if (type === 'params') {
       if (item && value) {
         where = `WHERE ${item}='${value}'`;
       }
     }
+
     const qry = `SELECT * FROM public."Establishment" ${where};`;
     const answer = await poolConnect.query(qry);
+
     res.status(200).json({
       correct: true,
       resp: answer.rows
@@ -68,7 +71,6 @@ stablishmentSrv.create = async (req, res) => {
   try {
     poolConnect = pool(configDB);
     const data = req.body;
-    
     const o_date = new Intl.DateTimeFormat;
     const f_date = (m_ca, m_it) => Object({ ...m_ca, [m_it.type]: m_it.value });
     const m_date = o_date.formatToParts().reduce(f_date, {});
@@ -115,7 +117,6 @@ stablishmentSrv.delete = async (req, res) => {
     poolConnect = pool(configDB);
     const { id } = req.params;
     const qry = `UPDATE public."Establishment" SET status=0 WHERE idestablishment= ${id};`;
-    
     await poolConnect.query(qry);
     res.status(200).json({
       correct: true,

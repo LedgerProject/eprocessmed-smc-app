@@ -226,6 +226,7 @@ usersSrv.auth = async (req, res) => {
                 break;
         }
         qry = `SELECT * FROM users ${where};`;
+
         try {
             poolConnect = pool(configDB);
             answerQry = await poolConnect.query(qry);
@@ -235,7 +236,7 @@ usersSrv.auth = async (req, res) => {
                 var dni = userReg.dni;
                 var name = userReg.name;
                 var lastname = userReg.lastname;
-                const login = userReg.login;
+                var loginD = userReg.login;
                 var mail = userReg.mail;
                 const codePhone = userReg.code_phone;
                 var phone = userReg.phone;
@@ -268,7 +269,7 @@ usersSrv.auth = async (req, res) => {
                         dni: dni,
                         name: name,
                         lastname: lastname,
-                        login: login,
+                        login: loginD,
                         mail: mail,
                         phone: phone,
                     }
@@ -276,14 +277,13 @@ usersSrv.auth = async (req, res) => {
 
                 const deyptResp = await decrypt(dataDecrypt);
                 const message = deyptResp.message;
-
                 if (message === 'Datos descifrados correctamente') {
-                    dni= deyptResp.data.dni,
-                    name= deyptResp.data.name,
-                    lastname= deyptResp.data.lastname,
-                    //login= deyptResp.data.login,
-                    mail= deyptResp.data.mail,
-                    phone= deyptResp.data.phone
+                    dni= deyptResp.data.dni;
+                    name= deyptResp.data.name;
+                    lastname= deyptResp.data.lastname;
+                    loginD= deyptResp.data.login;
+                    mail= deyptResp.data.mail;
+                    phone= deyptResp.data.phone;
                 }
 
                 answer = {
@@ -293,7 +293,7 @@ usersSrv.auth = async (req, res) => {
                         dni,
                         name,
                         lastname,
-                        login,
+                        login: loginD,
                         phone,
                         codePhone,
                         mail,
@@ -313,6 +313,8 @@ usersSrv.auth = async (req, res) => {
                 correct = true;
 
             } else {
+                status = 200;
+                correct = true;
                 answer = 'Denied';
             }
         } catch (err) {

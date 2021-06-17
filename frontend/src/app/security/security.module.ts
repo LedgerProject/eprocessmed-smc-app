@@ -26,6 +26,8 @@ import { LoginComponent } from './components/logins/lgn-dynamic-forms/lgn-dynami
 import { AppLgnSmartPassportComponent } from './components/logins/lgn-smart-passport/lgn-smart-passport.component';
 import { LgnConsentComponent } from './components/logins/lgn-consent/lgn-consent.component';
 
+import { SharedModule } from '../general/components/shared/shared.module';
+
 @NgModule({
   declarations: [
     RolesEstabComponent,
@@ -53,7 +55,8 @@ import { LgnConsentComponent } from './components/logins/lgn-consent/lgn-consent
     AgGridModule.withComponents([]),
     FlexLayoutModule,
     GeneralModule,
-    BrowserModule
+    BrowserModule,
+    SharedModule
   ],
   providers: [
     AuthGuard,

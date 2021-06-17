@@ -105,6 +105,10 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         ],
       } as SocialAuthServiceConfig,
     },
+    // PwaServiceService,    
+    // AuthGuard,
+    // NotAuthGuard,
+    // DatePipe
   ],
   bootstrap: [
     AppComponent

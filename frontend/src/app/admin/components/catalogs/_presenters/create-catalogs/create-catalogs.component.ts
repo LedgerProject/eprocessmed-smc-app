@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, AfterViewInit, Renderer2, ViewC
 import { GeneralService } from '../../../../../service-mngmt/general.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CrtEdtCatalogDialogComponent }  from  '../../../../../general/components/shared/dialog/crt-edt-catalog-dialog/app-crt-edt-catalog-dialog.component' ;
+import { AuthService } from 'src/app/security/services/auth.service';
 
 export interface DialogData {
   titleDlg: string;
@@ -32,6 +33,8 @@ export interface IntfNewCatalog {
 export class CreateCatalogsComponent implements AfterViewInit {
 
   public catalogsStrct: [any?];
+  public dataSesion: any;
+  
   @Input() public btnSaveCatalogStrctAdtive!: boolean;
   @Output() ApgradeCatalogsStrct = new EventEmitter();
   @ViewChild('divCatalogStrct') divCatalogStrct!: ElementRef;
@@ -59,7 +62,8 @@ export class CreateCatalogsComponent implements AfterViewInit {
 
   }
 
-  constructor(private generalService: GeneralService, private renderer: Renderer2, private el: ElementRef, private dialog: MatDialog) {
+  constructor(private generalService: GeneralService, private renderer: Renderer2, private el: ElementRef, private dialog: MatDialog, private authService: AuthService) {
+    this.dataSesion = this.authService.getDataSesion();
     this.catalogsStrct = [];
   }
 
@@ -133,7 +137,7 @@ export class CreateCatalogsComponent implements AfterViewInit {
       idCatLanguage: 1,//this.catalogsStrct[0].language
       structure: JSON.stringify(this.catalogsStrct[0]),
       data: JSON.stringify(this.catalogsStrct[0]),
-      // idUserCreate: 0,
+      idUserCreate: parseInt(this.dataSesion.id)
       // idUserModify: 0
     };
     // envia a la DB

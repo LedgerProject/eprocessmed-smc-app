@@ -15,7 +15,6 @@ export class DashboardComponent implements OnDestroy {
   @ViewChild('snav') snav:any;
   toggleSnav() {
     this.snav.toggle();
-    console.log(this.snav.toggle);
   }
 
   mobileQuery: MediaQueryList;

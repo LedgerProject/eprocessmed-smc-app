@@ -74,6 +74,29 @@ const ncrypt = async (dataNcrypt) => {
   return answerNcrypt.answer;
 }
 
+const getPatientByStb = async (idEstablishment) => {
+  const dataReq = {
+    request: 'pat-by-stablishment',
+    data: {
+      idEstablishment,
+    }
+  }
+  let prepareData = '';
+  if (dataReq.prepareData !== undefined) {
+    prepareData = dataReq.prepareData;
+  }
+  const objDta = [{
+    params: [dataReq.data],
+    where: {}
+  }];
+  dataReq.data = objDta;
+  const queryData = strgf(dataReq);
+  const setQuery = { prepareData, process: dataReq.process, input: null, ouput: dataReq.request, url, method: 'POST', data: queryData, headers: hdJson, bodyType: 'body', respFormat: 'Json' };
+  const reqSelet = [setQuery];
+  const requests = [];
+  return sedRequest(reqSelet, requests, collector);
+}
+
 patientsCtr.ctrUpd = async (req, res) => {
   let dataReq;
   if (req.body) {
@@ -82,7 +105,6 @@ patientsCtr.ctrUpd = async (req, res) => {
   if (req.params.data) {
     dataReq = req.params
   }
-  
   const request = dataReq.request;
   let params = dataReq.data;
   let respSrv;
@@ -92,7 +114,6 @@ patientsCtr.ctrUpd = async (req, res) => {
   const respEstb = respEst.find(resp => resp.ouput === 'estab-by-id');
   const correctEstb = respEstb.answer.correct;
   const answerEstb = respEstb.answer.resp;
-
   if (correctEstb) {
     const hash = answerEstb[0].hash;
     const dataNcrypt = {
@@ -120,15 +141,12 @@ patientsCtr.ctrUpd = async (req, res) => {
     }
     //  Enviar parametros a encriptar
     const ncryptData = await ncrypt(dataNcrypt);
-
     if (ncryptData.message === 'Datos encriptados correctamente') {
       for (const key in ncryptData.data) {
         params[key] = ncryptData.data[key];
       }
-
       respSrv = await ctrUpdPatients(dataReq);
       respCtrUpd = respSrv.find(resp => resp.ouput === request);
-
       if (respCtrUpd !== undefined) {
         res.status(200).json(respCtrUpd.answer);
       } else {
@@ -150,29 +168,6 @@ patientsCtr.ctrUpd = async (req, res) => {
     });
   }
 };
-
-const getPatientByStb = async (idEstablishment) => {
-  const dataReq = {
-    request: 'pat-by-stablishment',
-    data: {
-      idEstablishment,
-    }
-  }
-  let prepareData = '';
-  if (dataReq.prepareData !== undefined) {
-    prepareData = dataReq.prepareData;
-  }
-  const objDta = [{
-    params: [dataReq.data],
-    where: {}
-  }];
-  dataReq.data = objDta;
-  const queryData = strgf(dataReq);
-  const setQuery = { prepareData, process: dataReq.process, input: null, ouput: dataReq.request, url, method: 'POST', data: queryData, headers: hdJson, bodyType: 'body', respFormat: 'Json' };
-  const reqSelet = [setQuery];
-  const requests = [];
-  return sedRequest(reqSelet, requests, collector);
-}
 
 //METODO QUE DEVUELVE PACIENTES CON DATOS DESENCRIPTADOS POR CENTRO DE SALUD
 patientsCtr.getPatientsByStablishment = async (req, res) => {

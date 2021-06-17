@@ -1,38 +1,38 @@
 const data_config = {
     server: {
-        host: 'localhost',
+        host:'localhost',
         port: 8080
     },
     srvFront: {
-        host: 'localhost',
-        port: 8080
+        host:'localhost',
+        port:''
     },
     srvBack: {
-        host: 'localhost',
+        host:'localhost',
         port: 8080
     },    
     serverTest: {
-        host: 'localhost',
+        host:'localhost',
         port: 8080
     },
     srvFrontTest: {
-        host: 'localhost',
+        host:'localhost',
         port: 8080
     },    
     srvBackTest: {
-        host: 'localhost',
+        host:'localhost',
         port: 8080
     },
     serverDev: {
-        host: 'localhost',
+        host:'localhost',
         port: 8080
     },
     srvFrontDev: {
-        host: 'localhost',
+        host:'localhost',
         port: 8080
     },    
     srvBackDev: {
-        host: 'localhost',
+        host:'localhost',
         port: 8080
     },
     otpSrv:{
@@ -53,7 +53,7 @@ const data_config = {
     },
     bockchHashSrv: {
         host: 'localhost',
-        port: 8080     
+        port: 8080       
     },
     bockchCryptSrv: {
         host: 'localhost',
@@ -61,9 +61,21 @@ const data_config = {
     },
     encryptIpfsSrv: {
         host: 'localhost',
+        port: 8085
+    },
+    serverPdfDev: {
+        host: 'localhost',
         port: 8080
     },
-    serverPdf: {
+    serverPdfTest: {
+        host: 'localhost',
+        port: 8080
+    },
+    serverPdfProd: {
+        host: 'localhost',
+        port: 8080
+    },
+    serverWhatsapp: {
         host: 'localhost',
         port: 8080
     },
@@ -81,7 +93,9 @@ const data_config = {
     sslZoom: true,
     sslMail: true,
     sslShort: true,
-    sslBock: false
+    sslBock: false,
+    sslPdf: false,
+    sslWhatsapp: false
 };
 
 module.exports = data_config;

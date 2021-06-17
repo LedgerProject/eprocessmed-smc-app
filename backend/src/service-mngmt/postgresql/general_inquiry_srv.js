@@ -179,6 +179,10 @@ const listBuilder = (data) => {
   let strParams = '';
   let params = columns;
   let where = '';
+  let orderBy = '';
+  let order = 'ASC';
+  let limit = '';
+
   // Selecciona solo los parametros permitidos de salida. De haber.
   if (ouput.length) {
     params = columns.filter(column => ouput.includes(column.name));
@@ -201,7 +205,7 @@ const listBuilder = (data) => {
     formattedWhere  = whereBuilder(arrWhere, reqData.data[0].params, columns, operator);
     where = `WHERE ${formattedWhere}`;
   }
-  arrQry.push(`SELECT ${strParams} FROM ${table} ${where}`);
+  arrQry.push(`SELECT ${strParams} FROM ${table} ${where} ${orderBy} ${limit}`);
   return arrQry;
 }
 
@@ -338,6 +342,9 @@ const queryBuilder = async (bodyReq, tablesSet, requestsSet) => {
   const columns = set.table.columns;
   const returning = set.options.returning;
   const conditions = set.options.conditions;
+
+
+
   let params = set.options.params;
   let reqData = bodyReq;
   let data = {
@@ -400,7 +407,6 @@ generalInquirySrv.query = async (req, res) => {
       correct: true,
       resp: answer.rows
     });
-
   } catch (err) {
     const created_on = new Date();
     const log = { module: 'generalInquirySrv', process: 'query', line: '205', data: {bodyReq, qry}, err, created_on };
@@ -408,14 +414,8 @@ generalInquirySrv.query = async (req, res) => {
     res.status(400).json({
       correct: false,
       resp: err
-    });
+    });  
   }
 }
 
 module.exports = generalInquirySrv;
-
-/*
-  Si las consultas son estaticas:
-  Llegan los datos y del set se extrae el query en queryBuilder, o
-  Un swith debe direccionarse a la funcioin que lo arme.
-*/

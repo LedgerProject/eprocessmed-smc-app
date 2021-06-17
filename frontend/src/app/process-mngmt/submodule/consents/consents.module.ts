@@ -7,14 +7,17 @@ import { GeneralModule } from 'src/app/general/general.module';
 import { RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
+import { NgOtpInputModule } from 'ng-otp-input';
 
 import { SignatureHouseComponent } from './components/signature-house/signature-house.component';
 import { SwitchDefaultDformsComponent } from '../../components/switch-default-dforms/switch-default-dforms.component';
+import { ViewConsentComponent } from './components/view-consent/view-consent.component';
 
 @NgModule({
   declarations: [
     // SwitchDefaultDformsComponent,
-    SignatureHouseComponent
+    SignatureHouseComponent,
+    ViewConsentComponent
   ],
   exports: [
     RouterModule,
@@ -28,7 +31,8 @@ import { SwitchDefaultDformsComponent } from '../../components/switch-default-df
     GeneralModule,
     RouterModule,
     BrowserModule,
-    FormsModule
+    FormsModule,
+    NgOtpInputModule
   ]
 })
 export class ConsentsModule { }

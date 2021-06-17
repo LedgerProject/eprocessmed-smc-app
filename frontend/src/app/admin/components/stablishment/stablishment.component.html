@@ -83,9 +83,9 @@
     <mat-grid-list cols="2" rowHeight="90px">
 
       <mat-grid-tile>
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="fill" >
           <mat-label>Customer</mat-label>
-          <mat-select [(value)]="stablishmentmodel.idCustomer">
+          <mat-select [(value)]="stablishmentmodel.idCustomer" [disabled]="true">
             <mat-option *ngFor="let customer of customers" value="{{customer.id_customer}}">{{customer.description}}</mat-option>
           </mat-select>
           <mat-hint align="end"></mat-hint>
@@ -111,7 +111,7 @@
       <mat-grid-tile>
         <mat-form-field hintLabel="Max 250 characters" appearance="fill">
           <mat-label>Url Hash</mat-label>
-          <input matInput #input maxlength="250" placeholder="" [(ngModel)]="stablishmentmodel.urlhash" readonly>
+          <input matInput #input maxlength="250" placeholder="" [(ngModel)]="stablishmentmodel.urlhash" [disabled]="true">
           <mat-hint align="end">{{input.value?.length || 0}}/50</mat-hint>
         </mat-form-field>
       </mat-grid-tile>

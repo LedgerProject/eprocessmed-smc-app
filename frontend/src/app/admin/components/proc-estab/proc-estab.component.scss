@@ -32,3 +32,17 @@
 .procCheckAll {
   font-weight: bold;
 }
+
+/* Grid */
+.box1 {
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 1;
+  grid-row-end: 2;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.checked {
+  align-self: center;
+}

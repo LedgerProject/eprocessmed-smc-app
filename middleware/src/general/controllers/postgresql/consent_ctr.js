@@ -1,17 +1,20 @@
 const generatorRequest = require('../../global/functions/generator_request');
 const cryptoJS = require('crypto-js');
+const bockchainRequest = require('../services/server_bockchain_ctr');
 const fetch = require('node-fetch');
 const serverBockchainCtr = require('../services/server_bockchain_ctr');
 const sendRequest = require('../../global/functions/send_request');
 const jsonCatalogParse = require('../../global/functions/parse-json-catalogs');
-const { urlSrv, rootBockchCryptIpfs, urls, rootOtp, hdForm, rootHostPdf, rootURI } = require('../../global/data/global_data');
+const { urlSrv, rootBockchCryptIpfs, urls, rootOtp, hdForm, rootHostPdf, rootHostWat } = require('../../global/data/global_data');
 const urlSendIpfs = `${rootBockchCryptIpfs}${urls.encryptIpsSrv}`;
-const urlCrtUsrSrv = `${rootURI}${urls.crtUpdUser}`; 
-const routepdf = `${urls.rutaPdf}`;
+const urlWatsapp = `${rootHostWat}${urls.whatsNotification}`;
 const url = `${urlSrv}${urls.genQuerySrv}`;
 const consentCtr = {};
 const urlServerOtp = `${rootOtp}${urls.scriptOtpSrv}`;
-const usersCtr= require('./users_ctr');
+const usersCtr = require('./users_ctr');
+
+//strcuturee pdf
+const jsonpdfStructure = require("./structure.json");
 
 //IMPORT DE PDFMAKE
 var fonts = {
@@ -34,7 +37,7 @@ const prepareLog = async (dataLog) => {
   // saveLogs(log);
 }
 
-const sedRequest = async (reqSelet, requests, collector) => {// Generalizar la construcción de la consulta
+const sedRequest = async (reqSelet, requests, collector) => {
   const resp = await generatorRequest(reqSelet, requests, collector)
     .then((resp) => { return resp })
     .catch((err) => prepareLog({ module: 'generalInquiryCtr', process: 'query', line: '29', data: '', err }));
@@ -42,15 +45,18 @@ const sedRequest = async (reqSelet, requests, collector) => {// Generalizar la c
 }
 
 const sendIpfs = async (ulrPdf) => {
-  const dataReq = {
-    ouput: 'urlipfs',
-    url: urlSendIpfs,
-    data: {
-      datos: ulrPdf,
-    }
-  }
-  const answer = await sendRequest.send(dataReq, 'external');
-  return answer;
+  var raw = JSON.stringify({ "datos": ulrPdf });
+  var requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: raw,
+    redirect: 'follow'
+  };
+  const resp = fetch(urlSendIpfs, requestOptions)
+    .then(response => response.json())
+    .then(result => { return result })
+    .catch(error => console.log('error', error));
+  return resp;
 };
 
 const getHashParams = async () => {
@@ -87,21 +93,6 @@ const getConsentById = async (idConsent) => {
     url,
     data: {
       idConsent: idConsent,
-    }
-  }
-  const answerReq = await sendRequest.send(dataReq, 'internal');
-  const ouput = answerReq.find(rq => rq.ouput === dataReq.request);
-  answer = ouput.answer.resp;
-  return answer;
-};
-
-const crtUsr = async (jsonUser) => {
-  const dataReq = {
-    request: 'rgt-users',
-    module: 'mobile-consent',
-    urlCrtUsrSrv,
-    data: {
-      idConsent: jsonUser,
     }
   }
   const answerReq = await sendRequest.send(dataReq, 'internal');
@@ -163,7 +154,9 @@ const prepareConsent = (pendingConsents) => {
       catProcess: element.id_cat_process.procedures,
       specialtyName: "",
       procedureName: "",
-      infoOtp: element.info_otp
+      infoOtp: element.info_otp,
+      traceability: element.traceability,
+      url: element.url_pdf
     }
     pendingCons.push(params);
   }
@@ -207,16 +200,24 @@ consentCtr.getPendingConsentsByPatient = async (req, res) => {
 
 //metodo que arma y devuelve al specialista y clinica del consentimiento
 consentCtr.getStructureConsent = async (req, res) => {
+  var data = req.body;
+  const resp = await getSpecialistStablishment(data.idSpecialist, data.idEstablishment);
+  res.status(resp.status).json({
+    correct: resp.correct,
+    resp: resp.answer
+  });
+}
+
+const getSpecialistStablishment = async (idSpecialist, idEstablishment) => {
   let status = 400;
   let correct = false;
   let answer;
-  var data = req.body;
   try {
-    //obtengo los datos del especialista
-    var specialist = await getUser(data.idSpecialist);
-    var establishment = await getEstablishment(data.idEstablishment);
+    status = 200;
+    correct = true;
+    var specialist = await getUser(idSpecialist);
+    var establishment = await getEstablishment(idEstablishment);
     const hashUser = await getHashParams();
-
     var decryptSp = {
       dni: specialist[0].dni,
       name: specialist[0].name,
@@ -225,7 +226,6 @@ consentCtr.getStructureConsent = async (req, res) => {
       mail: specialist[0].mail,
       phone: specialist[0].phone,
     }
-
     //aqui voy a desencriptar los datos del specialista y centro de salud
     const answerDecryptSpecialis = await serverBockchainCtr.decrypt(decryptSp, hashUser[0].params[0].hash);
     const respSpecialist = answerDecryptSpecialis.find(element => element.ouput === 'decrypt');
@@ -248,7 +248,6 @@ consentCtr.getStructureConsent = async (req, res) => {
         contact_name: establishment[0].contact_name,
         contact_phone: establishment[0].contact_phone
       }
-
       const answerDecryptStabli = await serverBockchainCtr.decrypt(decryptSta, establishment[0].hash);
       const respStabl = answerDecryptStabli.find(element => element.ouput === 'decrypt');
       const msg = respStabl.answer.message;
@@ -262,15 +261,12 @@ consentCtr.getStructureConsent = async (req, res) => {
         establishment[0].contact_name = respStabl.answer.data.contact_name;
         establishment[0].contact_phone = respStabl.answer.data.contact_phone;
         decryptSta = establishment[0];
-
         answer = {
           specialist: decryptSp,
           establishment: decryptSta
         }
-
         status = 200;
         correct = true;
-
       } else {
         answer = msg;
       }
@@ -278,17 +274,11 @@ consentCtr.getStructureConsent = async (req, res) => {
     } else {
       answer = message;
     }
-
-  } catch (err) {
+  } catch (error) {
     status = 400;
-    correct = true;
-    answer = err;
+    correct = false;
   }
-  res.status(status).json({
-    correct,
-    resp: answer
-  });
-
+  return { status, correct, answer }
 }
 
 consentCtr.create = async (req, res) => {
@@ -299,6 +289,7 @@ consentCtr.create = async (req, res) => {
       resp: link
     });
   } catch (err) {
+    console.log(err);
     res.status(400).json({
       correct: false,
       resp: err
@@ -407,6 +398,44 @@ consentCtr.sendOtp = async (req, res) => {
 
 }
 
+//metodo que envia mensaje por whatsapp
+consentCtr.sendWhatsapp = async (req, res) => {
+  let status = 400;
+  let correct = false;
+  let answer;
+  try {
+    console.log("entre a whatsapp");
+    const dta = req.body;
+    const msg = "E PROCESS MED informs. Dear " + dta.name + dta.lastname + ", your code to sign your consent is: " + dta.infoOtp;
+    const dataWata = {
+      numero: dta.codephone + dta.phone,
+      nombre: dta.name,
+      mensaje: msg
+    };
+    const dataReq = {
+      ouput: 'whatsapp',
+      url: urlWatsapp,
+      data: {
+        dataWata
+      }
+    }
+    const respAnswer = await sendRequest.send(dataReq, 'external');
+    answer = respAnswer.find(element => element.ouput === 'whatsapp');
+    answer = answer.answer;
+
+    status = 200;
+    correct = true;
+  } catch (err) {
+    status = 200;
+    correct = true;
+    answer = err;
+  }
+  res.status(status).json({
+    correct,
+    resp: answer
+  });
+}
+
 //metodo que tiene la logica para crear el pdf y crear o modificar el consentimiento
 const drawPdfAndGenerateConsent = async (jsonData) => {
   try {
@@ -416,14 +445,16 @@ const drawPdfAndGenerateConsent = async (jsonData) => {
     var idPdf = 0;
     var body = [];
     //variable que extrae los textos del pdf
-    var jsonPdf = jsonData.pdf;
+    //var jsonPdf = jsonData.pdf;
+    var jsonPdf = jsonpdfStructure;
     var jsonConsent = jsonData.consent;
     var jsonUser = jsonData.user;
     var retorno = null;
     var hashInit = null;
     var hashFinal = null;
     //variable que extrae las firmas del pdf
-    var jsonFirmas = jsonPdf.body.firmas;
+    //var jsonFirmas = jsonPdf.body.firmas;
+    var jsonFirmas = jsonData.pdf.body.firmas;
 
     //aqui se procede a insertar el consentimiento por primera vez
     //aqui validamos si se crea el consentimiento o se lo modifica
@@ -446,12 +477,13 @@ const drawPdfAndGenerateConsent = async (jsonData) => {
           data: jsonUser
         }
         await usersCtr.ctrUserInt(dataReq);
+        //si no se crea retorna el mensaje yonaider
       }
       //aqui procedo a modificar el consentimiento guardando los datos de trazabilidad
       const traceability = JSON.stringify({
         time_init: resDet.timestamp1,
         hash_init: hashInit,
-        time_final: '',
+        time_end: '',
         hash_final: ''
       })
       const consentUpdate = {
@@ -465,6 +497,9 @@ const drawPdfAndGenerateConsent = async (jsonData) => {
         timeInit: resDet.timestamp1
       }
     } else {
+      //aqui reemplazo las etiquetas
+      var consentById = await getConsentById(jsonConsent.idConsent);
+      jsonPdf.body.text = await replaceLabel(jsonPdf.body.text, consentById[0], jsonUser.idEstablishment);
       if (jsonConsent.homeFirm == 0) {
         //aqui coloco los datos del pdf y firmas
         jsonConsent.firmPatient = jsonFirmas.firma_p.replace(/'/gi, "|");
@@ -472,8 +507,12 @@ const drawPdfAndGenerateConsent = async (jsonData) => {
         //aqui hasheo las firmas del especialista y del paciente
         const hashSignaPat = cryptoJS.SHA256(jsonConsent.firmPatient);
         const hashSignaSpec = cryptoJS.SHA256(jsonConsent.firmSpecialist);
-        jsonConsent.hashFpacient = hashSignaPat;
-        jsonConsent.hashFspecialist = hashSignaSpec;
+        jsonConsent.hashFpacient = hashSignaPat.toString();
+        jsonConsent.hashFspecialist = hashSignaSpec.toString();
+      }else{
+        //aqui tomo la firma del campo structure user en la tabla users
+
+
       }
       //aqui tengo que validar el orden de los textos y armar la estructura para el body
       idPdf = jsonConsent.idConsent;
@@ -536,10 +575,10 @@ const drawPdfAndGenerateConsent = async (jsonData) => {
           {
             columns: [
               {
-                width: '*', text: 'Firma del Paciente', bold: true
+                width: '*', text: "Patient's signature", bold: true
               },
               {
-                width: '*', text: 'Firma del Especialista', bold: true
+                width: '*', text: 'Signature of the Specialist', bold: true
               }
             ]
           }
@@ -550,7 +589,7 @@ const drawPdfAndGenerateConsent = async (jsonData) => {
           return currentNode.headlineLevel === 1 && followingNodesOnPage.length === 0;
         }
       };
-      const rutaSalida = routepdf + 'pdf/' + idPdf + '.pdf';
+      const rutaSalida = 'public/' + 'pdf/' + idPdf + '.pdf';
       var pdfDoc = await printer.createPdfKitDocument(docDefinition);
       pdfDoc.pipe(fs.createWriteStream(rutaSalida));
       pdfDoc.end();
@@ -570,14 +609,19 @@ const drawPdfAndGenerateConsent = async (jsonData) => {
       const resHash = reshash.answer;
       hashFinal = resHash.hash;
 
-      const ulrPdf = rootHostPdf + `/pdf/${idPdf}.pdf`;
+      const ulrPdf = rootHostPdf + `pdf/${idPdf}.pdf`;
       const answer = await sendIpfs(ulrPdf);
-      const resDet = answer.find(resp => resp.ouput === 'urlipfs');
-      var answerDet = resDet.answer;
+      //const resDet = answer.find(resp => resp.ouput === 'urlipfs');
+      //var answerDet = resDet.answer;
+      var answerDet = "null"
+      if (answer.correct) {
+
+        answerDet = answer.resp;
+      }
 
       //aqui modifico los datos del campo trazabilidad y le agrego el hash final y time final
       var traceability = jsonConsent.traceability;
-      traceability.time_final = resHash.timestamp1;
+      traceability.time_end = resHash.timestamp1;
       traceability.hash_final = hashFinal;
       //aqui actualizo el consentimiento y le agrego la url del pdf y la 
       var data = {
@@ -600,6 +644,7 @@ const drawPdfAndGenerateConsent = async (jsonData) => {
     }
     return retorno;
   } catch (err) {
+    console.log(err);
     return err
   }
 }
@@ -611,25 +656,129 @@ consentCtr.validateCodeOtp = async (req, res) => {
   let answer;
   try {
     var otp = req.body.otp;
+    var action = req.body.action;
     var consent = await getConsentById(req.body.consent.idConsent);
-    if (consent[0].info_otp == otp) {
+    req.body.consent.traceability.hash_init = consent[0].traceability.hash_init;
+    req.body.consent.traceability.time_init = consent[0].traceability.time_init;
+    if (action == "accept") {
+      if (consent[0].info_otp == otp) {
+        answer = await drawPdfAndGenerateConsent(req.body);
+        status = 200;
+        correct = true;
+      } else {
+        status = 200
+        correct = false;
+        answer = "not found";
+      }
+    } else {
       answer = await drawPdfAndGenerateConsent(req.body);
       status = 200;
       correct = true;
-    } else {
-      status = 404
-      correct = false;
-      answer = "not found";
     }
   } catch (err) {
     status = 200;
     correct = true;
     answer = err;
+    console.log(err);
   }
   res.status(status).json({
     correct,
     resp: answer
   });
+}
+
+//metodo que reemplaza las etiquetas por los datos de los pacientes, specialista, centro salud, etc
+const replaceLabel = async (ArrayText, consent, idEstablishment) => {
+  var objUsr = await getSpecialistStablishment(consent.id_specialist, idEstablishment);
+  const specialist = objUsr.answer.specialist;
+  const stablishment = objUsr.answer.establishment;
+  const patient = await getPatient(consent.id_patient, stablishment.hash);
+  var element = {};
+  var arrayElement = [];
+  const fecha_create = consent.traceability.time_init;
+  for (let i = 0; i < ArrayText.length; i++) {
+    const text = ArrayText[i].information;
+    const text1 = text.replace(/{consentimiento.fecha_creacion}/gi, fecha_create);
+    const text2 = text1.replace(/{paciente.dni}/gi, patient[0].dni);
+    const text3 = text2.replace(/{paciente.nombre}/gi, patient[0].name_patient);
+    const text4 = text3.replace(/{paciente.apellido}/gi, patient[0].lastname);
+    const text5 = text4.replace(/{paciente.direccion}/gi, patient[0].address);
+    const text6 = text5.replace(/{paciente.correo}/gi, patient[0].mail);
+    const text7 = text6.replace(/{paciente.telefono}/gi, patient[0].phone);
+    const text8 = text7.replace(/{paciente.rep_dni}/gi, patient[0].dni_rep_legal);
+    const text9 = text8.replace(/{paciente.rep_nombre}/gi, patient[0].name_rep_legal);
+    const text10 = text9.replace(/{paciente.rep_apellido}/gi, patient[0].lastname_rep_legal);
+    const text11 = text10.replace(/{paciente.rep_direccion}/gi, patient[0].address_rep_legal);
+    const text12 = text11.replace(/{paciente.rep_correo}/gi, patient[0].address_rep_legal);
+    const text13 = text12.replace(/{paciente.rep_telefono}/gi, patient[0].phone_rep_legal);
+    const text14 = text13.replace(/{paciente.no_historia_c}/gi, patient[0].no_clinic_history);
+    const text15 = text14.replace(/{especialista.dni}/gi, specialist.dni);
+    const text16 = text15.replace(/{especialista.nombre}/gi, specialist.name);
+    const text17 = text16.replace(/{especialista.apellido}/gi, specialist.lastname);
+    const text18 = text17.replace(/{especialista.direccion}/gi, specialist.dni);
+    const text19 = text18.replace(/{especialista.telefono_fijo}/gi, specialist.phone);
+    const text20 = text19.replace(/{especialista.telefono_movil}/gi, specialist.phone);
+    const text21 = text20.replace(/{centro_de_salud.nombre}/gi, stablishment.description);
+    const text22 = text21.replace(/{centro_de_salud.direccion}/gi, stablishment.address);
+    const text23 = text22.replace(/{centro_de_salud.telefono}/gi, stablishment.phone);
+    const text24 = text23.replace(/{centro_de_salud.ciglas}/gi, stablishment.dni);
+    const text25 = text24.replace(/{procedimientos.nombre}/gi, consent);
+    //aqui ya estan los textos con las etiquetas modificadas
+    element = {
+      order: text.order,
+      information: text25
+    };
+    arrayElement.push(element);
+  }
+  return arrayElement;
+}
+
+const getPatient = async (idPatient, hashStablishment) => {
+  const dataReq = {
+    request: 'pat-by-id',
+    url,
+    data: {
+      idPatient: idPatient
+    }
+  }
+  const defaultDecrypt = {
+    no_clinic_history: '',
+    dni: '',
+    name_patient: '',
+    lastname: '',
+    address: '',
+    mail: '',
+    phone: '',
+    legal_representative: '',
+    dni_rep_legal: '',
+    name_rep_legal: '',
+    lastname_rep_legal: '',
+    address_rep_legal: '',
+    mail_rep_legal: '',
+    phone_rep_legal: '',
+    name_emecon: '',
+    lastname_emecon: '',
+    phone_emecon: '',
+    address_emecon: ''
+  }
+  const answerReq = await sendRequest.send(dataReq, 'internal');
+  const ouput = answerReq.find(rq => rq.ouput === dataReq.request);
+  var answer = ouput.answer.resp;
+  let decrypt = defaultDecrypt;
+  for (var key in decrypt) {
+    decrypt[key] = answer[key];
+  }
+  const answerDecrypt = await bockchainRequest.decrypt(decrypt, hashStablishment);
+  const resp = answerDecrypt.find(element => element.ouput === 'decrypt');
+  const message = resp.answer.message;
+  const data = resp.answer.data;
+
+  if (message === 'Datos descifrados correctamente') {
+    for (var key in data) {
+      answer[key] = data[key];
+    }
+  }
+  return answer;
 }
 
 module.exports = consentCtr;

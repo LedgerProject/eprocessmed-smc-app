@@ -68,7 +68,7 @@ export class CatalogsComponent implements AfterViewInit {
       resp => {
         const ouput = resp.filter((res: any) => res.ouput === data.request);
         const answer = ouput[0].answer;
-        if (answer.correct) {// Falta dialogo de "Correct" o "Failed"
+        if (answer.correct) {
           location.reload();
         }
       },

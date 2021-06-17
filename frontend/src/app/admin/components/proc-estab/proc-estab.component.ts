@@ -1,5 +1,6 @@
 import { Component, ViewChild, HostListener, ElementRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { AuthService } from 'src/app/security/services/auth.service';
 import { DialogMsgComponent } from '../../../general/components/shared/dialog/dialog-msg/dialog-msg.component';
 
 //SERVICES
@@ -9,7 +10,7 @@ export interface ProcEstab {
   specialties?: any;
   idEstablishment?: string;
   idEstSpec?: string;
-  // idUserCreate?: string;
+  idUserCreate?: number;
   // idUserModify?: string;
 }
 
@@ -21,6 +22,7 @@ export interface ProcEstab {
 export class ProcEstabComponent {
   @ViewChild("checkedAll") checkedAll!: ElementRef<any>;
 
+  public dataSesion: any;
   public stablishments: any;
   public procEstabs: any;
   public procEstab!: ProcEstab;
@@ -37,7 +39,8 @@ export class ProcEstabComponent {
     this.switchOnClick(event);
   }
 
-  constructor(private generalService: GeneralService) {
+  constructor(private generalService: GeneralService, private authService: AuthService) {
+    this.dataSesion = this.authService.getDataSesion();
     this.procEstabs = [];
     this.collector = [];
     this.step = 0;
@@ -48,7 +51,8 @@ export class ProcEstabComponent {
     this.procEstab = {
       specialties: [],
       idEstablishment: '',
-      idEstSpec: ''
+      idEstSpec: '',
+      idUserCreate: 0
     }
 
     this.btnStabActions = {
@@ -62,7 +66,7 @@ export class ProcEstabComponent {
 
   initialAsyncFunctions = async () => {
     await this.getCatalogs({ request: "catalogs" });
-    await this.getStablis({ request: "establishment" });
+    await this.getStablis({ request: "estab-by-cust", data: { idCustomer: this.dataSesion.customerId } });
     await this.getProcEstabs({ request: "proc-estab" });
     this.activateStep();
   }
@@ -161,6 +165,7 @@ export class ProcEstabComponent {
   }
 
   createProcEstab = async (id: string) => {
+    this.procEstab.idUserCreate = parseInt(this.dataSesion.id);
     this.procEstab.idEstablishment = id;
     this.procEstab.specialties = [];
     this.validateCheckedSpecialties(this.procEstab.specialties);
@@ -189,16 +194,18 @@ export class ProcEstabComponent {
   }
 
   presentsProcedures = async (specialties: any, id: string) => {
-    await this.switchJsonParse(specialties,id,'procedures','false', '');
+    await this.switchJsonParse(specialties, id, 'procedures', 'false', '');
     this.validateProcCheck(id);
   }
 
   validateProcCheck(id: string) {
     const includeSpc = this.procEstab.specialties.find((ps: any) => ps.specId === id);
     if (includeSpc !== undefined) {
-      this.collector.procedures.forEach((prc: any) => {
+
+      this.collector.procedures.forEach( async (prc: any) => {
         prc['checked'] = false;
         const includeProc = includeSpc.proc.find((sp: any) => sp.id === prc.id);
+
         if (includeProc !== undefined) {
           if (includeProc.status === 1) {
             prc.checked = true;
@@ -219,7 +226,7 @@ export class ProcEstabComponent {
     } else {
       statusAll = 0;
     }
-    await this.switchJsonParse(this.specialties,slctSpecialty,'procedures','false', '');
+    await this.switchJsonParse(this.specialties, slctSpecialty, 'procedures','false', '');
     await procedures.forEach((procedure: any) => {
       this.addRemoveProcedure(slctSpecialty,procedure.id,true,statusAll);
     });
@@ -366,14 +373,40 @@ export class ProcEstabComponent {
 
       // Separar y parametrizar solo para construir selectores
       dta.forEach( async (datachild: any)=> {
+        let videos = [];
+
+        if (name === 'procedures') {
+          const paramsGroups: any = datachild.children.find((param: any) => param.name === 'video');
+
+          for (let i = 0; i < paramsGroups.children.length; i++) {
+            const element = paramsGroups.children[i];
+            let video: any = {};
+
+            for (let j = 0; j < element.children.length; j++) {
+              const elmt = element.children[j];
+              video[`${elmt.name}`] = elmt.value;
+            }
+
+            videos.push(video);
+
+          }
+        }
+
         const param: any = datachild.children.find((param: any) => param.name === paramName);
         if (param !== undefined) {
           const idChild = `${datachild.father},${datachild.id}`;
-          // const idChild = `${datachild.father},${param.id}`;
           const value = param.value;
-          collector.push({id: idChild, value});
+
+          if (name === 'procedures') {
+            collector.push({id: idChild, value, videos});
+          } else {
+            collector.push({id: idChild, value}); 
+          }
+
         }
+        
       });
+      
       if (collector.length > 0) {
         this.collector[name] = collector;
       }

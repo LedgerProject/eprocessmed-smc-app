@@ -1,0 +1,41 @@
+<div class="tittle">
+  <h3 class="tittle">CONSENT LIST</h3>
+</div>
+
+<div id="divTable" class="div-mat-table">
+  <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef> <b>Id</b> </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.idConsent}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="patient">
+      <mat-header-cell *matHeaderCellDef> <b>Patient</b> </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.idPatient}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="procedure">
+      <mat-header-cell *matHeaderCellDef> <b>Procedure</b> </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.procedureName}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="date_creation">
+      <mat-header-cell *matHeaderCellDef> <b>Date Creation</b> </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.traceability.date_init}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="pdf">
+      <mat-header-cell *matHeaderCellDef> <b>View Pdf</b> </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <button id="btnPdf" mat-raised-button color="primary" value="{{element.url}}">
+          <mat-icon id="btnPdf" value="{{element.url}}">open_in_new</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns" class="header"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;" class="cell"></mat-row>
+  </mat-table>
+
+</div>
